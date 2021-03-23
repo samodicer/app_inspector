@@ -1,0 +1,196 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="component_event" id="PzzwQ,r9S~WBf?zDy+cH" x="-791" y="-409">
+    <mutation component_type="Canvas" is_generic="false" instance_name="Canvas1" event_name="Dragged"></mutation>
+    <field name="COMPONENT_SELECTOR">Canvas1</field>
+    <statement name="DO">
+      <block type="component_method" id=".#)}VVjVCt-JzdQJ@t4|">
+        <mutation component_type="Canvas" method_name="DrawLine" is_generic="false" instance_name="Canvas1"></mutation>
+        <field name="COMPONENT_SELECTOR">Canvas1</field>
+        <value name="ARG0">
+          <block type="lexical_variable_get" id="GvU15IAU.Qa}imYPKx4j">
+            <mutation>
+              <eventparam name="prevX"></eventparam>
+            </mutation>
+            <field name="VAR">prevX</field>
+          </block>
+        </value>
+        <value name="ARG1">
+          <block type="lexical_variable_get" id="v]g-,exwktlnVyW;#Z;4">
+            <mutation>
+              <eventparam name="prevY"></eventparam>
+            </mutation>
+            <field name="VAR">prevY</field>
+          </block>
+        </value>
+        <value name="ARG2">
+          <block type="lexical_variable_get" id=",Vci;1Z0L+znKV=)cG)A">
+            <mutation>
+              <eventparam name="currentX"></eventparam>
+            </mutation>
+            <field name="VAR">currentX</field>
+          </block>
+        </value>
+        <value name="ARG3">
+          <block type="lexical_variable_get" id="Xuz(}A#!SPy^LVN{NEiB">
+            <mutation>
+              <eventparam name="currentY"></eventparam>
+            </mutation>
+            <field name="VAR">currentY</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="component_event" id="yJ8!;U4z_hF9|MupkuuJ" x="-1163" y="-387">
+    <mutation component_type="Canvas" is_generic="false" instance_name="Canvas1" event_name="Touched"></mutation>
+    <field name="COMPONENT_SELECTOR">Canvas1</field>
+    <statement name="DO">
+      <block type="component_method" id="WxOe|#L;GMEn2,-RsIYq">
+        <mutation component_type="Canvas" method_name="DrawCircle" is_generic="false" instance_name="Canvas1"></mutation>
+        <field name="COMPONENT_SELECTOR">Canvas1</field>
+        <value name="ARG0">
+          <block type="lexical_variable_get" id="rS]oAo/tV!Ux7;UHtjN:">
+            <mutation>
+              <eventparam name="x"></eventparam>
+            </mutation>
+            <field name="VAR">x</field>
+          </block>
+        </value>
+        <value name="ARG1">
+          <block type="lexical_variable_get" id="?U^7vf;JK8*{D?Xy*+:2">
+            <mutation>
+              <eventparam name="y"></eventparam>
+            </mutation>
+            <field name="VAR">y</field>
+          </block>
+        </value>
+        <value name="ARG2">
+          <block type="math_number" id="dU9Ixo)V]6Am@c~ye^,p">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+        <value name="ARG3">
+          <block type="logic_boolean" id="[[P1:y@kK}k4c}?zeVSR">
+            <field name="BOOL">TRUE</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="component_event" id="qmznt.F9Z00+uLDD4(P=" x="-160" y="-403">
+    <mutation component_type="AccelerometerSensor" is_generic="false" instance_name="AccelerometerSensor1" event_name="Shaking"></mutation>
+    <field name="COMPONENT_SELECTOR">AccelerometerSensor1</field>
+    <statement name="DO">
+      <block type="component_method" id="C^]aZN13vTwuKjwA8Uqz">
+        <mutation component_type="Canvas" method_name="Clear" is_generic="false" instance_name="Canvas1"></mutation>
+        <field name="COMPONENT_SELECTOR">Canvas1</field>
+        <next>
+          <block type="component_set_get" id="b,MQPY%YM-}E-p;NAt8?">
+            <mutation component_type="Canvas" set_or_get="set" property_name="BackgroundImage" is_generic="false" instance_name="Canvas1"></mutation>
+            <field name="COMPONENT_SELECTOR">Canvas1</field>
+            <field name="PROP">BackgroundImage</field>
+            <value name="VALUE">
+              <block type="text" id="s(J4;2Oj]Iz1oYJyq$6t">
+                <field name="TEXT"></field>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="component_event" id="ilf3{g=t?AFSsz$4*8N!" x="-1166" y="-148">
+    <mutation component_type="Button" is_generic="false" instance_name="btnZelena" event_name="Click"></mutation>
+    <field name="COMPONENT_SELECTOR">btnZelena</field>
+    <statement name="DO">
+      <block type="component_set_get" id="|*fW/fr1OUpU*q.7%_zZ">
+        <mutation component_type="Canvas" set_or_get="set" property_name="PaintColor" is_generic="false" instance_name="Canvas1"></mutation>
+        <field name="COMPONENT_SELECTOR">Canvas1</field>
+        <field name="PROP">PaintColor</field>
+        <value name="VALUE">
+          <block type="color_red" id="6/Ukk_;o62+5|q*LaK7P">
+            <field name="COLOR">#33cc00</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="component_event" id="haX}Hq+e!g0?.Vl|l;N?" x="-740" y="-141">
+    <mutation component_type="Button" is_generic="false" instance_name="btnOdfot" event_name="Click"></mutation>
+    <field name="COMPONENT_SELECTOR">btnOdfot</field>
+    <statement name="DO">
+      <block type="component_method" id="02yTq9R+N.|Lco]S2WR-">
+        <mutation component_type="Camera" method_name="TakePicture" is_generic="false" instance_name="Camera1"></mutation>
+        <field name="COMPONENT_SELECTOR">Camera1</field>
+      </block>
+    </statement>
+  </block>
+  <block type="component_event" id="87|5hN?d!KTnjepdbh0H" x="-1167" y="-71">
+    <mutation component_type="Button" is_generic="false" instance_name="btnModra" event_name="Click"></mutation>
+    <field name="COMPONENT_SELECTOR">btnModra</field>
+    <statement name="DO">
+      <block type="component_set_get" id="M(X6)J|k96v]qwJj-(OT">
+        <mutation component_type="Canvas" set_or_get="set" property_name="PaintColor" is_generic="false" instance_name="Canvas1"></mutation>
+        <field name="COMPONENT_SELECTOR">Canvas1</field>
+        <field name="PROP">PaintColor</field>
+        <value name="VALUE">
+          <block type="color_red" id="7w`a*PpCqK0.7-a:rAqh">
+            <field name="COLOR">#00cccc</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="component_event" id="kP@x%d|ew1j,|(_)Uq*h" x="-1167" y="21">
+    <mutation component_type="Button" is_generic="false" instance_name="btnCervena" event_name="Click"></mutation>
+    <field name="COMPONENT_SELECTOR">btnCervena</field>
+    <statement name="DO">
+      <block type="component_set_get" id="@.za^+a22,V@+2ivnb,j">
+        <mutation component_type="Canvas" set_or_get="set" property_name="PaintColor" is_generic="false" instance_name="Canvas1"></mutation>
+        <field name="COMPONENT_SELECTOR">Canvas1</field>
+        <field name="PROP">PaintColor</field>
+        <value name="VALUE">
+          <block type="color_red" id="b4z73-VR={H9NGt}x+V1">
+            <field name="COLOR">#ff0000</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="component_event" id="a$.E;.kK8kkaON.idKdG" x="-733" y="0">
+    <mutation component_type="Camera" is_generic="false" instance_name="Camera1" event_name="AfterPicture"></mutation>
+    <field name="COMPONENT_SELECTOR">Camera1</field>
+    <statement name="DO">
+      <block type="component_set_get" id="I;rd%[WTvD[!A7*@2zq-">
+        <mutation component_type="Canvas" set_or_get="set" property_name="BackgroundImage" is_generic="false" instance_name="Canvas1"></mutation>
+        <field name="COMPONENT_SELECTOR">Canvas1</field>
+        <field name="PROP">BackgroundImage</field>
+        <value name="VALUE">
+          <block type="lexical_variable_get" id="BE^zaAB6H,1B_xbwB8Qs">
+            <mutation>
+              <eventparam name="image"></eventparam>
+            </mutation>
+            <field name="VAR">image</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="component_event" id="8(?I]o!0N+b$)w`k,8aD" x="-1167" y="114">
+    <mutation component_type="Button" is_generic="false" instance_name="btnCierna" event_name="Click"></mutation>
+    <field name="COMPONENT_SELECTOR">btnCierna</field>
+    <statement name="DO">
+      <block type="component_set_get" id="0^F9KNTvqwRX$i|pdOT_">
+        <mutation component_type="Canvas" set_or_get="set" property_name="PaintColor" is_generic="false" instance_name="Canvas1"></mutation>
+        <field name="COMPONENT_SELECTOR">Canvas1</field>
+        <field name="PROP">PaintColor</field>
+        <value name="VALUE">
+          <block type="color_red" id=":BW8hYfbZLc6bT3PB7y5">
+            <field name="COLOR">#000000</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <yacodeblocks ya-version="208" language-version="33"></yacodeblocks>
+</xml>
