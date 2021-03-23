@@ -241,9 +241,6 @@ h1 {
 .file_input {
   margin: auto;
 }
-#fi input {
-  cursor: pointer;
-}
 .btn {
   text-align: center;
   padding: 10px;
