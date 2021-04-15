@@ -69,6 +69,8 @@ def analyze(id, file):
     print("Used events:", events)
     methods = tree.xpath("//mutation/@method_name")
     print("Used methods:", methods)
+    parameters=tree.xpath("//eventparam/@name")
+    print("Used parameters:", parameters)
     sets = len(tree.xpath("//mutation[@set_or_get = 'set']"))
     print("Number of setters:", sets)
     gets = len(tree.xpath("//mutation[@set_or_get = 'get']"))
@@ -81,6 +83,7 @@ def analyze(id, file):
     data['methods'] = methods
     data['sets'] = sets
     data['gets'] = gets
+    data['parameters'] = parameters
     #json_data = json.dumps(data)
 
     return [data]
