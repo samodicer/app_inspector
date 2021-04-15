@@ -164,12 +164,9 @@
                 <div id="main_content2">
                   <h1>Analysed data</h1>
                   <v-row id="row">
-                    <v-col
-                      v-for="n in 5"
-                      :key="n"
-                      cols="4"
-                    >
-                      <v-card id="card" height="100%" elevation="3" outlined >
+                    <v-col v-for="n in 6" :key="n" cols="4">
+                      <v-card id="card" height="100%" elevation="3" outlined>
+
                         <div class="stat" v-if="n == 1">
                             <p class="headline">Blocks</p>
                             <p class="num_data">{{data.number_of_blocks}}</p>
@@ -189,11 +186,17 @@
                             </div>
                         </div>
                         <div class="stat" v-if="n == 5">
-                            <p class="headline">Methods</p>
-                            <div v-for="i in data.methods" :key="i">
-                              <p class="text_data">{{i}}</p>
-                            </div>
-                        </div>                                                                                            
+                          <p class="headline">Methods</p>
+                          <div v-for="i in data.methods" :key="i">
+                            <p class="text_data">{{ i }}</p>
+                          </div>
+                        </div>
+                        <div class="stat" v-if="n == 6">
+                          <p class="headline">Parameters</p>
+                          <div v-for="i in data.parameters" :key="i">
+                            <p class="text_data">{{ i }}</p>
+                          </div>
+                        </div>
                       </v-card>
                     </v-col>
                   </v-row>
