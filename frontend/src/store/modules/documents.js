@@ -34,16 +34,40 @@ const actions = {
         console.log(err);
       });
   },
-  async analyzeFile({ commit }, id) {
+  async analyzeFile({ commit }, ids) {
+    console.log(ids);
+    var URL = 'http://127.0.0.1:8000/get-files-data';
+    for (let i = 0; i < ids.length; i++) {
+      if (i == 0) URL = URL + '?';
+      URL = URL + 'id=' + ids[i] + '&';
+    }
+    URL = URL.substring(0, URL.length - 1);
+
+    axios({
+      method: 'get',
+      url: URL,
+    })
+      .then((response) => {
+        //commit('setAnalyzedData', response.data);
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    commit('setAnalyzedData', '');
+    /*for (var id in ids) {
+      console.log(id);
+    }*/
+    /*
     axios
-      .get('http://127.0.0.1:8000/get-file-data/' + id)
+      .get('http://127.0.0.1:8000/get-files-data/' + ids)
       .then((response) => {
         commit('setAnalyzedData', response.data);
         console.log(response);
       })
       .catch((err) => {
         console.log(err);
-      });
+      });*/
   },
 };
 

@@ -74,12 +74,13 @@
             <v-sheet id="sheet" min-height="70vh" rounded="lg">
               <v-card id="card">
                 <div id="main_content1">
-                  <h1>Choose file to upload</h1>
+                  <h1>Select files to upload</h1>
                   <div class="file_input">
                     <v-file-input
                       id="fi"
                       class="d-flex pa-2"
-                      v-model="inputs.file"
+                      v-model="inputs.files"
+                      multiple="multiple"
                       ref="fileInputRef"
                       color="black"
                       counter
@@ -87,19 +88,14 @@
                       truncate-length="40"
                     ></v-file-input>
                   </div>
-                  <div v-if="!this.uploaded && this.inputs.file" class="btn">
+                  <div v-if="!this.uploaded" class="btn">
                     <v-btn color="#26A69A" dark @click="onSelected()">
-                      Upload file
+                      Upload files
                     </v-btn>
                   </div>
                   <h2 v-if="this.uploaded">
-                    File has been successfully uploaded
+                    Files has been successfully uploaded
                   </h2>
-                  <div v-if="this.uploaded" class="btn">
-                    <v-btn color="#26A69A" dark @click="analyze()">
-                      Analyse file
-                    </v-btn>
-                  </div>
                   <v-alert
                     :value="alert"
                     color="#26A69A"
@@ -108,10 +104,7 @@
                     type="error"
                   >
                     <p style="color: white">
-                      <b
-                        >The file type must be aia (MIT App Inventor Project
-                        File)</b
-                      >
+                      <b>{{ alert_text }}</b>
                     </p>
                     <div class="text-center">
                       <v-btn
@@ -119,7 +112,11 @@
                         rounded
                         color="white"
                         dark
-                        @click="alert = false"
+                        @click="
+                          alert = false;
+                          uploaded = false;
+                          crashed = false;
+                        "
                       >
                         Okay
                       </v-btn>
@@ -131,6 +128,47 @@
               <div v-for="doc in allFiles" :key="doc.id" class="files">
                   <b>{{doc}}</b>
               </div>-->
+
+              <v-card
+                max-width="600"
+                class="mx-auto"
+                v-if="uploaded_files.length != 0"
+              >
+                <v-toolbar color="#26a69a" dark>
+                  <v-toolbar-title>Uploaded files</v-toolbar-title>
+                </v-toolbar>
+
+                <v-list subheader two-line>
+                  <v-list-item v-for="file in uploaded_files" :key="file.id">
+                    <v-list-item-avatar>
+                      <v-icon class="grey lighten-1" dark> mdi-file </v-icon>
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                      <v-list-item-title
+                        v-text="file.title"
+                      ></v-list-item-title>
+
+                      <!--<v-list-item-subtitle
+                        v-text="file.file"
+                      ></v-list-item-subtitle>-->
+                    </v-list-item-content>
+
+                    <v-list-item-action>
+                      <v-checkbox
+                        v-model="selectedFiles"
+                        color="#26a69a"
+                        :value="file.id"
+                      ></v-checkbox>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list>
+                <div v-if="this.uploaded" class="btn">
+                  <v-btn color="#26A69A" dark @click="analyze()">
+                    Analyse files
+                  </v-btn>
+                </div>
+              </v-card>
               <v-card id="card" v-for="data in getAnalyzedData" :key="data.id">
                 <div id="main_content2">
                   <h1>Analysed data</h1>
@@ -189,14 +227,16 @@ export default {
   data() {
     return {
       alert: false,
+      alert_text: '',
       uploaded: false,
+      crashed: false,
       inputs: {
-        id: null,
-        title: '',
-        file: null,
+        files: [],
       },
+      uploaded_files: [],
       current_file_id: null,
       links: ['Dashboard', 'Messages', 'Profile', 'Updates'],
+      selectedFiles: [],
     };
   },
   methods: {
@@ -206,10 +246,60 @@ export default {
     }),
 
     onSelected() {
-      this.inputs.title = this.inputs.file.name;
+      this.crashed = false;
+      this.alert = false;
+      //this.inputs.title = this.inputs.files.name;
+      if (this.inputs.files.length != 0) {
+        const fd = new FormData();
+        for (let i = 0; i < this.inputs.files.length; i++) {
+          var idxDot = this.inputs.files[i].name.lastIndexOf('.') + 1;
+          var extFile = this.inputs.files[i].name
+            .substr(idxDot, this.inputs.files[i].name.length)
+            .toLowerCase();
+          if (extFile == 'aia') {
+            fd.append('files', this.inputs.files[i]);
+          } else {
+            this.crashed = true;
+            this.alert = true;
+            this.alert_text =
+              'The file type must be aia (MIT App Inventor Project File)';
+            this.inputs.files = [];
+            this.$refs.fileInputRef = null;
+            break;
+          }
+        }
 
-      if (this.inputs.file) {
-        var idxDot = this.inputs.file.name.lastIndexOf('.') + 1;
+        /*for (var value of fd.values()) {
+          console.log(value);
+        }*/
+        if (!this.crashed) {
+          axios({
+            method: 'post',
+            url: 'http://127.0.0.1:8000/upload-file/',
+            data: fd,
+            body: fd,
+          }).then((response) => {
+            //this.inputs.id = response.data.id;
+            for (let i = 0; i < response.data.length; i++) {
+              var myFile = [];
+              myFile['id'] = response.data[i].id;
+              myFile['title'] = response.data[i].title;
+              myFile['file'] = response.data[i].file;
+              this.uploaded_files.push(myFile);
+              this.selectedFiles.push(myFile['id']);
+            }
+            console.log(response);
+          });
+          this.uploaded = true;
+        }
+      } else {
+        this.crashed = true;
+        this.alert = true;
+        this.alert_text = 'You have not selected any files.';
+      }
+
+      if (this.inputs.files) {
+        /*var idxDot = this.inputs.file.name.lastIndexOf('.') + 1;
         var extFile = this.inputs.file.name
           .substr(idxDot, this.inputs.file.name.length)
           .toLowerCase();
@@ -233,11 +323,11 @@ export default {
           this.inputs.title = '';
           this.$refs.fileInputRef = null;
           console.log(this.$refs.fileInputRef);
-        }
+        }*/
       }
     },
     analyze() {
-      this.analyzeFile(this.inputs.id);
+      this.analyzeFile(this.selectedFiles);
     },
   },
   computed: {

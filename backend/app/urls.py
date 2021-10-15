@@ -7,4 +7,5 @@ urlpatterns = [
     path('get-file/<str:pk>', views.getFileById, name="get-file"),
     path('upload-file/', views.uploadFile, name="upload-file"),
     path('get-file-data/<str:pk>', views.getFileData, name="get-file-data"),
+    path('get-files-data/', views.getFilesData, name="get-files-data"),
 ]
