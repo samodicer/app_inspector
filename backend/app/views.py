@@ -50,8 +50,22 @@ def getFilesData(request):
     return Response(analyze(files))
 
 def analyze(files):
-    data = {}
+    data= {"builtInBlocks": {}, "componentBlocks": {}}
     number_of_blocks = 0
+    control_blocks = 0
+    logic_blocks = 0
+    math_blocks = 0
+    text_blocks = 0
+    lists_blocks = 0
+    colors_blocks = 0
+    variables_blocks = 0
+    procedures_blocks = 0
+    event_blocks = 0
+    setGet_blocks = 0
+    method_blocks = 0
+    componentObject_blocks = 0
+    helpersAssets_blocks = 0
+
     for file in files:
         path = "./media/unzipped_files/"+str(file.id)
         print('path:', path)
@@ -102,10 +116,43 @@ def analyze(files):
         data['gets'] = gets
         data['parameters'] = parameters
         #json_data = json.dumps(data)'''
-        tree = html.fromstring(content)
-        number_of_blocks = number_of_blocks + len(tree.xpath("//block[@type ='component_event']"))
 
-    data['number_of_blocks'] = number_of_blocks
+        tree = html.fromstring(content)
+
+        #number_of_blocks = number_of_blocks + len(tree.xpath("//block[@type ='component_event']"))
+
+        # built-in blocks
+        control_blocks += len(tree.xpath("//block[contains(@type,'control')]"))
+        logic_blocks += len(tree.xpath("//block[contains(@type,'logic')]"))
+        math_blocks += len(tree.xpath("//block[contains(@type,'math')]"))
+        text_blocks += len(tree.xpath("//block[contains(@type,'text')]"))
+        lists_blocks += len(tree.xpath("//block[contains(@type,'lists')]"))
+        colors_blocks += len(tree.xpath("//block[contains(@type,'color')]"))
+        variables_blocks += len(tree.xpath("//block[contains(@type,'lexical_variable') or contains(@type,'local_declaration')]"))
+        procedures_blocks += len(tree.xpath("//block[contains(@type,'procedures')]"))
+
+        #component blocks
+        event_blocks += len(tree.xpath("//block[contains(@type,'component_event')]"))
+        setGet_blocks += len(tree.xpath("//block[contains(@type,'component_set_get')]"))
+        method_blocks += len(tree.xpath("//block[contains(@type,'component_method')]"))
+        componentObject_blocks += len(tree.xpath("//block[contains(@type,'component_component_block')]"))
+        helpersAssets_blocks += len(tree.xpath("//block[contains(@type,'helpers_assets')]"))
+
+    #data['builtInBlocks']['number_of_blocks'] = number_of_blocks
+    data['builtInBlocks']['control_blocks'] = control_blocks
+    data['builtInBlocks']['logic_blocks'] = logic_blocks
+    data['builtInBlocks']['math_blocks'] = math_blocks
+    data['builtInBlocks']['text_blocks'] = text_blocks
+    data['builtInBlocks']['lists_blocks'] = lists_blocks
+    data['builtInBlocks']['colors_blocks'] = colors_blocks
+    data['builtInBlocks']['variables_blocks'] = variables_blocks
+    data['builtInBlocks']['procedures_blocks'] = procedures_blocks
+    data['componentBlocks']['event_blocks'] = event_blocks
+    data['componentBlocks']['setGet_blocks'] = setGet_blocks
+    data['componentBlocks']['method_blocks'] = method_blocks
+    data['componentBlocks']['componentObject_blocks'] = componentObject_blocks
+    data['componentBlocks']['helpersAssets_blocks'] = helpersAssets_blocks
+
 
     return [data]
 
