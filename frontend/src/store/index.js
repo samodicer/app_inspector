@@ -1,11 +1,11 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
-import documents from './modules/documents';
+import files from './modules/files';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-    modules: {
-        documents
-    }
+  modules: {
+    files,
+  },
 });

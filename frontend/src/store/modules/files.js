@@ -3,9 +3,13 @@ import axios from 'axios';
 const state = {
   files: [],
   analyzed_data: [],
+  uploadedFiles: [],
+  isUploaded: false,
 };
 
 const getters = {
+  getUploadedFiles: (state) => state.uploadedFiles,
+  getUploaded: (state) => state.isUploaded,
   allFiles: (state) => state.files,
   getAnalyzedData: (state) => state.analyzed_data,
 };
@@ -69,9 +73,17 @@ const actions = {
         console.log(err);
       });*/
   },
+  async changeUploaded({ commit }, value) {
+    commit('setUploaded', value);
+  },
+  async changeUploadedFiles({ commit }, array) {
+    commit('setUploadedFiles', array);
+  },
 };
 
 const mutations = {
+  setUploaded: (state, uploaded) => (state.isUploaded = uploaded),
+  setUploadedFiles: (state, array) => (state.uploadedFiles = array),
   setFiles: (state, files) => (state.files = files),
   setAnalyzedData: (state, analyzed_data) =>
     (state.analyzed_data = analyzed_data),

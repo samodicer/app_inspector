@@ -48,14 +48,7 @@
 
           <v-col>
             <v-sheet id="sheet" min-height="70vh" rounded="lg">
-              <UploadFiles></UploadFiles>
-              <!--<p>uploaded files on server:</p>
-              <div v-for="doc in allFiles" :key="doc.id" class="files">
-                  <b>{{doc}}</b>
-              </div>-->
-              <div v-if="this.getUploaded">
-                <SelectFiles></SelectFiles>
-              </div>
+              <p>Overview</p>
             </v-sheet>
           </v-col>
         </v-row>
@@ -63,48 +56,14 @@
     </v-main>
   </v-app>
 </template>
-
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import UploadFiles from '../components/UploadFiles.vue';
-import SelectFiles from '../components/SelectFiles.vue';
-
 export default {
-  name: 'Home',
-  components: {
-    UploadFiles,
-    SelectFiles,
-  },
+  name: 'Overview',
+  components: {},
   data() {
     return {
       links: ['Dashboard', 'Messages', 'Profile', 'Updates'],
     };
   },
-  methods: {
-    ...mapActions({
-      fetchFiles: 'files/fetchFiles',
-    }),
-  },
-  computed: {
-    ...mapGetters({
-      allFiles: 'files/allFiles',
-      getUploaded: 'files/getUploaded',
-    }),
-  },
-  mounted() {
-    this.fetchFiles();
-  },
 };
 </script>
-
-<style scoped>
-#inspire {
-  text-align: center;
-}
-#sheet {
-  padding: 30px;
-}
-.row {
-  margin-bottom: 50px;
-}
-</style>
