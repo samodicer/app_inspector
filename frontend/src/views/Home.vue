@@ -1,25 +1,15 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar app color="white" flat>
+    <v-app-bar app color="white" flat height="80px">
       <v-container class="py-0 fill-height">
-        <v-avatar tile class="mr-10" color="#26A69A" size="50">
-          <span class="white--text headline">AI</span>
-        </v-avatar>
+        <router-link v-bind:to="'/'">
+          <img src="../assets/images/logo2.png" height="70px" />
+        </router-link>
+
+        <v-spacer></v-spacer>
         <v-btn v-for="link in links" :key="link" text>
           {{ link }}
         </v-btn>
-
-        <v-spacer></v-spacer>
-
-        <v-responsive max-width="260">
-          <v-text-field
-            dense
-            flat
-            hide-details
-            rounded
-            solo-inverted
-          ></v-text-field>
-        </v-responsive>
       </v-container>
     </v-app-bar>
 

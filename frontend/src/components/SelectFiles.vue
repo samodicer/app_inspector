@@ -1,12 +1,12 @@
 <template>
-  <v-card max-width="600" class="mx-auto">
+  <v-card class="mx-auto">
     <v-toolbar color="#26a69a" dark>
       <v-toolbar-title>Uploaded files</v-toolbar-title>
     </v-toolbar>
 
-    <v-list subheader two-line>
+    <v-list subheader height="50px">
       <v-list-item v-for="file in getUploadedFiles" :key="file.id">
-        <v-list-item-avatar>
+        <v-list-item-avatar width="30px" height="30px">
           <v-icon class="grey lighten-1" dark> mdi-file </v-icon>
         </v-list-item-avatar>
 
