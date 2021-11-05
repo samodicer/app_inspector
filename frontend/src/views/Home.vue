@@ -5,7 +5,6 @@
         <router-link v-bind:to="'/'">
           <img src="../assets/images/logo2.png" height="70px" />
         </router-link>
-
         <v-spacer></v-spacer>
         <v-btn v-for="link in links" :key="link" text>
           {{ link }}

@@ -4,7 +4,7 @@
       <v-toolbar-title>Uploaded files</v-toolbar-title>
     </v-toolbar>
 
-    <v-list subheader height="50px">
+    <v-list subheader>
       <v-list-item v-for="file in getUploadedFiles" :key="file.id">
         <v-list-item-avatar width="30px" height="30px">
           <v-icon class="grey lighten-1" dark> mdi-file </v-icon>
@@ -32,6 +32,16 @@
         <v-btn color="#26A69A" dark @click="analyze()"> Analyse files </v-btn>
       </router-link>
     </div>
+
+    <v-snackbar v-model="snackbar">
+      {{ snackbar_text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="#26a69a" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-card>
   <!--  <v-card id="card" v-for="data in getAnalyzedData" :key="data.id">
     <div id="main_content2">
@@ -84,6 +94,8 @@ export default {
   data() {
     return {
       selectedFiles: [],
+      snackbar: true,
+      snackbar_text: 'Files has been successfully uploaded',
     };
   },
   methods: {

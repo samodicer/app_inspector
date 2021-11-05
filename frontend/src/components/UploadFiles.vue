@@ -18,7 +18,7 @@
       <div v-if="!this.uploaded" class="btn">
         <v-btn color="#26A69A" dark @click="onSelected()"> Upload files </v-btn>
       </div>
-      <h2 v-if="this.uploaded">Files has been successfully uploaded</h2>
+
       <v-alert
         :value="alert"
         color="#26A69A"
@@ -165,7 +165,6 @@ export default {
       this.analyzeFile(this.selectedFiles);
     },
   },
-  computed: {},
 };
 </script>
 
