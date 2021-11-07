@@ -54,6 +54,7 @@ const actions = {
       .then((response) => {
         //commit('setAnalyzedData', response.data);
         console.log(response);
+        commit('setAnalyzedData', response.data);
       })
       .catch((err) => {
         console.log(err);

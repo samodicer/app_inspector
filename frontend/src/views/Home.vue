@@ -15,7 +15,7 @@
     <v-main class="grey lighten-3">
       <v-container>
         <v-row>
-          <v-col cols="2">
+          <!-- <v-col cols="2">
             <v-sheet rounded="lg">
               <v-list color="transparent">
                 <v-list-item v-for="n in 5" :key="n" link>
@@ -33,7 +33,7 @@
                 </v-list-item>
               </v-list>
             </v-sheet>
-          </v-col>
+          </v-col>-->
 
           <v-col>
             <v-sheet id="sheet" min-height="70vh" rounded="lg">

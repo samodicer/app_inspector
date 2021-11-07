@@ -15,7 +15,7 @@
     <v-main class="grey lighten-3">
       <v-container>
         <v-row>
-          <v-col cols="2">
+          <!--<v-col cols="2">
             <v-sheet rounded="lg">
               <v-list color="transparent">
                 <v-list-item v-for="n in 5" :key="n" link>
@@ -33,11 +33,16 @@
                 </v-list-item>
               </v-list>
             </v-sheet>
-          </v-col>
+          </v-col>-->
 
           <v-col>
             <v-sheet id="sheet" min-height="70vh" rounded="lg">
               <p>Overview</p>
+              <BarChart
+                :chartData="this.chartData"
+                :chartOptions="this.chartOptions"
+                class="bar-chart"
+              ></BarChart>
             </v-sheet>
           </v-col>
         </v-row>
@@ -47,13 +52,37 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import BarChart from '../components/BarChart.vue';
+
 export default {
   name: 'Overview',
-  components: {},
+  components: {
+    BarChart,
+  },
   data() {
     return {
       links: ['Dashboard', 'Messages', 'Profile', 'Updates'],
+      chartData: {
+        labels: ['Dashboard', 'Messages', 'Profile', 'Updates'],
+        datasets: [
+          {
+            data: [0, 4, 25, 2],
+            backgroundColor: '#26a69a',
+          },
+        ],
+      },
+      chartOptions: {
+        indexAxis: 'y',
+        maintainAspectRatio: false,
+        responsive: true,
+      },
     };
+  },
+  computed: {
+    ...mapGetters({
+      getAnalyzedData: 'files/getAnalyzedData',
+    }),
   },
 };
 </script>
@@ -67,5 +96,7 @@ export default {
 }
 .row {
   margin-bottom: 50px;
+}
+.bar-chart {
 }
 </style>
