@@ -34,15 +34,29 @@
               </v-list>
             </v-sheet>
           </v-col>-->
-
           <v-col>
-            <v-sheet id="sheet" min-height="70vh" rounded="lg">
-              <p>Overview</p>
-              <BarChart
-                :chartData="this.chartData"
-                :chartOptions="this.chartOptions"
-                class="bar-chart"
-              ></BarChart>
+            <v-sheet
+              id="sheet"
+              min-height="70vh"
+              rounded="lg"
+              v-if="this.renderChart"
+            >
+              <v-col>
+                <p>Build-in blocks</p>
+                <BarChart
+                  :chartData="this.chartData"
+                  :chartOptions="this.chartOptions"
+                  class="bar-chart"
+                ></BarChart>
+              </v-col>
+              <v-col>
+                <p>Component blocks</p>
+                <BarChart
+                  :chartData="this.chartData"
+                  :chartOptions="this.chartOptions"
+                  class="bar-chart"
+                ></BarChart>
+              </v-col>
             </v-sheet>
           </v-col>
         </v-row>
@@ -62,20 +76,34 @@ export default {
   },
   data() {
     return {
+      //analyzedData: Object,
+      renderChart: false,
       links: ['Dashboard', 'Messages', 'Profile', 'Updates'],
       chartData: {
-        labels: ['Dashboard', 'Messages', 'Profile', 'Updates'],
+        labels: [],
         datasets: [
           {
-            data: [0, 4, 25, 2],
-            backgroundColor: '#26a69a',
+            data: [],
+            backgroundColor: [
+              '#FBA92A',
+              '#F54141',
+              '#FFF80B',
+              '#4BF148',
+              '#EA2FCD',
+              '#8934C8',
+              '#1A90E7',
+              '#0AD68F',
+            ],
           },
         ],
       },
       chartOptions: {
-        indexAxis: 'y',
         maintainAspectRatio: false,
         responsive: true,
+        legend: {
+          position: 'right',
+          align: 'middle',
+        },
       },
     };
   },
@@ -83,6 +111,18 @@ export default {
     ...mapGetters({
       getAnalyzedData: 'files/getAnalyzedData',
     }),
+  },
+  watch: {
+    getAnalyzedData: function (val) {
+      if (val) {
+        for (const [key, value] of Object.entries(val[0].builtInBlocks)) {
+          console.log(key, value);
+          this.chartData.labels.push(key);
+          this.chartData.datasets[0].data.push(value);
+          this.renderChart = true;
+        }
+      }
+    },
   },
 };
 </script>
