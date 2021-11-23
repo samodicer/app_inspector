@@ -91,6 +91,7 @@ const mutations = {
     state.analyzed_data = [];
     state.uploadedFiles = [];
     state.isUploaded = false;
+    console.log('RESETING');
   },
   setUploaded: (state, uploaded) => (state.isUploaded = uploaded),
   setUploadedFiles: (state, array) => (state.uploadedFiles = array),

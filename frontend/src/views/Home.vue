@@ -2,9 +2,13 @@
   <v-app id="inspire">
     <v-app-bar app color="white" flat height="80px">
       <v-container class="py-0 fill-height">
-        <router-link v-bind:to="'/'">
-          <img src="../assets/images/logo2.png" height="70px" />
-        </router-link>
+        <img
+          class="logo"
+          src="../assets/images/logo2.png"
+          height="70px"
+          @click="refreshByClick"
+        />
+
         <v-spacer></v-spacer>
         <v-btn v-for="link in links" :key="link" text>
           {{ link }}
@@ -74,6 +78,9 @@ export default {
       fetchFiles: 'files/fetchFiles',
       resetStates: 'files/resetStates',
     }),
+    refreshByClick() {
+      this.$router.go();
+    },
   },
   computed: {
     ...mapGetters({
@@ -97,5 +104,8 @@ export default {
 }
 .row {
   margin-bottom: 50px;
+}
+.logo {
+  cursor: pointer;
 }
 </style>
