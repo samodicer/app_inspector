@@ -27,6 +27,9 @@ const actions = {
             body: fd
         })
     },*/
+  async resetStates({ commit }) {
+    commit('resetStates');
+  },
   async fetchFiles({ commit }) {
     axios
       .get('http://127.0.0.1:8000/get-files/')
@@ -83,6 +86,12 @@ const actions = {
 };
 
 const mutations = {
+  resetStates: (state) => {
+    state.files = [];
+    state.analyzed_data = [];
+    state.uploadedFiles = [];
+    state.isUploaded = false;
+  },
   setUploaded: (state, uploaded) => (state.isUploaded = uploaded),
   setUploadedFiles: (state, array) => (state.uploadedFiles = array),
   setFiles: (state, files) => (state.files = files),

@@ -3,11 +3,7 @@
     <v-app-bar app color="white" flat height="80px">
       <v-container class="py-0 fill-height">
         <router-link v-bind:to="'/'">
-          <img
-            src="../assets/images/logo2.png"
-            height="70px"
-            @click="reloadPage"
-          />
+          <img src="../assets/images/logo2.png" height="70px" />
         </router-link>
         <v-spacer></v-spacer>
         <v-btn v-for="link in links" :key="link" text>
@@ -258,19 +254,63 @@ export default {
       getAnalyzedData: 'files/getAnalyzedData',
     }),
   },
+  methods: {
+    sortData(type, labels, data) {
+      //create object
+      var chartObj = labels.map(function (d, i) {
+        return {
+          label: d,
+          data: data[i] || 0,
+        };
+      });
+      // sort data
+      var sortedChartObj = chartObj.sort(function (a, b) {
+        return b.data - a.data;
+      });
+      //populate sorted labels and data arrays
+      var sortedLabels = [];
+      var sortedData = [];
+      sortedChartObj.forEach(function (d) {
+        sortedLabels.push(d.label);
+        sortedData.push(d.data);
+      });
+      //set data for each type
+      switch (type) {
+        case 'builtInBlocks':
+          this.chartDataBuiltInBlocks.labels = sortedLabels;
+          this.chartDataBuiltInBlocks.datasets[0].data = sortedData;
+          break;
+        case 'componentBlocks':
+          this.chartDataComponentBlocks.labels = sortedLabels;
+          this.chartDataComponentBlocks.datasets[0].data = sortedData;
+          break;
+        case 'componentBlocksCategories':
+          this.chartDataComponentBlocksCategories.labels = sortedLabels;
+          this.chartDataComponentBlocksCategories.datasets[0].data = sortedData;
+          break;
+        case 'userInterfaceComponentBlocks':
+          this.chartDataUIComponentBlocks.labels = sortedLabels;
+          this.chartDataUIComponentBlocks.datasets[0].data = sortedData;
+          break;
+      }
+    },
+  },
   watch: {
     getAnalyzedData: function (val) {
       if (val) {
+        //populate labels and data from server response data
         for (const [key, value] of Object.entries(val[0].builtInBlocks)) {
           console.log(key, value);
           this.chartDataBuiltInBlocks.labels.push(key);
           this.chartDataBuiltInBlocks.datasets[0].data.push(value);
         }
+        //populate labels and data from server response data
         for (const [key, value] of Object.entries(val[0].componentBlocks)) {
           console.log(key, value);
           this.chartDataComponentBlocks.labels.push(key);
           this.chartDataComponentBlocks.datasets[0].data.push(value);
         }
+        //populate labels and data from server response data
         for (const [key, value] of Object.entries(
           val[0].componentBlocksCategories
         )) {
@@ -278,6 +318,7 @@ export default {
           this.chartDataComponentBlocksCategories.labels.push(key);
           this.chartDataComponentBlocksCategories.datasets[0].data.push(value);
         }
+        //populate labels and data from server response data
         for (const [key, value] of Object.entries(
           val[0].userInterfaceComponentBlocks
         )) {
@@ -285,6 +326,28 @@ export default {
           this.chartDataUIComponentBlocks.labels.push(key);
           this.chartDataUIComponentBlocks.datasets[0].data.push(value);
         }
+        //sort all data and labels
+        this.sortData(
+          'builtInBlocks',
+          this.chartDataBuiltInBlocks.labels,
+          this.chartDataBuiltInBlocks.datasets[0].data
+        );
+        this.sortData(
+          'componentBlocks',
+          this.chartDataComponentBlocks.labels,
+          this.chartDataComponentBlocks.datasets[0].data
+        );
+        this.sortData(
+          'componentBlocksCategories',
+          this.chartDataComponentBlocksCategories.labels,
+          this.chartDataComponentBlocksCategories.datasets[0].data
+        );
+        this.sortData(
+          'userInterfaceComponentBlocks',
+          this.chartDataUIComponentBlocks.labels,
+          this.chartDataUIComponentBlocks.datasets[0].data
+        );
+
         this.renderChart = true;
       }
     },

@@ -36,7 +36,7 @@
           </v-col>-->
 
           <v-col>
-            <v-sheet id="sheet" min-height="70vh" rounded="lg">
+            <v-sheet id="sheet" rounded="lg">
               <UploadFiles></UploadFiles>
               <!--<p>uploaded files on server:</p>
               <div v-for="doc in allFiles" :key="doc.id" class="files">
@@ -72,6 +72,7 @@ export default {
   methods: {
     ...mapActions({
       fetchFiles: 'files/fetchFiles',
+      resetStates: 'files/resetStates',
     }),
   },
   computed: {
@@ -82,6 +83,7 @@ export default {
   },
   mounted() {
     this.fetchFiles();
+    this.resetStates();
   },
 };
 </script>
