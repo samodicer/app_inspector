@@ -15,25 +15,6 @@
     <v-main class="grey lighten-3">
       <v-container>
         <v-row>
-          <!--<v-col cols="2">
-            <v-sheet rounded="lg">
-              <v-list color="transparent">
-                <v-list-item v-for="n in 5" :key="n" link>
-                  <v-list-item-content>
-                    <v-list-item-title> List Item {{ n }} </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-
-                <v-divider class="my-2"></v-divider>
-
-                <v-list-item link color="grey lighten-4">
-                  <v-list-item-content>
-                    <v-list-item-title> Refresh </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-sheet>
-          </v-col>-->
           <v-col>
             <v-sheet
               id="sheet"
@@ -87,6 +68,9 @@
                   </v-sheet>
                 </v-col>
               </v-row>
+              <v-row>
+                <v-btn elevation="2" @click="exportToExcel">Export</v-btn>
+              </v-row>
             </v-sheet>
           </v-col>
         </v-row>
@@ -99,6 +83,8 @@
 import { mapGetters } from 'vuex';
 import DoughnutChart from '../components/DoughnutChart.vue';
 import BarChart from '../components/BarChart.vue';
+import ExcelExport from 'export-xlsx';
+//import { alignment } from 'export-xlsx';
 
 export default {
   name: 'Overview',
@@ -247,6 +233,74 @@ export default {
           ],
         },
       },
+
+      SETTINGS_FOR_EXPORT: {
+        fileName: 'app_inspector_project_overview',
+        workSheets: [
+          {
+            sheetName: 'Built-in blocks',
+            startingRowNumber: 2,
+            gapBetweenTwoTables: 2,
+            tableSettings: {
+              data: {
+                importable: true,
+                tableTitle: 'Built-in blocks',
+                headerDefinition: [],
+              },
+            },
+          },
+          {
+            sheetName: 'Component blocks',
+            startingRowNumber: 2,
+            gapBetweenTwoTables: 2,
+            tableSettings: {
+              data: {
+                importable: true,
+                tableTitle: 'Component blocks',
+                headerDefinition: [],
+              },
+            },
+          },
+          {
+            sheetName: 'Categories of component blocks',
+            startingRowNumber: 2,
+            gapBetweenTwoTables: 2,
+            tableSettings: {
+              data: {
+                importable: true,
+                tableTitle: 'Categories of component blocks',
+                headerDefinition: [],
+              },
+            },
+          },
+          {
+            sheetName: 'User Interface component blocks',
+            startingRowNumber: 2,
+            gapBetweenTwoTables: 2,
+            tableSettings: {
+              data: {
+                importable: true,
+                tableTitle: 'User Interface component blocks',
+                headerDefinition: [],
+              },
+            },
+          },
+        ],
+      },
+      dataToExport: [
+        {
+          data: [],
+        },
+        {
+          data: [],
+        },
+        {
+          data: [],
+        },
+        {
+          data: [],
+        },
+      ],
     };
   },
   computed: {
@@ -263,10 +317,12 @@ export default {
           data: data[i] || 0,
         };
       });
-      // sort data
+
+      //sort data
       var sortedChartObj = chartObj.sort(function (a, b) {
         return b.data - a.data;
       });
+
       //populate sorted labels and data arrays
       var sortedLabels = [];
       var sortedData = [];
@@ -274,6 +330,7 @@ export default {
         sortedLabels.push(d.label);
         sortedData.push(d.data);
       });
+
       //set data for each type
       switch (type) {
         case 'builtInBlocks':
@@ -294,6 +351,56 @@ export default {
           break;
       }
     },
+    setDataToExport(type, labels, data) {
+      //create style object for header cell
+      const style = {
+        alignment: { horizontal: 'center', vertical: 'middle' },
+      };
+
+      //create header object array
+      var tableHeaders = labels.map(function (d) {
+        return {
+          name: d,
+          key: d,
+          style: style,
+          width: 25,
+        };
+      });
+
+      //create data object array
+      var tableData = data.map(function (d, i) {
+        return {
+          [labels[i]]: d,
+        };
+      });
+
+      //merge all data objects to single object
+      const tableDataMerged = Object.assign({}, ...tableData);
+
+      //set table data for each type
+      switch (type) {
+        case 'builtInBlocks':
+          this.SETTINGS_FOR_EXPORT.workSheets[0].tableSettings.data.headerDefinition = tableHeaders;
+          this.dataToExport[0].data = [tableDataMerged];
+          break;
+        case 'componentBlocks':
+          this.SETTINGS_FOR_EXPORT.workSheets[1].tableSettings.data.headerDefinition = tableHeaders;
+          this.dataToExport[1].data = [tableDataMerged];
+          break;
+        case 'componentBlocksCategories':
+          this.SETTINGS_FOR_EXPORT.workSheets[2].tableSettings.data.headerDefinition = tableHeaders;
+          this.dataToExport[2].data = [tableDataMerged];
+          break;
+        case 'userInterfaceComponentBlocks':
+          this.SETTINGS_FOR_EXPORT.workSheets[3].tableSettings.data.headerDefinition = tableHeaders;
+          this.dataToExport[3].data = [tableDataMerged];
+          break;
+      }
+    },
+    exportToExcel() {
+      const excelExport = new ExcelExport();
+      excelExport.downloadExcel(this.SETTINGS_FOR_EXPORT, this.dataToExport);
+    },
   },
   watch: {
     getAnalyzedData: function (val) {
@@ -304,12 +411,14 @@ export default {
           this.chartDataBuiltInBlocks.labels.push(key);
           this.chartDataBuiltInBlocks.datasets[0].data.push(value);
         }
+
         //populate labels and data from server response data
         for (const [key, value] of Object.entries(val[0].componentBlocks)) {
           console.log(key, value);
           this.chartDataComponentBlocks.labels.push(key);
           this.chartDataComponentBlocks.datasets[0].data.push(value);
         }
+
         //populate labels and data from server response data
         for (const [key, value] of Object.entries(
           val[0].componentBlocksCategories
@@ -318,6 +427,7 @@ export default {
           this.chartDataComponentBlocksCategories.labels.push(key);
           this.chartDataComponentBlocksCategories.datasets[0].data.push(value);
         }
+
         //populate labels and data from server response data
         for (const [key, value] of Object.entries(
           val[0].userInterfaceComponentBlocks
@@ -326,6 +436,7 @@ export default {
           this.chartDataUIComponentBlocks.labels.push(key);
           this.chartDataUIComponentBlocks.datasets[0].data.push(value);
         }
+
         //sort all data and labels
         this.sortData(
           'builtInBlocks',
@@ -348,6 +459,29 @@ export default {
           this.chartDataUIComponentBlocks.datasets[0].data
         );
 
+        //set all data to excel export
+        this.setDataToExport(
+          'builtInBlocks',
+          this.chartDataBuiltInBlocks.labels,
+          this.chartDataBuiltInBlocks.datasets[0].data
+        );
+        this.setDataToExport(
+          'componentBlocks',
+          this.chartDataComponentBlocks.labels,
+          this.chartDataComponentBlocks.datasets[0].data
+        );
+        this.setDataToExport(
+          'componentBlocksCategories',
+          this.chartDataComponentBlocksCategories.labels,
+          this.chartDataComponentBlocksCategories.datasets[0].data
+        );
+        this.setDataToExport(
+          'userInterfaceComponentBlocks',
+          this.chartDataUIComponentBlocks.labels,
+          this.chartDataUIComponentBlocks.datasets[0].data
+        );
+
+        //render chart
         this.renderChart = true;
       }
     },
