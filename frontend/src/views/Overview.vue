@@ -25,7 +25,7 @@
               <v-row>
                 <v-col>
                   <v-sheet id="sheet" rounded="lg" color="#F7F7F7">
-                    <p>Built-in blocks</p>
+                    <p class="card_title">Built-in blocks</p>
                     <DoughnutChart
                       :chartData="this.chartDataBuiltInBlocks"
                       :chartOptions="this.chartOptionsBuiltInBlocks"
@@ -35,7 +35,7 @@
                 </v-col>
                 <v-col>
                   <v-sheet id="sheet" rounded="lg" color="#F7F7F7">
-                    <p>Component blocks</p>
+                    <p class="card_title">Component blocks</p>
                     <DoughnutChart
                       :chartData="this.chartDataComponentBlocks"
                       :chartOptions="this.chartOptionsComponentBlocks"
@@ -47,7 +47,7 @@
               <v-row>
                 <v-col>
                   <v-sheet id="sheet" rounded="lg" color="#F7F7F7">
-                    <p>Categories of component blocks</p>
+                    <p class="card_title">Categories of component blocks</p>
                     <BarChart
                       :chartData="this.chartDataComponentBlocksCategories"
                       :chartOptions="this.chartOptionsComponentBlocksCategories"
@@ -59,7 +59,7 @@
               <v-row>
                 <v-col>
                   <v-sheet id="sheet" rounded="lg" color="#F7F7F7">
-                    <p>User Interface component blocks</p>
+                    <p class="card_title">User Interface component blocks</p>
                     <BarChart
                       :chartData="this.chartDataUIComponentBlocks"
                       :chartOptions="this.chartOptionsUIComponentBlocks"
@@ -69,7 +69,127 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-btn elevation="2" @click="exportToExcel">Export</v-btn>
+                <v-col class="text-right">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        id="icon"
+                        x-large
+                        @click="exportToExcel"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        mdi-file-export
+                      </v-icon>
+                    </template>
+                    <span>Export to Excel</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        id="icon"
+                        x-large
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="settingsDialog = true"
+                      >
+                        mdi-cog
+                      </v-icon>
+                    </template>
+                    <span>Settings</span>
+                  </v-tooltip>
+                  <div v-if="settingsDialog">
+                    <v-dialog
+                      v-model="settingsDialog"
+                      fullscreen
+                      hide-overlay
+                      transition="dialog-bottom-transition"
+                    >
+                      <v-card>
+                        <v-toolbar dark color="#26a69a">
+                          <v-btn icon dark @click="settingsDialog = false">
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
+                          <v-toolbar-title>Settings</v-toolbar-title>
+                          <v-spacer></v-spacer>
+                          <v-toolbar-items>
+                            <v-btn dark text @click="settingsDialog = false">
+                              Save
+                            </v-btn>
+                          </v-toolbar-items>
+                        </v-toolbar>
+                        <v-list three-line subheader>
+                          <v-subheader>User Controls</v-subheader>
+                          <v-list-item>
+                            <v-list-item-content>
+                              <v-list-item-title
+                                >Content filtering</v-list-item-title
+                              >
+                              <v-list-item-subtitle
+                                >Set the content filtering level to restrict
+                                apps that can be
+                                downloaded</v-list-item-subtitle
+                              >
+                            </v-list-item-content>
+                          </v-list-item>
+                          <v-list-item>
+                            <v-list-item-content>
+                              <v-list-item-title>Password</v-list-item-title>
+                              <v-list-item-subtitle
+                                >Require password for purchase or use password
+                                to restrict purchase</v-list-item-subtitle
+                              >
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-list>
+                        <v-divider></v-divider>
+                        <v-list three-line subheader>
+                          <v-subheader>General</v-subheader>
+                          <v-list-item>
+                            <v-list-item-action>
+                              <v-checkbox v-model="notifications"></v-checkbox>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                              <v-list-item-title
+                                >Notifications</v-list-item-title
+                              >
+                              <v-list-item-subtitle
+                                >Notify me about updates to apps or games that I
+                                downloaded</v-list-item-subtitle
+                              >
+                            </v-list-item-content>
+                          </v-list-item>
+                          <v-list-item>
+                            <v-list-item-action>
+                              <v-checkbox v-model="sound"></v-checkbox>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                              <v-list-item-title>Sound</v-list-item-title>
+                              <v-list-item-subtitle
+                                >Auto-update apps at any time. Data charges may
+                                apply</v-list-item-subtitle
+                              >
+                            </v-list-item-content>
+                          </v-list-item>
+                          <v-list-item>
+                            <v-list-item-action>
+                              <v-checkbox v-model="widgets"></v-checkbox>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                              <v-list-item-title
+                                >Auto-add widgets</v-list-item-title
+                              >
+                              <v-list-item-subtitle
+                                >Automatically add home screen
+                                widgets</v-list-item-subtitle
+                              >
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-list>
+                      </v-card>
+                    </v-dialog>
+                  </div>
+                </v-col>
               </v-row>
             </v-sheet>
           </v-col>
@@ -84,7 +204,6 @@ import { mapGetters } from 'vuex';
 import DoughnutChart from '../components/DoughnutChart.vue';
 import BarChart from '../components/BarChart.vue';
 import ExcelExport from 'export-xlsx';
-//import { alignment } from 'export-xlsx';
 
 export default {
   name: 'Overview',
@@ -96,6 +215,7 @@ export default {
     return {
       //analyzedData: Object,
       renderChart: false,
+      settingsDialog: false,
       links: ['Dashboard', 'Messages', 'Profile', 'Updates'],
       chartDataBuiltInBlocks: {
         labels: [],
@@ -498,5 +618,12 @@ export default {
 }
 .row {
   margin-bottom: 50px;
+}
+#icon:hover {
+  color: #26a69a;
+}
+.card_title {
+  font-weight: 700;
+  font-size: 20px;
 }
 </style>
