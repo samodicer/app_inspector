@@ -429,6 +429,39 @@ export default {
     }),
   },
   methods: {
+    setChartData(val) {
+      //populate labels and data from server response data
+      for (const [key, value] of Object.entries(val[0].builtInBlocks)) {
+        console.log(key, value);
+        this.chartDataBuiltInBlocks.labels.push(key);
+        this.chartDataBuiltInBlocks.datasets[0].data.push(value);
+      }
+
+      //populate labels and data from server response data
+      for (const [key, value] of Object.entries(val[0].componentBlocks)) {
+        console.log(key, value);
+        this.chartDataComponentBlocks.labels.push(key);
+        this.chartDataComponentBlocks.datasets[0].data.push(value);
+      }
+
+      //populate labels and data from server response data
+      for (const [key, value] of Object.entries(
+        val[0].componentBlocksCategories
+      )) {
+        console.log(key, value);
+        this.chartDataComponentBlocksCategories.labels.push(key);
+        this.chartDataComponentBlocksCategories.datasets[0].data.push(value);
+      }
+
+      //populate labels and data from server response data
+      for (const [key, value] of Object.entries(
+        val[0].userInterfaceComponentBlocks
+      )) {
+        console.log(key, value);
+        this.chartDataUIComponentBlocks.labels.push(key);
+        this.chartDataUIComponentBlocks.datasets[0].data.push(value);
+      }
+    },
     sortData(type, labels, data) {
       //create object
       var chartObj = labels.map(function (d, i) {
@@ -471,7 +504,7 @@ export default {
           break;
       }
     },
-    setDataToExport(type, labels, data) {
+    setExportData(type, labels, data) {
       //create style object for header cell
       const style = {
         alignment: { horizontal: 'center', vertical: 'middle' },
@@ -521,88 +554,62 @@ export default {
       const excelExport = new ExcelExport();
       excelExport.downloadExcel(this.SETTINGS_FOR_EXPORT, this.dataToExport);
     },
+    setData(val) {
+      //set chart data and labels
+      this.setChartData(val);
+
+      //sort all data and labels
+      this.sortData(
+        'builtInBlocks',
+        this.chartDataBuiltInBlocks.labels,
+        this.chartDataBuiltInBlocks.datasets[0].data
+      );
+      this.sortData(
+        'componentBlocks',
+        this.chartDataComponentBlocks.labels,
+        this.chartDataComponentBlocks.datasets[0].data
+      );
+      this.sortData(
+        'componentBlocksCategories',
+        this.chartDataComponentBlocksCategories.labels,
+        this.chartDataComponentBlocksCategories.datasets[0].data
+      );
+      this.sortData(
+        'userInterfaceComponentBlocks',
+        this.chartDataUIComponentBlocks.labels,
+        this.chartDataUIComponentBlocks.datasets[0].data
+      );
+
+      //set all data to excel export
+      this.setExportData(
+        'builtInBlocks',
+        this.chartDataBuiltInBlocks.labels,
+        this.chartDataBuiltInBlocks.datasets[0].data
+      );
+      this.setExportData(
+        'componentBlocks',
+        this.chartDataComponentBlocks.labels,
+        this.chartDataComponentBlocks.datasets[0].data
+      );
+      this.setExportData(
+        'componentBlocksCategories',
+        this.chartDataComponentBlocksCategories.labels,
+        this.chartDataComponentBlocksCategories.datasets[0].data
+      );
+      this.setExportData(
+        'userInterfaceComponentBlocks',
+        this.chartDataUIComponentBlocks.labels,
+        this.chartDataUIComponentBlocks.datasets[0].data
+      );
+
+      //render chart
+      this.renderChart = true;
+    },
   },
   watch: {
     getAnalyzedData: function (val) {
       if (val) {
-        //populate labels and data from server response data
-        for (const [key, value] of Object.entries(val[0].builtInBlocks)) {
-          console.log(key, value);
-          this.chartDataBuiltInBlocks.labels.push(key);
-          this.chartDataBuiltInBlocks.datasets[0].data.push(value);
-        }
-
-        //populate labels and data from server response data
-        for (const [key, value] of Object.entries(val[0].componentBlocks)) {
-          console.log(key, value);
-          this.chartDataComponentBlocks.labels.push(key);
-          this.chartDataComponentBlocks.datasets[0].data.push(value);
-        }
-
-        //populate labels and data from server response data
-        for (const [key, value] of Object.entries(
-          val[0].componentBlocksCategories
-        )) {
-          console.log(key, value);
-          this.chartDataComponentBlocksCategories.labels.push(key);
-          this.chartDataComponentBlocksCategories.datasets[0].data.push(value);
-        }
-
-        //populate labels and data from server response data
-        for (const [key, value] of Object.entries(
-          val[0].userInterfaceComponentBlocks
-        )) {
-          console.log(key, value);
-          this.chartDataUIComponentBlocks.labels.push(key);
-          this.chartDataUIComponentBlocks.datasets[0].data.push(value);
-        }
-
-        //sort all data and labels
-        this.sortData(
-          'builtInBlocks',
-          this.chartDataBuiltInBlocks.labels,
-          this.chartDataBuiltInBlocks.datasets[0].data
-        );
-        this.sortData(
-          'componentBlocks',
-          this.chartDataComponentBlocks.labels,
-          this.chartDataComponentBlocks.datasets[0].data
-        );
-        this.sortData(
-          'componentBlocksCategories',
-          this.chartDataComponentBlocksCategories.labels,
-          this.chartDataComponentBlocksCategories.datasets[0].data
-        );
-        this.sortData(
-          'userInterfaceComponentBlocks',
-          this.chartDataUIComponentBlocks.labels,
-          this.chartDataUIComponentBlocks.datasets[0].data
-        );
-
-        //set all data to excel export
-        this.setDataToExport(
-          'builtInBlocks',
-          this.chartDataBuiltInBlocks.labels,
-          this.chartDataBuiltInBlocks.datasets[0].data
-        );
-        this.setDataToExport(
-          'componentBlocks',
-          this.chartDataComponentBlocks.labels,
-          this.chartDataComponentBlocks.datasets[0].data
-        );
-        this.setDataToExport(
-          'componentBlocksCategories',
-          this.chartDataComponentBlocksCategories.labels,
-          this.chartDataComponentBlocksCategories.datasets[0].data
-        );
-        this.setDataToExport(
-          'userInterfaceComponentBlocks',
-          this.chartDataUIComponentBlocks.labels,
-          this.chartDataUIComponentBlocks.datasets[0].data
-        );
-
-        //render chart
-        this.renderChart = true;
+        this.setData(val);
       }
     },
   },

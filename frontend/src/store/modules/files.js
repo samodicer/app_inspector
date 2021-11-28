@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const state = {
   files: [],
-  analyzed_data: [],
+  analyzedData: [],
   uploadedFiles: [],
   isUploaded: false,
 };
@@ -11,7 +11,7 @@ const getters = {
   getUploadedFiles: (state) => state.uploadedFiles,
   getUploaded: (state) => state.isUploaded,
   allFiles: (state) => state.files,
-  getAnalyzedData: (state) => state.analyzed_data,
+  getAnalyzedData: (state) => state.analyzedData,
 };
 
 const actions = {
@@ -88,16 +88,14 @@ const actions = {
 const mutations = {
   resetStates: (state) => {
     state.files = [];
-    state.analyzed_data = [];
+    state.analyzedData = [];
     state.uploadedFiles = [];
     state.isUploaded = false;
-    console.log('RESETING');
   },
   setUploaded: (state, uploaded) => (state.isUploaded = uploaded),
   setUploadedFiles: (state, array) => (state.uploadedFiles = array),
   setFiles: (state, files) => (state.files = files),
-  setAnalyzedData: (state, analyzed_data) =>
-    (state.analyzed_data = analyzed_data),
+  setAnalyzedData: (state, analyzedData) => (state.analyzedData = analyzedData),
 };
 
 export default {
