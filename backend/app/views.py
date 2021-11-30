@@ -3,6 +3,7 @@ import shutil
 import zipfile
 from lxml import html
 import json
+import shutil
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -271,6 +272,12 @@ def analyze(files):
         textBoxes += len(tree.xpath("//mutation[@component_type='TextBox']"))
         timePickers += len(tree.xpath("//mutation[@component_type='TimePicker']"))
         webViewers += len(tree.xpath("//mutation[@component_type='WebViewer']"))
+
+        f.close()
+
+    for file in files:
+        my_dir = "./media/unzipped_files/"+str(file.id)
+        shutil.rmtree(my_dir, ignore_errors=True)
 
     #data['builtInBlocks']['number_of_blocks'] = number_of_blocks
     data['builtInBlocks']['control_blocks'] = control_blocks

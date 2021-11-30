@@ -27,8 +27,8 @@
                   <v-sheet id="sheet" rounded="lg" color="#F7F7F7">
                     <p class="card_title">Built-in blocks</p>
                     <DoughnutChart
-                      :chartData="this.chartDataBuiltInBlocks"
-                      :chartOptions="this.chartOptionsBuiltInBlocks"
+                      :chartData="this.chartDataBuiltInBlocks.data"
+                      :chartLabels="this.chartDataBuiltInBlocks.labels"
                       class="doughnut-chart"
                     ></DoughnutChart>
                   </v-sheet>
@@ -37,8 +37,8 @@
                   <v-sheet id="sheet" rounded="lg" color="#F7F7F7">
                     <p class="card_title">Component blocks</p>
                     <DoughnutChart
-                      :chartData="this.chartDataComponentBlocks"
-                      :chartOptions="this.chartOptionsComponentBlocks"
+                      :chartData="this.chartDataComponentBlocks.data"
+                      :chartLabels="this.chartDataComponentBlocks.labels"
                       class="doughnut-chart"
                     ></DoughnutChart>
                   </v-sheet>
@@ -49,8 +49,10 @@
                   <v-sheet id="sheet" rounded="lg" color="#F7F7F7">
                     <p class="card_title">Categories of component blocks</p>
                     <BarChart
-                      :chartData="this.chartDataComponentBlocksCategories"
-                      :chartOptions="this.chartOptionsComponentBlocksCategories"
+                      :chartData="this.chartDataComponentBlocksCategories.data"
+                      :chartLabels="
+                        this.chartDataComponentBlocksCategories.labels
+                      "
                       class="doughnut-chart"
                     ></BarChart>
                   </v-sheet>
@@ -61,8 +63,8 @@
                   <v-sheet id="sheet" rounded="lg" color="#F7F7F7">
                     <p class="card_title">User Interface component blocks</p>
                     <BarChart
-                      :chartData="this.chartDataUIComponentBlocks"
-                      :chartOptions="this.chartOptionsUIComponentBlocks"
+                      :chartData="this.chartDataUIComponentBlocks.data"
+                      :chartLabels="this.chartDataUIComponentBlocks.labels"
                       class="doughnut-chart"
                     ></BarChart>
                   </v-sheet>
@@ -107,90 +109,24 @@
                     >
                       <v-card>
                         <v-toolbar dark color="#26a69a">
-                          <v-btn icon dark @click="settingsDialog = false">
-                            <v-icon>mdi-close</v-icon>
-                          </v-btn>
                           <v-toolbar-title>Settings</v-toolbar-title>
                           <v-spacer></v-spacer>
                           <v-toolbar-items>
                             <v-btn dark text @click="settingsDialog = false">
-                              Save
+                              <v-icon>mdi-close</v-icon>
                             </v-btn>
                           </v-toolbar-items>
                         </v-toolbar>
-                        <v-list three-line subheader>
-                          <v-subheader>User Controls</v-subheader>
-                          <v-list-item>
-                            <v-list-item-content>
-                              <v-list-item-title
-                                >Content filtering</v-list-item-title
-                              >
-                              <v-list-item-subtitle
-                                >Set the content filtering level to restrict
-                                apps that can be
-                                downloaded</v-list-item-subtitle
-                              >
-                            </v-list-item-content>
-                          </v-list-item>
-                          <v-list-item>
-                            <v-list-item-content>
-                              <v-list-item-title>Password</v-list-item-title>
-                              <v-list-item-subtitle
-                                >Require password for purchase or use password
-                                to restrict purchase</v-list-item-subtitle
-                              >
-                            </v-list-item-content>
-                          </v-list-item>
-                        </v-list>
-                        <v-divider></v-divider>
-                        <v-list three-line subheader>
-                          <v-subheader>General</v-subheader>
-                          <v-list-item>
-                            <v-list-item-action>
-                              <v-checkbox v-model="notifications"></v-checkbox>
-                            </v-list-item-action>
-                            <v-list-item-content>
-                              <v-list-item-title
-                                >Notifications</v-list-item-title
-                              >
-                              <v-list-item-subtitle
-                                >Notify me about updates to apps or games that I
-                                downloaded</v-list-item-subtitle
-                              >
-                            </v-list-item-content>
-                          </v-list-item>
-                          <v-list-item>
-                            <v-list-item-action>
-                              <v-checkbox v-model="sound"></v-checkbox>
-                            </v-list-item-action>
-                            <v-list-item-content>
-                              <v-list-item-title>Sound</v-list-item-title>
-                              <v-list-item-subtitle
-                                >Auto-update apps at any time. Data charges may
-                                apply</v-list-item-subtitle
-                              >
-                            </v-list-item-content>
-                          </v-list-item>
-                          <v-list-item>
-                            <v-list-item-action>
-                              <v-checkbox v-model="widgets"></v-checkbox>
-                            </v-list-item-action>
-                            <v-list-item-content>
-                              <v-list-item-title
-                                >Auto-add widgets</v-list-item-title
-                              >
-                              <v-list-item-subtitle
-                                >Automatically add home screen
-                                widgets</v-list-item-subtitle
-                              >
-                            </v-list-item-content>
-                          </v-list-item>
-                        </v-list>
+                        <SelectFiles></SelectFiles>
                       </v-card>
                     </v-dialog>
                   </div>
                 </v-col>
               </v-row>
+            </v-sheet>
+            <v-sheet v-else style="padding: 50px">
+              <v-icon style="margin-right: 10px" x-large> mdi-eye-off</v-icon>
+              <p>No data to analyse</p>
             </v-sheet>
           </v-col>
         </v-row>
@@ -204,12 +140,14 @@ import { mapGetters } from 'vuex';
 import DoughnutChart from '../components/DoughnutChart.vue';
 import BarChart from '../components/BarChart.vue';
 import ExcelExport from 'export-xlsx';
+import SelectFiles from '../components/SelectFiles.vue';
 
 export default {
   name: 'Overview',
   components: {
     DoughnutChart,
     BarChart,
+    SelectFiles,
   },
   data() {
     return {
@@ -219,141 +157,20 @@ export default {
       links: ['Dashboard', 'Messages', 'Profile', 'Updates'],
       chartDataBuiltInBlocks: {
         labels: [],
-        datasets: [
-          {
-            data: [],
-            backgroundColor: [
-              '#FBA92A',
-              '#F54141',
-              '#FFF80B',
-              '#4BF148',
-              '#EA2FCD',
-              '#8934C8',
-              '#1A90E7',
-              '#0AD68F',
-            ],
-          },
-        ],
+        data: [],
       },
       chartDataComponentBlocks: {
         labels: [],
-        datasets: [
-          {
-            data: [],
-            backgroundColor: [
-              '#FBA92A',
-              '#F54141',
-              '#FFF80B',
-              '#4BF148',
-              '#EA2FCD',
-              '#8934C8',
-              '#1A90E7',
-              '#0AD68F',
-            ],
-          },
-        ],
+        data: [],
       },
       chartDataComponentBlocksCategories: {
         labels: [],
-        datasets: [
-          {
-            data: [],
-            backgroundColor: [
-              '#FBA92A',
-              '#F54141',
-              '#FFF80B',
-              '#4BF148',
-              '#EA2FCD',
-              '#8934C8',
-              '#1A90E7',
-              '#0AD68F',
-              '#04B9C8',
-              '#9D9D9D',
-              '#E670B8',
-              '#764903',
-              '#C296E1',
-              '#000000',
-              '#F15757',
-            ],
-          },
-        ],
+        data: [],
       },
-
       chartDataUIComponentBlocks: {
         labels: [],
-        datasets: [
-          {
-            data: [],
-            backgroundColor: [
-              '#FBA92A',
-              '#F54141',
-              '#FFF80B',
-              '#4BF148',
-              '#EA2FCD',
-              '#8934C8',
-              '#1A90E7',
-              '#0AD68F',
-              '#04B9C8',
-              '#9D9D9D',
-              '#E670B8',
-              '#764903',
-              '#C296E1',
-              '#000000',
-              '#F15757',
-            ],
-          },
-        ],
+        data: [],
       },
-      chartOptionsBuiltInBlocks: {
-        maintainAspectRatio: false,
-        responsive: true,
-        legend: {
-          position: 'right',
-          align: 'middle',
-        },
-      },
-      chartOptionsComponentBlocks: {
-        maintainAspectRatio: false,
-        responsive: true,
-        legend: {
-          position: 'right',
-          align: 'middle',
-        },
-      },
-      chartOptionsComponentBlocksCategories: {
-        maintainAspectRatio: false,
-        responsive: true,
-        legend: {
-          display: false,
-        },
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true,
-              },
-            },
-          ],
-        },
-      },
-
-      chartOptionsUIComponentBlocks: {
-        maintainAspectRatio: false,
-        responsive: true,
-        legend: {
-          display: false,
-        },
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true,
-              },
-            },
-          ],
-        },
-      },
-
       SETTINGS_FOR_EXPORT: {
         fileName: 'app_inspector_project_overview',
         workSheets: [
@@ -434,14 +251,14 @@ export default {
       for (const [key, value] of Object.entries(val[0].builtInBlocks)) {
         console.log(key, value);
         this.chartDataBuiltInBlocks.labels.push(key);
-        this.chartDataBuiltInBlocks.datasets[0].data.push(value);
+        this.chartDataBuiltInBlocks.data.push(value);
       }
 
       //populate labels and data from server response data
       for (const [key, value] of Object.entries(val[0].componentBlocks)) {
         console.log(key, value);
         this.chartDataComponentBlocks.labels.push(key);
-        this.chartDataComponentBlocks.datasets[0].data.push(value);
+        this.chartDataComponentBlocks.data.push(value);
       }
 
       //populate labels and data from server response data
@@ -450,7 +267,7 @@ export default {
       )) {
         console.log(key, value);
         this.chartDataComponentBlocksCategories.labels.push(key);
-        this.chartDataComponentBlocksCategories.datasets[0].data.push(value);
+        this.chartDataComponentBlocksCategories.data.push(value);
       }
 
       //populate labels and data from server response data
@@ -459,7 +276,7 @@ export default {
       )) {
         console.log(key, value);
         this.chartDataUIComponentBlocks.labels.push(key);
-        this.chartDataUIComponentBlocks.datasets[0].data.push(value);
+        this.chartDataUIComponentBlocks.data.push(value);
       }
     },
     sortData(type, labels, data) {
@@ -488,19 +305,19 @@ export default {
       switch (type) {
         case 'builtInBlocks':
           this.chartDataBuiltInBlocks.labels = sortedLabels;
-          this.chartDataBuiltInBlocks.datasets[0].data = sortedData;
+          this.chartDataBuiltInBlocks.data = sortedData;
           break;
         case 'componentBlocks':
           this.chartDataComponentBlocks.labels = sortedLabels;
-          this.chartDataComponentBlocks.datasets[0].data = sortedData;
+          this.chartDataComponentBlocks.data = sortedData;
           break;
         case 'componentBlocksCategories':
           this.chartDataComponentBlocksCategories.labels = sortedLabels;
-          this.chartDataComponentBlocksCategories.datasets[0].data = sortedData;
+          this.chartDataComponentBlocksCategories.data = sortedData;
           break;
         case 'userInterfaceComponentBlocks':
           this.chartDataUIComponentBlocks.labels = sortedLabels;
-          this.chartDataUIComponentBlocks.datasets[0].data = sortedData;
+          this.chartDataUIComponentBlocks.data = sortedData;
           break;
       }
     },
@@ -562,53 +379,73 @@ export default {
       this.sortData(
         'builtInBlocks',
         this.chartDataBuiltInBlocks.labels,
-        this.chartDataBuiltInBlocks.datasets[0].data
+        this.chartDataBuiltInBlocks.data
       );
       this.sortData(
         'componentBlocks',
         this.chartDataComponentBlocks.labels,
-        this.chartDataComponentBlocks.datasets[0].data
+        this.chartDataComponentBlocks.data
       );
       this.sortData(
         'componentBlocksCategories',
         this.chartDataComponentBlocksCategories.labels,
-        this.chartDataComponentBlocksCategories.datasets[0].data
+        this.chartDataComponentBlocksCategories.data
       );
       this.sortData(
         'userInterfaceComponentBlocks',
         this.chartDataUIComponentBlocks.labels,
-        this.chartDataUIComponentBlocks.datasets[0].data
+        this.chartDataUIComponentBlocks.data
       );
 
       //set all data to excel export
       this.setExportData(
         'builtInBlocks',
         this.chartDataBuiltInBlocks.labels,
-        this.chartDataBuiltInBlocks.datasets[0].data
+        this.chartDataBuiltInBlocks.data
       );
       this.setExportData(
         'componentBlocks',
         this.chartDataComponentBlocks.labels,
-        this.chartDataComponentBlocks.datasets[0].data
+        this.chartDataComponentBlocks.data
       );
       this.setExportData(
         'componentBlocksCategories',
         this.chartDataComponentBlocksCategories.labels,
-        this.chartDataComponentBlocksCategories.datasets[0].data
+        this.chartDataComponentBlocksCategories.data
       );
       this.setExportData(
         'userInterfaceComponentBlocks',
         this.chartDataUIComponentBlocks.labels,
-        this.chartDataUIComponentBlocks.datasets[0].data
+        this.chartDataUIComponentBlocks.data
       );
 
-      //render chart
+      //render charts
       this.renderChart = true;
+    },
+    resetData() {
+      this.chartDataBuiltInBlocks.labels = [];
+      this.chartDataBuiltInBlocks.data = [];
+      this.chartDataComponentBlocks.labels = [];
+      this.chartDataComponentBlocks.data = [];
+      this.chartDataComponentBlocksCategories.labels = [];
+      this.chartDataComponentBlocksCategories.data = [];
+      this.chartDataUIComponentBlocks.labels = [];
+      this.chartDataUIComponentBlocks.data = [];
+
+      this.SETTINGS_FOR_EXPORT.workSheets[0].tableSettings.data.headerDefinition = [];
+      this.SETTINGS_FOR_EXPORT.workSheets[1].tableSettings.data.headerDefinition = [];
+      this.SETTINGS_FOR_EXPORT.workSheets[2].tableSettings.data.headerDefinition = [];
+      this.SETTINGS_FOR_EXPORT.workSheets[3].tableSettings.data.headerDefinition = [];
+      this.dataToExport[0].data = [];
+      this.dataToExport[1].data = [];
+      this.dataToExport[2].data = [];
+      this.dataToExport[3].data = [];
     },
   },
   watch: {
     getAnalyzedData: function (val) {
       if (val) {
+        this.resetData();
         this.setData(val);
       }
     },
