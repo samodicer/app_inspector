@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto">
+  <v-card class="mx-auto" id="card">
     <v-toolbar color="#26a69a" dark>
       <v-toolbar-title>Uploaded files</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -36,16 +36,6 @@
         <v-btn color="#26A69A" dark @click="analyze()"> Analyse files </v-btn>
       </router-link>
     </div>
-
-    <v-snackbar v-model="snackbar">
-      {{ snackbar_text }}
-
-      <template v-slot:action="{ attrs }">
-        <v-btn color="#26a69a" text v-bind="attrs" @click="snackbar = false">
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
   </v-card>
 </template>
 <script>
@@ -58,8 +48,6 @@ export default {
     return {
       selectedFiles: [],
       headerCheck: true,
-      snackbar: true,
-      snackbar_text: 'Files has been successfully uploaded',
     };
   },
   methods: {

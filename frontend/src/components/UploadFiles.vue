@@ -1,7 +1,7 @@
 <template>
   <v-card id="card">
     <div id="main_content1">
-      <h1>Select files to upload</h1>
+      <h1 id="heading">Select files to upload</h1>
       <div class="file_input">
         <v-file-input
           id="fi"
@@ -45,6 +45,15 @@
           </v-btn>
         </div>
       </v-alert>
+      <v-snackbar v-if="uploaded" v-model="snackbar">
+        {{ snackbar_text }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn color="#26a69a" text v-bind="attrs" @click="snackbar = false">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
     </div>
   </v-card>
 </template>
@@ -58,6 +67,8 @@ export default {
   components: {},
   data() {
     return {
+      snackbar: true,
+      snackbar_text: 'Files has been successfully uploaded',
       alert: false,
       alert_text: '',
       uploaded: false,
@@ -210,5 +221,10 @@ h1 {
   font-weight: bold;
   font-size: 30px;
   text-align: center;
+}
+@media only screen and (max-width: 800px) {
+  #heading {
+    font-size: 20px;
+  }
 }
 </style>

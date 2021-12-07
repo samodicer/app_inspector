@@ -49,10 +49,45 @@
               <div v-if="this.getUploaded">
                 <SelectFiles></SelectFiles>
               </div>
+              <v-divider id="divider"></v-divider>
+              <AboutUs></AboutUs>
             </v-sheet>
           </v-col>
         </v-row>
       </v-container>
+      <v-footer dark padless>
+        <v-card flat tile class="teal lighten-1 white--text text-center">
+          <v-card-text>
+            <v-btn
+              v-for="icon in icons"
+              :key="icon"
+              class="mx-4 white--text"
+              icon
+            >
+              <v-icon size="24px">
+                {{ icon }}
+              </v-icon>
+            </v-btn>
+          </v-card-text>
+
+          <v-card-text class="white--text pt-0">
+            Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet.
+            Mauris cursus commodo interdum. Praesent ut risus eget metus luctus
+            accumsan id ultrices nunc. Sed at orci sed massa consectetur
+            dignissim a sit amet dui. Duis commodo vitae velit et faucibus.
+            Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum
+            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel
+            diam elementum tempor vel ut orci. Orci varius natoque penatibus et
+            magnis dis parturient montes, nascetur ridiculus mus.
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-text class="white--text">
+            {{ new Date().getFullYear() }} — <strong>App Inspector</strong>
+          </v-card-text>
+        </v-card>
+      </v-footer>
     </v-main>
   </v-app>
 </template>
@@ -61,16 +96,19 @@
 import { mapActions, mapGetters } from 'vuex';
 import UploadFiles from '../components/UploadFiles.vue';
 import SelectFiles from '../components/SelectFiles.vue';
+import AboutUs from '../components/AboutUs.vue';
 
 export default {
   name: 'Home',
   components: {
     UploadFiles,
     SelectFiles,
+    AboutUs,
   },
   data() {
     return {
-      links: ['Dashboard', 'Messages', 'Profile', 'Updates'],
+      links: ['Sign in'],
+      icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
     };
   },
   methods: {
@@ -107,5 +145,9 @@ export default {
 }
 .logo {
   cursor: pointer;
+}
+#divider {
+  margin-top: 50px;
+  margin-bottom: 30px;
 }
 </style>

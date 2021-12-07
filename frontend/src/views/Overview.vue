@@ -12,7 +12,7 @@
       </v-container>
     </v-app-bar>
 
-    <v-main class="grey lighten-3">
+    <v-main id="main" class="grey lighten-3">
       <v-container>
         <v-row>
           <v-col>
@@ -22,55 +22,7 @@
               rounded="lg"
               v-if="this.renderChart"
             >
-              <v-row>
-                <v-col>
-                  <v-sheet id="sheet" rounded="lg" color="#F7F7F7">
-                    <p class="card_title">Built-in blocks</p>
-                    <DoughnutChart
-                      :chartData="this.chartDataBuiltInBlocks.data"
-                      :chartLabels="this.chartDataBuiltInBlocks.labels"
-                      class="doughnut-chart"
-                    ></DoughnutChart>
-                  </v-sheet>
-                </v-col>
-                <v-col>
-                  <v-sheet id="sheet" rounded="lg" color="#F7F7F7">
-                    <p class="card_title">Component blocks</p>
-                    <DoughnutChart
-                      :chartData="this.chartDataComponentBlocks.data"
-                      :chartLabels="this.chartDataComponentBlocks.labels"
-                      class="doughnut-chart"
-                    ></DoughnutChart>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-sheet id="sheet" rounded="lg" color="#F7F7F7">
-                    <p class="card_title">Categories of component blocks</p>
-                    <BarChart
-                      :chartData="this.chartDataComponentBlocksCategories.data"
-                      :chartLabels="
-                        this.chartDataComponentBlocksCategories.labels
-                      "
-                      class="doughnut-chart"
-                    ></BarChart>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-sheet id="sheet" rounded="lg" color="#F7F7F7">
-                    <p class="card_title">User Interface component blocks</p>
-                    <BarChart
-                      :chartData="this.chartDataUIComponentBlocks.data"
-                      :chartLabels="this.chartDataUIComponentBlocks.labels"
-                      class="doughnut-chart"
-                    ></BarChart>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-              <v-row>
+              <v-row style="margin-bottom: 0px">
                 <v-col class="text-right">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -117,20 +69,168 @@
                             </v-btn>
                           </v-toolbar-items>
                         </v-toolbar>
-                        <SelectFiles></SelectFiles>
+                        <div class="selectFiles">
+                          <SelectFiles></SelectFiles>
+                        </div>
                       </v-card>
                     </v-dialog>
                   </div>
                 </v-col>
               </v-row>
+              <v-row>
+                <v-col>
+                  <v-sheet
+                    id="sheet"
+                    rounded="lg"
+                    color="#F7F7F7"
+                    height="100%"
+                  >
+                    <p class="card_title">Built-in blocks</p>
+                    <div
+                      v-if="
+                        this.hasNoData(this.chartDataBuiltInBlocks.data) != 0
+                      "
+                    >
+                      <DoughnutChart
+                        :chartData="this.chartDataBuiltInBlocks.data"
+                        :chartLabels="this.chartDataBuiltInBlocks.labels"
+                        class="doughnut-chart"
+                      ></DoughnutChart>
+                    </div>
+                    <div v-else>
+                      <v-icon x-large> mdi-eye-off </v-icon>
+                      <p>No data to analyse</p>
+                    </div>
+                  </v-sheet>
+                </v-col>
+                <v-col>
+                  <v-sheet
+                    id="sheet"
+                    rounded="lg"
+                    color="#F7F7F7"
+                    height="100%"
+                  >
+                    <p class="card_title">Component blocks</p>
+                    <div
+                      v-if="
+                        this.hasNoData(this.chartDataComponentBlocks.data) != 0
+                      "
+                    >
+                      <DoughnutChart
+                        :chartData="this.chartDataComponentBlocks.data"
+                        :chartLabels="this.chartDataComponentBlocks.labels"
+                        class="doughnut-chart"
+                      ></DoughnutChart>
+                    </div>
+                    <div v-else>
+                      <v-icon x-large> mdi-eye-off </v-icon>
+                      <p>No data to analyse</p>
+                    </div>
+                  </v-sheet>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-sheet
+                    id="sheet"
+                    rounded="lg"
+                    color="#F7F7F7"
+                    height="100%"
+                  >
+                    <p class="card_title">Categories of component blocks</p>
+                    <div
+                      v-if="
+                        this.hasNoData(
+                          this.chartDataComponentBlocksCategories.data
+                        ) != 0
+                      "
+                    >
+                      <BarChart
+                        :chartData="
+                          this.chartDataComponentBlocksCategories.data
+                        "
+                        :chartLabels="
+                          this.chartDataComponentBlocksCategories.labels
+                        "
+                        class="doughnut-chart"
+                      ></BarChart>
+                    </div>
+                    <div v-else>
+                      <v-icon x-large> mdi-eye-off </v-icon>
+                      <p>No data to analyse</p>
+                    </div>
+                  </v-sheet>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-sheet
+                    id="sheet"
+                    rounded="lg"
+                    color="#F7F7F7"
+                    height="100%"
+                  >
+                    <p class="card_title">User Interface component blocks</p>
+                    <div
+                      v-if="
+                        this.hasNoData(this.chartDataUIComponentBlocks.data) !=
+                        0
+                      "
+                    >
+                      <BarChart
+                        :chartData="this.chartDataUIComponentBlocks.data"
+                        :chartLabels="this.chartDataUIComponentBlocks.labels"
+                        class="doughnut-chart"
+                      ></BarChart>
+                    </div>
+                    <div v-else>
+                      <v-icon x-large> mdi-eye-off </v-icon>
+                      <p>No data to analyse</p>
+                    </div>
+                  </v-sheet>
+                </v-col>
+              </v-row>
             </v-sheet>
-            <v-sheet v-else style="padding: 50px">
-              <v-icon style="margin-right: 10px" x-large> mdi-eye-off</v-icon>
+            <v-sheet id="sheet" min-height="63vh" rounded="lg" v-else>
+              <v-icon style="margin-top: 50px" x-large> mdi-eye-off</v-icon>
               <p>No data to analyse</p>
             </v-sheet>
           </v-col>
         </v-row>
       </v-container>
+      <v-footer dark padless>
+        <v-card flat tile class="teal lighten-1 white--text text-center">
+          <v-card-text>
+            <v-btn
+              v-for="icon in icons"
+              :key="icon"
+              class="mx-4 white--text"
+              icon
+            >
+              <v-icon size="24px">
+                {{ icon }}
+              </v-icon>
+            </v-btn>
+          </v-card-text>
+
+          <v-card-text class="white--text pt-0">
+            Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet.
+            Mauris cursus commodo interdum. Praesent ut risus eget metus luctus
+            accumsan id ultrices nunc. Sed at orci sed massa consectetur
+            dignissim a sit amet dui. Duis commodo vitae velit et faucibus.
+            Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum
+            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel
+            diam elementum tempor vel ut orci. Orci varius natoque penatibus et
+            magnis dis parturient montes, nascetur ridiculus mus.
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-text class="white--text">
+            {{ new Date().getFullYear() }} — <strong>App Inspector</strong>
+          </v-card-text>
+        </v-card>
+      </v-footer>
     </v-main>
   </v-app>
 </template>
@@ -154,7 +254,8 @@ export default {
       //analyzedData: Object,
       renderChart: false,
       settingsDialog: false,
-      links: ['Dashboard', 'Messages', 'Profile', 'Updates'],
+      links: ['Sign in'],
+      icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
       chartDataBuiltInBlocks: {
         labels: [],
         data: [],
@@ -441,6 +542,13 @@ export default {
       this.dataToExport[2].data = [];
       this.dataToExport[3].data = [];
     },
+    hasNoData(data) {
+      return (
+        data.reduce(function (a, b) {
+          return a + b;
+        }, 0) != 0
+      );
+    },
   },
   watch: {
     getAnalyzedData: function (val) {
@@ -469,5 +577,10 @@ export default {
 .card_title {
   font-weight: 700;
   font-size: 20px;
+}
+.selectFiles {
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 20px;
 }
 </style>
