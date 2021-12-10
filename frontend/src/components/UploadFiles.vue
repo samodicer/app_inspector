@@ -1,6 +1,6 @@
 <template>
   <v-card id="card">
-    <div id="main_content1">
+    <div id="main_content">
       <h1 id="heading">Select files to upload</h1>
       <div class="file_input">
         <v-file-input
@@ -19,37 +19,31 @@
         <v-btn color="#26A69A" dark @click="onSelected()"> Upload files </v-btn>
       </div>
 
-      <v-alert
-        :value="alert"
-        color="#26A69A"
-        border="left"
-        transition="scale-transition"
-        type="error"
-      >
-        <p style="color: white">
-          <b>{{ alert_text }}</b>
-        </p>
-        <div class="text-center">
-          <v-btn
-            class="black--text"
-            rounded
-            color="white"
-            dark
-            @click="
-              alert = false;
-              uploaded = false;
-              crashed = false;
-            "
-          >
-            Okay
-          </v-btn>
-        </div>
-      </v-alert>
-      <v-snackbar v-if="uploaded" v-model="snackbar">
-        {{ snackbar_text }}
+      <v-snackbar v-if="error_snackbar" v-model="error_snackbar" timeout="3000">
+        {{ error_snackbar_text }}
 
         <template v-slot:action="{ attrs }">
-          <v-btn color="#26a69a" text v-bind="attrs" @click="snackbar = false">
+          <v-btn
+            color="#26a69a"
+            text
+            v-bind="attrs"
+            @click="error_snackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+
+      <v-snackbar v-if="uploaded" v-model="success_snackbar" timeout="5000">
+        {{ success_snackbar_text }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="#26a69a"
+            text
+            v-bind="attrs"
+            @click="success_snackbar = false"
+          >
             Close
           </v-btn>
         </template>
@@ -67,10 +61,10 @@ export default {
   components: {},
   data() {
     return {
-      snackbar: true,
-      snackbar_text: 'Files has been successfully uploaded',
-      alert: false,
-      alert_text: '',
+      success_snackbar: true,
+      success_snackbar_text: 'Files has been successfully uploaded',
+      error_snackbar: false,
+      error_snackbar_text: '',
       uploaded: false,
       crashed: false,
       inputs: {
@@ -91,7 +85,7 @@ export default {
 
     onSelected() {
       this.crashed = false;
-      this.alert = false;
+      this.error_snackbar = false;
       //this.inputs.title = this.inputs.files.name;
       if (this.inputs.files.length != 0) {
         const fd = new FormData();
@@ -104,8 +98,8 @@ export default {
             fd.append('files', this.inputs.files[i]);
           } else {
             this.crashed = true;
-            this.alert = true;
-            this.alert_text =
+            this.error_snackbar = true;
+            this.error_snackbar_text =
               'The file type must be aia (MIT App Inventor Project File)';
             this.inputs.files = [];
             this.$refs.fileInputRef = null;
@@ -140,8 +134,8 @@ export default {
         }
       } else {
         this.crashed = true;
-        this.alert = true;
-        this.alert_text = 'You have not selected any files.';
+        this.error_snackbar = true;
+        this.error_snackbar_text = 'You have not selected any files.';
       }
 
       if (this.inputs.files) {
@@ -180,16 +174,13 @@ export default {
 </script>
 
 <style scoped>
-#main_content1 {
+#main_content {
   padding: 20px;
   margin-left: 100px;
   margin-right: 100px;
 }
-#main_content2 {
-  padding: 20px;
-}
-h1 {
-  color: #26a69a;
+#heading {
+  color: #000000;
   text-align: center;
 }
 .file_input {
@@ -225,6 +216,11 @@ h1 {
 @media only screen and (max-width: 800px) {
   #heading {
     font-size: 20px;
+  }
+  #main_content {
+    padding: 20px;
+    margin-left: 0px;
+    margin-right: 0px;
   }
 }
 </style>

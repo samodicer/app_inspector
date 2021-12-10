@@ -52,7 +52,7 @@ export default {
       radius: 10,
       padding: 8,
       lineCap: 'round',
-      gradient: ['#006e54', '#13b48c', '#88f5b4'],
+      gradient: ['#1c857b', '#32d1c2', '#24f2cc'],
       value: Array.from({ length: 17 }, () => Math.floor(Math.random() * 20)),
       gradientDirection: 'top',
       fill: false,
