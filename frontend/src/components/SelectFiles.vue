@@ -3,13 +3,12 @@
     <v-toolbar color="#26a69a" dark>
       <v-toolbar-title>Uploaded files</v-toolbar-title>
       <v-spacer></v-spacer>
-      <div class="headerCheck">
-        <v-checkbox
-          color="#FFFFFF"
-          v-model="headerCheck"
-          @click="setChecked()"
-        ></v-checkbox>
-      </div>
+      <v-checkbox
+        hide-details
+        color="#FFFFFF"
+        v-model="headerCheck"
+        @click="setChecked()"
+      ></v-checkbox>
     </v-toolbar>
 
     <v-list subheader>
@@ -22,7 +21,7 @@
           <v-list-item-title v-text="file.title"></v-list-item-title>
         </v-list-item-content>
 
-        <v-list-item-action>
+        <v-list-item-action class="field">
           <v-checkbox
             v-model="selectedFiles"
             color="#26a69a"
@@ -128,5 +127,8 @@ h1 {
   font-weight: bold;
   font-size: 30px;
   text-align: center;
+}
+.field {
+  margin-right: 8px;
 }
 </style>

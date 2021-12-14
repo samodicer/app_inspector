@@ -54,6 +54,7 @@ def analyze(files):
     data= {"basicStats":{}, "builtInBlocks": {}, "componentBlocks": {}, "componentBlocksCategories": {},
            "userInterfaceComponentBlocks": {}, "controlBlocksTypes": {}, "procedureBlocksTypes":{}}
     number_of_blocks = 0
+    number_of_components = 0
     control_blocks = 0
     logic_blocks = 0
     math_blocks = 0
@@ -66,7 +67,7 @@ def analyze(files):
     setGet_blocks = 0
     method_blocks = 0
     componentObject_blocks = 0
-    helpersAssets_blocks = 0
+    helpers_blocks = 0
     userInterface = 0
     layout = 0
     media = 0
@@ -133,10 +134,10 @@ def analyze(files):
 
                 if f.mode == "r":
                     content = f.read()
-                    print(content)
 
                     tree = html.fromstring(content)
 
+                    #basic stats
                     number_of_blocks = number_of_blocks + len(tree.xpath("//block"))
 
                     #built-in blocks
@@ -154,7 +155,7 @@ def analyze(files):
                     setGet_blocks += len(tree.xpath("//block[contains(@type,'component_set_get')]"))
                     method_blocks += len(tree.xpath("//block[contains(@type,'component_method')]"))
                     componentObject_blocks += len(tree.xpath("//block[contains(@type,'component_component_block')]"))
-                    helpersAssets_blocks += len(tree.xpath("//block[contains(@type,'helpers_assets')]"))
+                    helpers_blocks += len(tree.xpath("//block[contains(@type,'helpers')]"))
 
                     #design components
                     userInterface += len(tree.xpath("//mutation[@component_type='Button']"))
@@ -285,7 +286,46 @@ def analyze(files):
 
                     number += 1
 
-                    f.close()
+                f.close()
+            else:
+                noMoreScreens = True
+
+
+        noMoreScreens = False
+        number = 1
+        while noMoreScreens == False:
+            if os.path.isfile("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm"):
+
+                f = open("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm", "r")
+
+                if f.mode == "r":
+                    lines = f.read().splitlines(True)
+
+                f.close()
+
+                f = open("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm", "w")
+
+                if f.mode == "w":
+                    f.writelines(lines[2:-1])
+
+                f.close()    
+
+                f = open("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm", "r")
+
+                if f.mode == "r":
+                    content = f.read()
+                    jsonData = json.loads(content)
+
+                    if '$Components' in jsonData['Properties']:
+                        number_of_components += len(jsonData['Properties']['$Components'])
+
+                        for i in jsonData['Properties']['$Components']:
+                            if '$Components' in i:
+                                number_of_components += len(i['$Components'])
+
+                f.close()
+
+                number += 1 
             else:
                 noMoreScreens = True
 
@@ -472,6 +512,9 @@ def analyze(files):
         shutil.rmtree(my_dir, ignore_errors=True)
 
     data['basicStats']['number_of_blocks'] = number_of_blocks
+    data['basicStats']['number_of_components'] = number_of_components
+    data['basicStats']['number_of_builtInBlocks'] = control_blocks + logic_blocks + math_blocks + text_blocks +lists_blocks + colors_blocks + variables_blocks + procedures_blocks
+    data['basicStats']['number_of_componentBlocks'] = event_blocks + setGet_blocks + method_blocks + componentObject_blocks + helpers_blocks
     data['builtInBlocks']['control_blocks'] = control_blocks
     data['builtInBlocks']['logic_blocks'] = logic_blocks
     data['builtInBlocks']['math_blocks'] = math_blocks
@@ -484,7 +527,7 @@ def analyze(files):
     data['componentBlocks']['setGet_blocks'] = setGet_blocks
     data['componentBlocks']['method_blocks'] = method_blocks
     data['componentBlocks']['componentObject_blocks'] = componentObject_blocks
-    data['componentBlocks']['helpersAssets_blocks'] = helpersAssets_blocks
+    data['componentBlocks']['helpers_blocks'] = helpers_blocks
     data['componentBlocksCategories']['user_interface'] = userInterface
     data['componentBlocksCategories']['layout'] = layout
     data['componentBlocksCategories']['media'] = media
