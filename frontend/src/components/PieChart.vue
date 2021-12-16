@@ -1,9 +1,9 @@
 <script>
-import { Doughnut } from 'vue-chartjs';
+import { Pie } from 'vue-chartjs';
 
 export default {
-  extends: Doughnut,
-  name: 'DoughnutChart',
+  extends: Pie,
+  name: 'PieChart',
   data() {
     return {
       backgroundColor: [

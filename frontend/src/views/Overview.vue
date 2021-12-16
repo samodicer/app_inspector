@@ -94,7 +94,7 @@
                     <p class="card_title">Built-in blocks</p>
                     <div
                       v-if="
-                        this.hasNoData(this.chartDataBuiltInBlocks.data) != 0
+                        this.sumOfArray(this.chartDataBuiltInBlocks.data) != 0
                       "
                     >
                       <DoughnutChart
@@ -120,7 +120,7 @@
                     <p class="card_title">Component blocks</p>
                     <div
                       v-if="
-                        this.hasNoData(this.chartDataComponentBlocks.data) != 0
+                        this.sumOfArray(this.chartDataComponentBlocks.data) != 0
                       "
                     >
                       <DoughnutChart
@@ -148,7 +148,7 @@
                     <p class="card_title">Component blocks types</p>
                     <div
                       v-if="
-                        this.hasNoData(
+                        this.sumOfArray(
                           this.chartDataComponentBlocksCategories.data
                         ) != 0
                       "
@@ -160,7 +160,7 @@
                         :chartLabels="
                           this.chartDataComponentBlocksCategories.labels
                         "
-                        class="doughnut-chart"
+                        class="bar-chart"
                       ></BarChart>
                     </div>
                     <div v-else>
@@ -182,15 +182,73 @@
                     <p class="card_title">User Interface component blocks</p>
                     <div
                       v-if="
-                        this.hasNoData(this.chartDataUIComponentBlocks.data) !=
+                        this.sumOfArray(this.chartDataUIComponentBlocks.data) !=
                         0
                       "
                     >
                       <BarChart
                         :chartData="this.chartDataUIComponentBlocks.data"
                         :chartLabels="this.chartDataUIComponentBlocks.labels"
-                        class="doughnut-chart"
+                        class="bar-chart"
                       ></BarChart>
+                    </div>
+                    <div v-else>
+                      <v-icon x-large> mdi-eye-off </v-icon>
+                      <p>No data to analyse</p>
+                    </div>
+                  </v-sheet>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-sheet
+                    id="sheet"
+                    rounded="lg"
+                    color="#F7F7F7"
+                    height="100%"
+                    elevation="2"
+                  >
+                    <p class="card_title">Control blocks types</p>
+                    <div
+                      v-if="
+                        this.sumOfArray(
+                          this.chartDataControlBlocksTypes.data
+                        ) != 0
+                      "
+                    >
+                      <PieChart
+                        :chartData="this.chartDataControlBlocksTypes.data"
+                        :chartLabels="this.chartDataControlBlocksTypes.labels"
+                        class="pie-chart"
+                      ></PieChart>
+                    </div>
+                    <div v-else>
+                      <v-icon x-large> mdi-eye-off </v-icon>
+                      <p>No data to analyse</p>
+                    </div>
+                  </v-sheet>
+                </v-col>
+                <v-col>
+                  <v-sheet
+                    id="sheet"
+                    rounded="lg"
+                    color="#F7F7F7"
+                    height="100%"
+                    elevation="2"
+                  >
+                    <p class="card_title">Procedure blocks types</p>
+                    <div
+                      v-if="
+                        this.sumOfArray(
+                          this.chartDataProcedureBlocksTypes.data
+                        ) != 0
+                      "
+                    >
+                      <PieChart
+                        :chartData="this.chartDataProcedureBlocksTypes.data"
+                        :chartLabels="this.chartDataProcedureBlocksTypes.labels"
+                        class="pie-chart"
+                      ></PieChart>
                     </div>
                     <div v-else>
                       <v-icon x-large> mdi-eye-off </v-icon>
@@ -251,12 +309,14 @@ import BarChart from '../components/BarChart.vue';
 import ExcelExport from 'export-xlsx';
 import SelectFiles from '../components/SelectFiles.vue';
 import BasicStats from '../components/BasicStats.vue';
+import PieChart from '../components/PieChart.vue';
 
 export default {
   name: 'Overview',
   components: {
     DoughnutChart,
     BarChart,
+    PieChart,
     SelectFiles,
     BasicStats,
   },
@@ -268,6 +328,10 @@ export default {
       links: ['Sign in'],
       icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
       basicStats: Object,
+      basicStatsExportData: {
+        labels: [],
+        data: [],
+      },
       chartDataBuiltInBlocks: {
         labels: [],
         data: [],
@@ -284,9 +348,29 @@ export default {
         labels: [],
         data: [],
       },
+      chartDataControlBlocksTypes: {
+        labels: [],
+        data: [],
+      },
+      chartDataProcedureBlocksTypes: {
+        labels: [],
+        data: [],
+      },
       SETTINGS_FOR_EXPORT: {
         fileName: 'app_inspector_project_overview',
         workSheets: [
+          {
+            sheetName: 'Basic statistics',
+            startingRowNumber: 2,
+            gapBetweenTwoTables: 2,
+            tableSettings: {
+              data: {
+                importable: true,
+                tableTitle: 'Basic statistics',
+                headerDefinition: [],
+              },
+            },
+          },
           {
             sheetName: 'Built-in blocks',
             startingRowNumber: 2,
@@ -312,13 +396,13 @@ export default {
             },
           },
           {
-            sheetName: 'Categories of component blocks',
+            sheetName: 'Component blocks types',
             startingRowNumber: 2,
             gapBetweenTwoTables: 2,
             tableSettings: {
               data: {
                 importable: true,
-                tableTitle: 'Categories of component blocks',
+                tableTitle: 'Component blocks types',
                 headerDefinition: [],
               },
             },
@@ -335,9 +419,42 @@ export default {
               },
             },
           },
+          {
+            sheetName: 'Control blocks types',
+            startingRowNumber: 2,
+            gapBetweenTwoTables: 2,
+            tableSettings: {
+              data: {
+                importable: true,
+                tableTitle: 'Control blocks types',
+                headerDefinition: [],
+              },
+            },
+          },
+          {
+            sheetName: 'Procedure blocks types',
+            startingRowNumber: 2,
+            gapBetweenTwoTables: 2,
+            tableSettings: {
+              data: {
+                importable: true,
+                tableTitle: 'Procedure blocks types',
+                headerDefinition: [],
+              },
+            },
+          },
         ],
       },
       dataToExport: [
+        {
+          data: [],
+        },
+        {
+          data: [],
+        },
+        {
+          data: [],
+        },
         {
           data: [],
         },
@@ -369,15 +486,19 @@ export default {
       this.basicStats = val[0].basicStats;
 
       //populate labels and data from server response data
+      for (const [key, value] of Object.entries(val[0].basicStats)) {
+        this.basicStatsExportData.labels.push(key);
+        this.basicStatsExportData.data.push(value);
+      }
+
+      //populate labels and data from server response data
       for (const [key, value] of Object.entries(val[0].builtInBlocks)) {
-        console.log(key, value);
         this.chartDataBuiltInBlocks.labels.push(key);
         this.chartDataBuiltInBlocks.data.push(value);
       }
 
       //populate labels and data from server response data
       for (const [key, value] of Object.entries(val[0].componentBlocks)) {
-        console.log(key, value);
         this.chartDataComponentBlocks.labels.push(key);
         this.chartDataComponentBlocks.data.push(value);
       }
@@ -386,7 +507,6 @@ export default {
       for (const [key, value] of Object.entries(
         val[0].componentBlocksCategories
       )) {
-        console.log(key, value);
         this.chartDataComponentBlocksCategories.labels.push(key);
         this.chartDataComponentBlocksCategories.data.push(value);
       }
@@ -395,9 +515,20 @@ export default {
       for (const [key, value] of Object.entries(
         val[0].userInterfaceComponentBlocks
       )) {
-        console.log(key, value);
         this.chartDataUIComponentBlocks.labels.push(key);
         this.chartDataUIComponentBlocks.data.push(value);
+      }
+
+      //populate labels and data from server response data
+      for (const [key, value] of Object.entries(val[0].controlBlocksTypes)) {
+        this.chartDataControlBlocksTypes.labels.push(key);
+        this.chartDataControlBlocksTypes.data.push(value);
+      }
+
+      //populate labels and data from server response data
+      for (const [key, value] of Object.entries(val[0].procedureBlocksTypes)) {
+        this.chartDataProcedureBlocksTypes.labels.push(key);
+        this.chartDataProcedureBlocksTypes.data.push(value);
       }
     },
     sortData(type, labels, data) {
@@ -440,6 +571,14 @@ export default {
           this.chartDataUIComponentBlocks.labels = sortedLabels;
           this.chartDataUIComponentBlocks.data = sortedData;
           break;
+        case 'controlBlocksTypes':
+          this.chartDataControlBlocksTypes.labels = sortedLabels;
+          this.chartDataControlBlocksTypes.data = sortedData;
+          break;
+        case 'procedureBlocksType':
+          this.chartDataProcedureBlocksTypes.labels = sortedLabels;
+          this.chartDataProcedureBlocksTypes.data = sortedData;
+          break;
       }
     },
     setExportData(type, labels, data) {
@@ -470,21 +609,33 @@ export default {
 
       //set table data for each type
       switch (type) {
-        case 'builtInBlocks':
+        case 'basicStats':
           this.SETTINGS_FOR_EXPORT.workSheets[0].tableSettings.data.headerDefinition = tableHeaders;
           this.dataToExport[0].data = [tableDataMerged];
           break;
-        case 'componentBlocks':
+        case 'builtInBlocks':
           this.SETTINGS_FOR_EXPORT.workSheets[1].tableSettings.data.headerDefinition = tableHeaders;
           this.dataToExport[1].data = [tableDataMerged];
           break;
-        case 'componentBlocksCategories':
+        case 'componentBlocks':
           this.SETTINGS_FOR_EXPORT.workSheets[2].tableSettings.data.headerDefinition = tableHeaders;
           this.dataToExport[2].data = [tableDataMerged];
           break;
-        case 'userInterfaceComponentBlocks':
+        case 'componentBlocksCategories':
           this.SETTINGS_FOR_EXPORT.workSheets[3].tableSettings.data.headerDefinition = tableHeaders;
           this.dataToExport[3].data = [tableDataMerged];
+          break;
+        case 'userInterfaceComponentBlocks':
+          this.SETTINGS_FOR_EXPORT.workSheets[4].tableSettings.data.headerDefinition = tableHeaders;
+          this.dataToExport[4].data = [tableDataMerged];
+          break;
+        case 'controlBlocksTypes':
+          this.SETTINGS_FOR_EXPORT.workSheets[5].tableSettings.data.headerDefinition = tableHeaders;
+          this.dataToExport[5].data = [tableDataMerged];
+          break;
+        case 'procedureBlocksType':
+          this.SETTINGS_FOR_EXPORT.workSheets[6].tableSettings.data.headerDefinition = tableHeaders;
+          this.dataToExport[6].data = [tableDataMerged];
           break;
       }
     },
@@ -517,8 +668,25 @@ export default {
         this.chartDataUIComponentBlocks.labels,
         this.chartDataUIComponentBlocks.data
       );
+      this.sortData(
+        'controlBlocksTypes',
+        this.chartDataControlBlocksTypes.labels,
+        this.chartDataControlBlocksTypes.data
+      );
+
+      this.sortData(
+        'procedureBlocksType',
+        this.chartDataProcedureBlocksTypes.labels,
+        this.chartDataProcedureBlocksTypes.data
+      );
 
       //set all data to excel export
+      this.setExportData(
+        'basicStats',
+        this.basicStatsExportData.labels,
+        this.basicStatsExportData.data
+      );
+
       this.setExportData(
         'builtInBlocks',
         this.chartDataBuiltInBlocks.labels,
@@ -539,12 +707,24 @@ export default {
         this.chartDataUIComponentBlocks.labels,
         this.chartDataUIComponentBlocks.data
       );
-
+      this.setExportData(
+        'controlBlocksTypes',
+        this.chartDataControlBlocksTypes.labels,
+        this.chartDataControlBlocksTypes.data
+      );
+      this.setExportData(
+        'procedureBlocksType',
+        this.chartDataProcedureBlocksTypes.labels,
+        this.chartDataProcedureBlocksTypes.data
+      );
       //render charts
       this.renderChart = true;
     },
     resetData() {
-      (this.basicStats = []), (this.chartDataBuiltInBlocks.labels = []);
+      this.basicStats = null;
+      this.basicStatsExportData.labels = [];
+      this.basicStatsExportData.data = [];
+      this.chartDataBuiltInBlocks.labels = [];
       this.chartDataBuiltInBlocks.data = [];
       this.chartDataComponentBlocks.labels = [];
       this.chartDataComponentBlocks.data = [];
@@ -552,17 +732,27 @@ export default {
       this.chartDataComponentBlocksCategories.data = [];
       this.chartDataUIComponentBlocks.labels = [];
       this.chartDataUIComponentBlocks.data = [];
+      this.chartDataControlBlocksTypes.data = [];
+      this.chartDataControlBlocksTypes.labels = [];
+      this.chartDataProcedureBlocksTypes.data = [];
+      this.chartDataProcedureBlocksTypes.labels = [];
 
       this.SETTINGS_FOR_EXPORT.workSheets[0].tableSettings.data.headerDefinition = [];
       this.SETTINGS_FOR_EXPORT.workSheets[1].tableSettings.data.headerDefinition = [];
       this.SETTINGS_FOR_EXPORT.workSheets[2].tableSettings.data.headerDefinition = [];
       this.SETTINGS_FOR_EXPORT.workSheets[3].tableSettings.data.headerDefinition = [];
+      this.SETTINGS_FOR_EXPORT.workSheets[4].tableSettings.data.headerDefinition = [];
+      this.SETTINGS_FOR_EXPORT.workSheets[5].tableSettings.data.headerDefinition = [];
+      this.SETTINGS_FOR_EXPORT.workSheets[6].tableSettings.data.headerDefinition = [];
       this.dataToExport[0].data = [];
       this.dataToExport[1].data = [];
       this.dataToExport[2].data = [];
       this.dataToExport[3].data = [];
+      this.dataToExport[4].data = [];
+      this.dataToExport[5].data = [];
+      this.dataToExport[6].data = [];
     },
-    hasNoData(data) {
+    sumOfArray(data) {
       return (
         data.reduce(function (a, b) {
           return a + b;
