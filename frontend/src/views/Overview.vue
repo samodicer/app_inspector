@@ -77,6 +77,11 @@
                   </div>
                 </v-col>
               </v-row>
+              <v-row v-if="basicStats != null">
+                <v-col>
+                  <BasicStats :data="this.basicStats"></BasicStats>
+                </v-col>
+              </v-row>
               <v-row>
                 <v-col>
                   <v-sheet
@@ -84,6 +89,7 @@
                     rounded="lg"
                     color="#F7F7F7"
                     height="100%"
+                    elevation="2"
                   >
                     <p class="card_title">Built-in blocks</p>
                     <div
@@ -109,6 +115,7 @@
                     rounded="lg"
                     color="#F7F7F7"
                     height="100%"
+                    elevation="2"
                   >
                     <p class="card_title">Component blocks</p>
                     <div
@@ -136,8 +143,9 @@
                     rounded="lg"
                     color="#F7F7F7"
                     height="100%"
+                    elevation="2"
                   >
-                    <p class="card_title">Categories of component blocks</p>
+                    <p class="card_title">Component blocks types</p>
                     <div
                       v-if="
                         this.hasNoData(
@@ -169,6 +177,7 @@
                     rounded="lg"
                     color="#F7F7F7"
                     height="100%"
+                    elevation="2"
                   >
                     <p class="card_title">User Interface component blocks</p>
                     <div
@@ -241,6 +250,7 @@ import DoughnutChart from '../components/DoughnutChart.vue';
 import BarChart from '../components/BarChart.vue';
 import ExcelExport from 'export-xlsx';
 import SelectFiles from '../components/SelectFiles.vue';
+import BasicStats from '../components/BasicStats.vue';
 
 export default {
   name: 'Overview',
@@ -248,6 +258,7 @@ export default {
     DoughnutChart,
     BarChart,
     SelectFiles,
+    BasicStats,
   },
   data() {
     return {
@@ -256,6 +267,7 @@ export default {
       settingsDialog: false,
       links: ['Sign in'],
       icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
+      basicStats: Object,
       chartDataBuiltInBlocks: {
         labels: [],
         data: [],
@@ -348,6 +360,14 @@ export default {
   },
   methods: {
     setChartData(val) {
+      //populate labels and data from server response data
+      /*for (const [key, value] of Object.entries(val[0].basicStats)) {
+        console.log(key, value);
+        this.basicStatsLabels.push(key);
+        this.basicStatsData.push(value);
+      }*/
+      this.basicStats = val[0].basicStats;
+
       //populate labels and data from server response data
       for (const [key, value] of Object.entries(val[0].builtInBlocks)) {
         console.log(key, value);
@@ -524,7 +544,7 @@ export default {
       this.renderChart = true;
     },
     resetData() {
-      this.chartDataBuiltInBlocks.labels = [];
+      (this.basicStats = []), (this.chartDataBuiltInBlocks.labels = []);
       this.chartDataBuiltInBlocks.data = [];
       this.chartDataComponentBlocks.labels = [];
       this.chartDataComponentBlocks.data = [];
