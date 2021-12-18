@@ -257,6 +257,94 @@
                   </v-sheet>
                 </v-col>
               </v-row>
+              <v-row>
+                <v-col>
+                  <v-sheet
+                    id="sheet"
+                    rounded="lg"
+                    color="#F7F7F7"
+                    height="100%"
+                    elevation="2"
+                  >
+                    <p class="card_title">Blocks per project</p>
+                    <div
+                      v-if="
+                        this.sumOfArray(this.chartDataBlocksPerProject.data) !=
+                        0
+                      "
+                    >
+                      <LineChart
+                        :chartData="this.chartDataBlocksPerProject.data"
+                        :chartLabels="this.chartDataBlocksPerProject.labels"
+                        class="bar-chart"
+                      ></LineChart>
+                    </div>
+                    <div v-else>
+                      <v-icon x-large> mdi-eye-off </v-icon>
+                      <p>No data to analyse</p>
+                    </div>
+                  </v-sheet>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-sheet
+                    id="sheet"
+                    rounded="lg"
+                    color="#F7F7F7"
+                    height="100%"
+                    elevation="2"
+                  >
+                    <p class="card_title">Components per project</p>
+                    <div
+                      v-if="
+                        this.sumOfArray(
+                          this.chartDataComponentsPerProject.data
+                        ) != 0
+                      "
+                    >
+                      <LineChart
+                        :chartData="this.chartDataComponentsPerProject.data"
+                        :chartLabels="this.chartDataComponentsPerProject.labels"
+                        class="bar-chart"
+                      ></LineChart>
+                    </div>
+                    <div v-else>
+                      <v-icon x-large> mdi-eye-off </v-icon>
+                      <p>No data to analyse</p>
+                    </div>
+                  </v-sheet>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-sheet
+                    id="sheet"
+                    rounded="lg"
+                    color="#F7F7F7"
+                    height="100%"
+                    elevation="2"
+                  >
+                    <p class="card_title">Screens per project</p>
+                    <div
+                      v-if="
+                        this.sumOfArray(this.chartDataScreensPerProject.data) !=
+                        0
+                      "
+                    >
+                      <LineChart
+                        :chartData="this.chartDataScreensPerProject.data"
+                        :chartLabels="this.chartDataScreensPerProject.labels"
+                        class="bar-chart"
+                      ></LineChart>
+                    </div>
+                    <div v-else>
+                      <v-icon x-large> mdi-eye-off </v-icon>
+                      <p>No data to analyse</p>
+                    </div>
+                  </v-sheet>
+                </v-col>
+              </v-row>
             </v-sheet>
             <v-sheet id="sheet" min-height="63vh" rounded="lg" v-else>
               <v-icon style="margin-top: 50px" x-large> mdi-eye-off</v-icon>
@@ -310,6 +398,7 @@ import ExcelExport from 'export-xlsx';
 import SelectFiles from '../components/SelectFiles.vue';
 import BasicStats from '../components/BasicStats.vue';
 import PieChart from '../components/PieChart.vue';
+import LineChart from '../components/LineChart.vue';
 
 export default {
   name: 'Overview',
@@ -317,6 +406,7 @@ export default {
     DoughnutChart,
     BarChart,
     PieChart,
+    LineChart,
     SelectFiles,
     BasicStats,
   },
@@ -353,6 +443,18 @@ export default {
         data: [],
       },
       chartDataProcedureBlocksTypes: {
+        labels: [],
+        data: [],
+      },
+      chartDataBlocksPerProject: {
+        labels: [],
+        data: [],
+      },
+      chartDataComponentsPerProject: {
+        labels: [],
+        data: [],
+      },
+      chartDataScreensPerProject: {
         labels: [],
         data: [],
       },
@@ -443,9 +545,54 @@ export default {
               },
             },
           },
+          {
+            sheetName: 'Blocks per project',
+            startingRowNumber: 2,
+            gapBetweenTwoTables: 2,
+            tableSettings: {
+              data: {
+                importable: true,
+                tableTitle: 'Blocks per project',
+                headerDefinition: [],
+              },
+            },
+          },
+          {
+            sheetName: 'Components per project',
+            startingRowNumber: 2,
+            gapBetweenTwoTables: 2,
+            tableSettings: {
+              data: {
+                importable: true,
+                tableTitle: 'Components per project',
+                headerDefinition: [],
+              },
+            },
+          },
+          {
+            sheetName: 'Screens per project',
+            startingRowNumber: 2,
+            gapBetweenTwoTables: 2,
+            tableSettings: {
+              data: {
+                importable: true,
+                tableTitle: 'Screens per project',
+                headerDefinition: [],
+              },
+            },
+          },
         ],
       },
       dataToExport: [
+        {
+          data: [],
+        },
+        {
+          data: [],
+        },
+        {
+          data: [],
+        },
         {
           data: [],
         },
@@ -530,6 +677,24 @@ export default {
         this.chartDataProcedureBlocksTypes.labels.push(key);
         this.chartDataProcedureBlocksTypes.data.push(value);
       }
+
+      //populate labels and data from server response data
+      for (const [key, value] of Object.entries(val[0].blocksPerProject)) {
+        this.chartDataBlocksPerProject.labels.push(key);
+        this.chartDataBlocksPerProject.data.push(value);
+      }
+
+      //populate labels and data from server response data
+      for (const [key, value] of Object.entries(val[0].componentsPerProject)) {
+        this.chartDataComponentsPerProject.labels.push(key);
+        this.chartDataComponentsPerProject.data.push(value);
+      }
+
+      //populate labels and data from server response data
+      for (const [key, value] of Object.entries(val[0].screensPerProject)) {
+        this.chartDataScreensPerProject.labels.push(key);
+        this.chartDataScreensPerProject.data.push(value);
+      }
     },
     sortData(type, labels, data) {
       //create object
@@ -578,6 +743,18 @@ export default {
         case 'procedureBlocksType':
           this.chartDataProcedureBlocksTypes.labels = sortedLabels;
           this.chartDataProcedureBlocksTypes.data = sortedData;
+          break;
+        case 'blocksPerProject':
+          this.chartDataBlocksPerProject.labels = sortedLabels;
+          this.chartDataBlocksPerProject.data = sortedData;
+          break;
+        case 'componentsPerProject':
+          this.chartDataComponentsPerProject.labels = sortedLabels;
+          this.chartDataComponentsPerProject.data = sortedData;
+          break;
+        case 'screensPerProject':
+          this.chartDataScreensPerProject.labels = sortedLabels;
+          this.chartDataScreensPerProject.data = sortedData;
           break;
       }
     },
@@ -637,6 +814,18 @@ export default {
           this.SETTINGS_FOR_EXPORT.workSheets[6].tableSettings.data.headerDefinition = tableHeaders;
           this.dataToExport[6].data = [tableDataMerged];
           break;
+        case 'blocksPerProject':
+          this.SETTINGS_FOR_EXPORT.workSheets[7].tableSettings.data.headerDefinition = tableHeaders;
+          this.dataToExport[7].data = [tableDataMerged];
+          break;
+        case 'componentsPerProject':
+          this.SETTINGS_FOR_EXPORT.workSheets[8].tableSettings.data.headerDefinition = tableHeaders;
+          this.dataToExport[8].data = [tableDataMerged];
+          break;
+        case 'screensPerProject':
+          this.SETTINGS_FOR_EXPORT.workSheets[9].tableSettings.data.headerDefinition = tableHeaders;
+          this.dataToExport[9].data = [tableDataMerged];
+          break;
       }
     },
     exportToExcel() {
@@ -680,6 +869,24 @@ export default {
         this.chartDataProcedureBlocksTypes.data
       );
 
+      this.sortData(
+        'blocksPerProject',
+        this.chartDataBlocksPerProject.labels,
+        this.chartDataBlocksPerProject.data
+      );
+
+      this.sortData(
+        'componentsPerProject',
+        this.chartDataComponentsPerProject.labels,
+        this.chartDataComponentsPerProject.data
+      );
+
+      this.sortData(
+        'screensPerProject',
+        this.chartDataScreensPerProject.labels,
+        this.chartDataScreensPerProject.data
+      );
+
       //set all data to excel export
       this.setExportData(
         'basicStats',
@@ -717,6 +924,21 @@ export default {
         this.chartDataProcedureBlocksTypes.labels,
         this.chartDataProcedureBlocksTypes.data
       );
+      this.setExportData(
+        'blocksPerProject',
+        this.chartDataBlocksPerProject.labels,
+        this.chartDataBlocksPerProject.data
+      );
+      this.setExportData(
+        'componentsPerProject',
+        this.chartDataComponentsPerProject.labels,
+        this.chartDataComponentsPerProject.data
+      );
+      this.setExportData(
+        'screensPerProject',
+        this.chartDataScreensPerProject.labels,
+        this.chartDataScreensPerProject.data
+      );
       //render charts
       this.renderChart = true;
     },
@@ -736,6 +958,12 @@ export default {
       this.chartDataControlBlocksTypes.labels = [];
       this.chartDataProcedureBlocksTypes.data = [];
       this.chartDataProcedureBlocksTypes.labels = [];
+      this.chartDataBlocksPerProject.labels = [];
+      this.chartDataBlocksPerProject.data = [];
+      this.chartDataComponentsPerProject.labels = [];
+      this.chartDataComponentsPerProject.data = [];
+      this.chartDataScreensPerProject.labels = [];
+      this.chartDataScreensPerProject.data = [];
 
       this.SETTINGS_FOR_EXPORT.workSheets[0].tableSettings.data.headerDefinition = [];
       this.SETTINGS_FOR_EXPORT.workSheets[1].tableSettings.data.headerDefinition = [];
@@ -744,6 +972,9 @@ export default {
       this.SETTINGS_FOR_EXPORT.workSheets[4].tableSettings.data.headerDefinition = [];
       this.SETTINGS_FOR_EXPORT.workSheets[5].tableSettings.data.headerDefinition = [];
       this.SETTINGS_FOR_EXPORT.workSheets[6].tableSettings.data.headerDefinition = [];
+      this.SETTINGS_FOR_EXPORT.workSheets[7].tableSettings.data.headerDefinition = [];
+      this.SETTINGS_FOR_EXPORT.workSheets[8].tableSettings.data.headerDefinition = [];
+      this.SETTINGS_FOR_EXPORT.workSheets[9].tableSettings.data.headerDefinition = [];
       this.dataToExport[0].data = [];
       this.dataToExport[1].data = [];
       this.dataToExport[2].data = [];
@@ -751,6 +982,9 @@ export default {
       this.dataToExport[4].data = [];
       this.dataToExport[5].data = [];
       this.dataToExport[6].data = [];
+      this.dataToExport[7].data = [];
+      this.dataToExport[8].data = [];
+      this.dataToExport[9].data = [];
     },
     sumOfArray(data) {
       return (

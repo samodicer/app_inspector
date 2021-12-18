@@ -52,11 +52,15 @@ def getFilesData(request):
 
 def analyze(files):
     data= {"basicStats":{}, "builtInBlocks": {}, "componentBlocks": {}, "componentBlocksCategories": {},
-           "userInterfaceComponentBlocks": {}, "controlBlocksTypes": {}, "procedureBlocksTypes":{}}
+           "userInterfaceComponentBlocks": {}, "controlBlocksTypes": {}, "procedureBlocksTypes":{},"blocksPerProject":{},
+           "componentsPerProject":{}, "screensPerProject":{},}
     number_of_blocks = 0
     number_of_components = 0
     number_of_projects = len(files)
     number_of_screens = 0
+    number_of_blocks_per_project = 0
+    number_of_components_per_project = 0
+    number_of_screens_per_project = 0
     control_blocks = 0
     logic_blocks = 0
     math_blocks = 0
@@ -282,10 +286,18 @@ def analyze(files):
                     procWithReturn += len(tree.xpath("//block[@type='procedures_defreturn']"))
                     #procWithReturn += len(tree.xpath("//block[@type='procedures_callreturn']"))
 
+                    #per project
+                    number_of_blocks_per_project += len(tree.xpath("//block"))
+                    number_of_screens_per_project += 1
+
                     number += 1
 
                 f.close()
             else:
+                data["blocksPerProject"][file.title] = number_of_blocks_per_project
+                data["screensPerProject"][file.title] = number_of_screens_per_project
+                number_of_blocks_per_project = 0
+                number_of_screens_per_project = 0
                 noMoreScreens = True
 
 
@@ -313,12 +325,18 @@ def analyze(files):
                 if f.mode == "r":
                     content = f.read()
 
+                    #basic stats
                     number_of_components += content.count("Uuid")-1
+
+                    #per project
+                    number_of_components_per_project += content.count("Uuid")-1
                     
                 f.close()
 
                 number += 1 
             else:
+                data["componentsPerProject"][file.title] = number_of_components_per_project
+                number_of_components_per_project = 0
                 noMoreScreens = True
 
 
