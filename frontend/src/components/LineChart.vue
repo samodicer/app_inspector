@@ -60,6 +60,8 @@ export default {
               fill: false,
               tension: 0,
               borderWidth: 5,
+              pointBorderWidth: 2,
+              pointRadius: 5,
               borderColor: '#9D9D9D',
             },
           ],

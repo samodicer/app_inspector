@@ -66,6 +66,7 @@ def analyze(files):
     math_blocks = 0
     text_blocks = 0
     lists_blocks = 0
+    dictionaries_blocks = 0
     colors_blocks = 0
     variables_blocks = 0
     procedures_blocks = 0
@@ -148,8 +149,9 @@ def analyze(files):
                     math_blocks += len(tree.xpath("//block[contains(@type,'math')]"))
                     text_blocks += len(tree.xpath("//block[contains(@type,'text')]"))
                     lists_blocks += len(tree.xpath("//block[contains(@type,'lists')]"))
+                    dictionaries_blocks += len(tree.xpath("//block[contains(@type,'dictionaries')]"))
                     colors_blocks += len(tree.xpath("//block[contains(@type,'color')]"))
-                    variables_blocks += len(tree.xpath("//block[contains(@type,'lexical_variable') or contains(@type,'local_declaration')]"))
+                    variables_blocks += len(tree.xpath("//block[contains(@type,'lexical_variable') or contains(@type,'local_declaration') or contains(@type,'global_declaration')]"))
                     procedures_blocks += len(tree.xpath("//block[contains(@type,'procedures')]"))
 
                     #component blocks
@@ -348,13 +350,14 @@ def analyze(files):
     data['basicStats']['Number of screens'] = number_of_screens
     data['basicStats']['Number of blocks'] = number_of_blocks
     data['basicStats']['Number of components'] = number_of_components
-    data['basicStats']['Number of built-in blocks'] = control_blocks + logic_blocks + math_blocks + text_blocks +lists_blocks + colors_blocks + variables_blocks + procedures_blocks
+    data['basicStats']['Number of built-in blocks'] = control_blocks + logic_blocks + math_blocks + text_blocks + lists_blocks + dictionaries_blocks + colors_blocks + variables_blocks + procedures_blocks
     data['basicStats']['Number of component blocks'] = event_blocks + setGet_blocks + method_blocks + componentObject_blocks
     data['builtInBlocks']['Control blocks'] = control_blocks
     data['builtInBlocks']['Logic blocks'] = logic_blocks
     data['builtInBlocks']['Math blocks'] = math_blocks
     data['builtInBlocks']['Text blocks'] = text_blocks
     data['builtInBlocks']['Lists blocks'] = lists_blocks
+    data['builtInBlocks']['Dictionaries blocks'] = dictionaries_blocks
     data['builtInBlocks']['Colors blocks'] = colors_blocks
     data['builtInBlocks']['Variables blocks'] = variables_blocks
     data['builtInBlocks']['Procedures blocks'] = procedures_blocks
@@ -397,4 +400,5 @@ def analyze(files):
 
 
     return [data]
+
 

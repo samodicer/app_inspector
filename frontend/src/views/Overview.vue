@@ -153,7 +153,7 @@
                         ) != 0
                       "
                     >
-                      <BarChart
+                      <LineChart
                         :chartData="
                           this.chartDataComponentBlocksCategories.data
                         "
@@ -161,7 +161,7 @@
                           this.chartDataComponentBlocksCategories.labels
                         "
                         class="bar-chart"
-                      ></BarChart>
+                      ></LineChart>
                     </div>
                     <div v-else>
                       <v-icon x-large> mdi-eye-off </v-icon>
@@ -186,11 +186,11 @@
                         0
                       "
                     >
-                      <BarChart
+                      <LineChart
                         :chartData="this.chartDataUIComponentBlocks.data"
                         :chartLabels="this.chartDataUIComponentBlocks.labels"
                         class="bar-chart"
-                      ></BarChart>
+                      ></LineChart>
                     </div>
                     <div v-else>
                       <v-icon x-large> mdi-eye-off </v-icon>
@@ -273,11 +273,11 @@
                         0
                       "
                     >
-                      <LineChart
+                      <BarChart
                         :chartData="this.chartDataBlocksPerProject.data"
                         :chartLabels="this.chartDataBlocksPerProject.labels"
                         class="bar-chart"
-                      ></LineChart>
+                      ></BarChart>
                     </div>
                     <div v-else>
                       <v-icon x-large> mdi-eye-off </v-icon>
@@ -303,11 +303,11 @@
                         ) != 0
                       "
                     >
-                      <LineChart
+                      <BarChart
                         :chartData="this.chartDataComponentsPerProject.data"
                         :chartLabels="this.chartDataComponentsPerProject.labels"
                         class="bar-chart"
-                      ></LineChart>
+                      ></BarChart>
                     </div>
                     <div v-else>
                       <v-icon x-large> mdi-eye-off </v-icon>
@@ -332,11 +332,11 @@
                         0
                       "
                     >
-                      <LineChart
+                      <BarChart
                         :chartData="this.chartDataScreensPerProject.data"
                         :chartLabels="this.chartDataScreensPerProject.labels"
                         class="bar-chart"
-                      ></LineChart>
+                      ></BarChart>
                     </div>
                     <div v-else>
                       <v-icon x-large> mdi-eye-off </v-icon>
