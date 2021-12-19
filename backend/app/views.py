@@ -70,11 +70,12 @@ def analyze(files):
     colors_blocks = 0
     variables_blocks = 0
     procedures_blocks = 0
+    helpers_names_blocks = 0
     event_blocks = 0
     setGet_blocks = 0
     method_blocks = 0
     componentObject_blocks = 0
-    #helpers_blocks = 0
+    helpers_assets_blocks = 0
     userInterface = 0
     layout = 0
     media = 0
@@ -153,13 +154,14 @@ def analyze(files):
                     colors_blocks += len(tree.xpath("//block[contains(@type,'color')]"))
                     variables_blocks += len(tree.xpath("//block[contains(@type,'lexical_variable') or contains(@type,'local_declaration') or contains(@type,'global_declaration')]"))
                     procedures_blocks += len(tree.xpath("//block[contains(@type,'procedures')]"))
+                    helpers_names_blocks += len(tree.xpath("//block[contains(@type,'helpers_screen_names')]"))
 
                     #component blocks
                     event_blocks += len(tree.xpath("//block[contains(@type,'component_event')]"))
                     setGet_blocks += len(tree.xpath("//block[contains(@type,'component_set_get')]"))
                     method_blocks += len(tree.xpath("//block[contains(@type,'component_method')]"))
                     componentObject_blocks += len(tree.xpath("//block[contains(@type,'component_component_block')]"))
-                    #helpers_blocks += len(tree.xpath("//block[contains(@type,'helpers')]"))
+                    helpers_assets_blocks += len(tree.xpath("//block[contains(@type,'helpers_assets')]"))
 
                     #design components
                     userInterface += len(tree.xpath("//mutation[@component_type='Button']"))
@@ -350,8 +352,8 @@ def analyze(files):
     data['basicStats']['Number of screens'] = number_of_screens
     data['basicStats']['Number of blocks'] = number_of_blocks
     data['basicStats']['Number of components'] = number_of_components
-    data['basicStats']['Number of built-in blocks'] = control_blocks + logic_blocks + math_blocks + text_blocks + lists_blocks + dictionaries_blocks + colors_blocks + variables_blocks + procedures_blocks
-    data['basicStats']['Number of component blocks'] = event_blocks + setGet_blocks + method_blocks + componentObject_blocks
+    data['basicStats']['Number of built-in blocks'] = control_blocks + logic_blocks + math_blocks + text_blocks + lists_blocks + dictionaries_blocks + colors_blocks + variables_blocks + procedures_blocks + helpers_names_blocks
+    data['basicStats']['Number of component blocks'] = event_blocks + setGet_blocks + method_blocks + componentObject_blocks + helpers_assets_blocks
     data['builtInBlocks']['Control blocks'] = control_blocks
     data['builtInBlocks']['Logic blocks'] = logic_blocks
     data['builtInBlocks']['Math blocks'] = math_blocks
@@ -361,11 +363,12 @@ def analyze(files):
     data['builtInBlocks']['Colors blocks'] = colors_blocks
     data['builtInBlocks']['Variables blocks'] = variables_blocks
     data['builtInBlocks']['Procedures blocks'] = procedures_blocks
+    data['builtInBlocks']['Helpers blocks'] = helpers_names_blocks
     data['componentBlocks']['Event blocks'] = event_blocks
     data['componentBlocks']['Set and get blocks'] = setGet_blocks
     data['componentBlocks']['Method blocks'] = method_blocks
     data['componentBlocks']['Component object blocks'] = componentObject_blocks
-    #data['componentBlocks']['helpers_blocks'] = helpers_blocks
+    data['componentBlocks']['Helpers blocks'] = helpers_assets_blocks
     data['componentBlocksCategories']['User interface'] = userInterface
     data['componentBlocksCategories']['Layout'] = layout
     data['componentBlocksCategories']['Media'] = media
