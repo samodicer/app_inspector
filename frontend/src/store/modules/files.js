@@ -5,11 +5,13 @@ const state = {
   analyzedData: [],
   uploadedFiles: [],
   isUploaded: false,
+  isAnalysed: false,
 };
 
 const getters = {
   getUploadedFiles: (state) => state.uploadedFiles,
   getUploaded: (state) => state.isUploaded,
+  getAnalysed: (state) => state.isAnalysed,
   allFiles: (state) => state.files,
   getAnalyzedData: (state) => state.analyzedData,
 };
@@ -80,6 +82,9 @@ const actions = {
   async changeUploaded({ commit }, value) {
     commit('setUploaded', value);
   },
+  async changeAnalysed({ commit }, value) {
+    commit('setAnalysed', value);
+  },
   async changeUploadedFiles({ commit }, array) {
     commit('setUploadedFiles', array);
   },
@@ -93,6 +98,7 @@ const mutations = {
     state.isUploaded = false;
   },
   setUploaded: (state, uploaded) => (state.isUploaded = uploaded),
+  setAnalysed: (state, analysed) => (state.isAnalysed = analysed),
   setUploadedFiles: (state, array) => (state.uploadedFiles = array),
   setFiles: (state, files) => (state.files = files),
   setAnalyzedData: (state, analyzedData) => (state.analyzedData = analyzedData),

@@ -45,7 +45,7 @@
                         x-large
                         v-bind="attrs"
                         v-on="on"
-                        @click="settingsDialog = true"
+                        @click="openSettings()"
                       >
                         mdi-cog
                       </v-icon>
@@ -77,6 +77,7 @@
                   </div>
                 </v-col>
               </v-row>
+              <v-divider id="divider"></v-divider>
               <v-row v-if="basicStats != null">
                 <v-col>
                   <BasicStats :data="this.basicStats"></BasicStats>
@@ -391,7 +392,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import DoughnutChart from '../components/DoughnutChart.vue';
 import BarChart from '../components/BarChart.vue';
 import ExcelExport from 'export-xlsx';
@@ -459,7 +460,7 @@ export default {
         data: [],
       },
       SETTINGS_FOR_EXPORT: {
-        fileName: 'app_inspector_project_overview',
+        fileName: 'ai_overview',
         workSheets: [
           {
             sheetName: 'Basic statistics',
@@ -620,9 +621,13 @@ export default {
   computed: {
     ...mapGetters({
       getAnalyzedData: 'files/getAnalyzedData',
+      getAnalysed: 'files/getAnalysed',
     }),
   },
   methods: {
+    ...mapActions({
+      changeAnalysed: 'files/changeAnalysed',
+    }),
     setChartData(val) {
       //populate labels and data from server response data
       /*for (const [key, value] of Object.entries(val[0].basicStats)) {
@@ -993,12 +998,23 @@ export default {
         }, 0) != 0
       );
     },
+    openSettings() {
+      this.settingsDialog = true;
+      this.changeAnalysed(false);
+    },
   },
   watch: {
     getAnalyzedData: function (val) {
       if (val) {
         this.resetData();
         this.setData(val);
+      }
+    },
+    getAnalysed: function (val) {
+      if (val) {
+        if (val == true) {
+          this.settingsDialog = false;
+        }
       }
     },
   },
@@ -1026,5 +1042,9 @@ export default {
   margin-left: 50px;
   margin-right: 50px;
   margin-top: 20px;
+}
+#divider {
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 </style>

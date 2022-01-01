@@ -30,11 +30,23 @@
         </v-list-item-action>
       </v-list-item>
     </v-list>
-    <div class="btn" v-if="this.selectedFiles.length != 0">
-      <router-link v-bind:to="'/overview'">
-        <v-btn color="#26A69A" dark @click="analyze()"> Analyse files </v-btn>
-      </router-link>
+    <div class="btn">
+      <v-btn color="#26A69A" dark @click="analyze()"> Analyse files </v-btn>
     </div>
+    <v-snackbar v-if="error_snackbar" v-model="error_snackbar" timeout="3000">
+      {{ error_snackbar_text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="#26a69a"
+          text
+          v-bind="attrs"
+          @click="error_snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-card>
 </template>
 <script>
@@ -47,22 +59,28 @@ export default {
     return {
       selectedFiles: [],
       headerCheck: true,
+      error_snackbar: false,
+      error_snackbar_text: 'You have not selected any files.',
     };
   },
   methods: {
     ...mapActions({
       analyzeFile: 'files/analyzeFile',
+      changeAnalysed: 'files/changeAnalysed',
     }),
     analyze() {
       if (this.selectedFiles.length != 0) {
         this.analyzeFile(this.selectedFiles);
+        this.changeAnalysed(true);
+        this.$router.push('overview');
+      } else {
+        this.error_snackbar = true;
       }
     },
     setSelected(val) {
       val.forEach((file) => this.selectedFiles.push(file.id));
     },
     setChecked() {
-      console.log('som tu a val:' + this.headerCheck);
       if (this.headerCheck == true) {
         this.setSelected(this.getUploadedFiles);
       } else {
