@@ -2,57 +2,55 @@
   <v-app id="inspire">
     <v-app-bar app color="white" flat height="80px">
       <v-container class="py-0 fill-height">
-        <img
-          class="logo"
-          src="../assets/images/logo2.png"
-          height="70px"
-          @click="refreshByClick"
-        />
+        <router-link v-bind:to="'/'">
+          <img src="../assets/images/logo2.png" height="70px" />
+        </router-link>
 
         <v-spacer></v-spacer>
-
-        <v-btn text @click="loadPage()"> Sign-in</v-btn>
+        <v-btn v-for="link in links" :key="link" text>
+          {{ link }}
+        </v-btn>
       </v-container>
     </v-app-bar>
 
     <v-main class="grey lighten-3">
       <v-container id="content">
-        <v-row>
-          <!-- <v-col cols="2">
-            <v-sheet rounded="lg">
-              <v-list color="transparent">
-                <v-list-item v-for="n in 5" :key="n" link>
-                  <v-list-item-content>
-                    <v-list-item-title> List Item {{ n }} </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-
-                <v-divider class="my-2"></v-divider>
-
-                <v-list-item link color="grey lighten-4">
-                  <v-list-item-content>
-                    <v-list-item-title> Refresh </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-sheet>
-          </v-col>-->
-
-          <v-col>
-            <v-sheet id="sheet" rounded="lg">
-              <UploadFiles></UploadFiles>
-              <!--<p>uploaded files on server:</p>
-              <div v-for="doc in allFiles" :key="doc.id" class="files">
-                  <b>{{doc}}</b>
-              </div>-->
-              <div v-if="this.getUploaded">
-                <SelectFiles></SelectFiles>
+        <v-sheet id="sheet" rounded="lg">
+          <v-card id="card">
+            <div class="form">
+              <h1 id="heading">Sign-in</h1>
+              <v-text-field
+                v-model="user.email"
+                label="Email"
+                placeholder="Email"
+                :rules="[rules.required, rules.email]"
+                outlined
+                dense
+                color="#26A69A"
+              ></v-text-field>
+              <v-text-field
+                v-model="user.password"
+                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="[rules.required, rules.min]"
+                :type="show ? 'text' : 'password'"
+                label="Password"
+                hint="At least 8 characters"
+                outlined
+                dense
+                @click:append="show = !show"
+                color="#26A69A"
+              ></v-text-field>
+              <div class="btn">
+                <v-btn color="#26A69A" dark> Sign-in </v-btn>
               </div>
-              <v-divider id="divider"></v-divider>
-              <AboutUs></AboutUs>
-            </v-sheet>
-          </v-col>
-        </v-row>
+            </div>
+            <v-divider id="divider"></v-divider>
+            <p>New to App Insepctor?</p>
+            <router-link v-bind:to="'/'">
+              <p>Create new account</p>
+            </router-link>
+          </v-card>
+        </v-sheet>
       </v-container>
       <v-footer dark padless>
         <v-card flat tile class="teal lighten-1 white--text text-center">
@@ -93,19 +91,28 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import UploadFiles from '../components/UploadFiles.vue';
-import SelectFiles from '../components/SelectFiles.vue';
-import AboutUs from '../components/AboutUs.vue';
 
 export default {
   name: 'Home',
-  components: {
-    UploadFiles,
-    SelectFiles,
-    AboutUs,
-  },
+  components: {},
   data() {
     return {
+      user: {
+        email: '',
+        password: '',
+      },
+      show: false,
+      rules: {
+        required: (value) => !!value || 'This field is required',
+        min: (value) => {
+          return value.length >= 8 || 'At least 8 characters';
+        },
+        email: (value) => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || 'Invalid Email';
+        },
+      },
+      links: ['Sign in'],
       icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
     };
   },
@@ -114,12 +121,6 @@ export default {
       fetchFiles: 'files/fetchFiles',
       resetStates: 'files/resetStates',
     }),
-    refreshByClick() {
-      this.$router.go();
-    },
-    loadPage() {
-      this.$router.push('signin');
-    },
   },
   computed: {
     ...mapGetters({
@@ -142,14 +143,33 @@ export default {
   padding: 30px;
   min-height: 720px;
 }
-#content {
+#card {
+  padding: 30px;
+}
+.form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.btn {
+  padding: 10px;
+}
+.row {
   margin-bottom: 50px;
 }
 .logo {
   cursor: pointer;
 }
+#heading {
+  padding: 10px;
+}
 #divider {
-  margin-top: 50px;
-  margin-bottom: 30px;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+#content {
+  margin-bottom: 50px;
 }
 </style>
