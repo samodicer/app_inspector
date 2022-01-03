@@ -18,7 +18,7 @@
         <v-sheet id="sheet" rounded="lg">
           <v-card id="card">
             <div class="form">
-              <h1 id="heading">Sign-in</h1>
+              <h1 id="heading">Create account</h1>
               <v-text-field
                 v-model="user.email"
                 label="Email"
@@ -30,24 +30,36 @@
               ></v-text-field>
               <v-text-field
                 v-model="user.password"
-                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="[rules.required, rules.min]"
-                :type="show ? 'text' : 'password'"
+                :type="show1 ? 'text' : 'password'"
                 label="Password"
                 hint="At least 8 characters"
                 outlined
                 dense
-                @click:append="show = !show"
+                @click:append="show1 = !show1"
+                color="#26A69A"
+              ></v-text-field>
+              <v-text-field
+                v-model="user.confirm_password"
+                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="[rules.required, rules.min]"
+                :type="show2 ? 'text' : 'password'"
+                label="Confirm Password"
+                hint="At least 8 characters"
+                outlined
+                dense
+                @click:append="show2 = !show2"
                 color="#26A69A"
               ></v-text-field>
               <div class="btn">
-                <v-btn color="#26A69A" dark> Sign-in </v-btn>
+                <v-btn color="#26A69A" dark> Create account </v-btn>
               </div>
             </div>
             <v-divider id="divider"></v-divider>
-            <p>New to App Insepctor?</p>
-            <router-link v-bind:to="'/create-account'">
-              <p>Create new account</p>
+            <p>Already have an account?</p>
+            <router-link v-bind:to="'/sign-in'">
+              <p>Sign-in</p>
             </router-link>
           </v-card>
         </v-sheet>
@@ -100,8 +112,10 @@ export default {
       user: {
         email: '',
         password: '',
+        confirm_password: '',
       },
-      show: false,
+      show1: false,
+      show2: false,
       rules: {
         required: (value) => !!value || 'This field is required',
         min: (value) => {

@@ -118,7 +118,7 @@ export default {
       this.$router.go();
     },
     loadPage() {
-      this.$router.push('signin');
+      this.$router.push('sign-in');
     },
   },
   computed: {

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from './views/Home';
 import Overview from './views/Overview';
 import SignIn from './views/SignIn';
+import CreateAccount from './views/CreateAccount';
 
 Vue.use(VueRouter);
 
@@ -20,9 +21,14 @@ export default new VueRouter({
       component: Overview,
     },
     {
-      path: '/signin',
+      path: '/sign-in',
       name: 'SignIn',
       component: SignIn,
+    },
+    {
+      path: '/create-account',
+      name: 'CreateAccount',
+      component: CreateAccount,
     },
   ],
 });
