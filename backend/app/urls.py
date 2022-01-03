@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 
@@ -8,6 +8,4 @@ urlpatterns = [
     path('upload-file/', views.uploadFile, name="upload-file"),
     path('get-file-data/<str:pk>', views.getFileData, name="get-file-data"),
     path('get-files-data/', views.getFilesData, name="get-files-data"),
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.jwt')),
 ]
