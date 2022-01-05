@@ -3,7 +3,10 @@
     <v-app-bar app color="white" flat height="80px">
       <v-container class="py-0 fill-height">
         <router-link v-bind:to="'/'">
-          <img src="../assets/images/logo2.png" height="70px" />
+          <img class="logo" src="../assets/images/logo.png" height="70px" />
+        </router-link>
+        <router-link v-bind:to="'/'">
+          <img class="logo2" src="../assets/images/logo2.png" height="70px" />
         </router-link>
         <v-spacer></v-spacer>
         <v-btn v-for="link in links" :key="link" text>
@@ -78,7 +81,324 @@
                 </v-col>
               </v-row>
               <v-divider id="divider"></v-divider>
-              <v-row v-if="basicStats != null">
+              <v-row>
+                <v-col>
+                  <v-card id="card">
+                    <h1 id="heading">
+                      <v-icon large color="#26a69a">
+                        mdi-chart-timeline-variant
+                      </v-icon>
+                      Overall analysis
+                    </h1>
+
+                    <v-row v-if="basicStats != null">
+                      <v-col>
+                        <BasicStats :data="this.basicStats"></BasicStats>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-sheet
+                          id="sheet"
+                          rounded="lg"
+                          color="#F7F7F7"
+                          height="100%"
+                          elevation="2"
+                        >
+                          <p class="card_title">Built-in blocks</p>
+                          <div
+                            v-if="
+                              this.sumOfArray(
+                                this.chartDataBuiltInBlocks.data
+                              ) != 0
+                            "
+                          >
+                            <DoughnutChart
+                              :chartData="this.chartDataBuiltInBlocks.data"
+                              :chartLabels="this.chartDataBuiltInBlocks.labels"
+                              class="doughnut-chart"
+                            ></DoughnutChart>
+                          </div>
+                          <div id="noData" v-else>
+                            <v-icon x-large> mdi-eye-off </v-icon>
+                            <p>No data to analyse</p>
+                          </div>
+                        </v-sheet>
+                      </v-col>
+                      <v-col>
+                        <v-sheet
+                          id="sheet"
+                          rounded="lg"
+                          color="#F7F7F7"
+                          height="100%"
+                          elevation="2"
+                        >
+                          <p class="card_title">Component blocks</p>
+                          <div
+                            v-if="
+                              this.sumOfArray(
+                                this.chartDataComponentBlocks.data
+                              ) != 0
+                            "
+                          >
+                            <DoughnutChart
+                              :chartData="this.chartDataComponentBlocks.data"
+                              :chartLabels="
+                                this.chartDataComponentBlocks.labels
+                              "
+                              class="doughnut-chart"
+                            ></DoughnutChart>
+                          </div>
+                          <div id="noData" v-else>
+                            <v-icon x-large> mdi-eye-off </v-icon>
+                            <p>No data to analyse</p>
+                          </div>
+                        </v-sheet>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-sheet
+                          id="sheet"
+                          rounded="lg"
+                          color="#F7F7F7"
+                          height="100%"
+                          elevation="2"
+                        >
+                          <p class="card_title">Component blocks types</p>
+                          <div
+                            v-if="
+                              this.sumOfArray(
+                                this.chartDataComponentBlocksCategories.data
+                              ) != 0
+                            "
+                          >
+                            <LineChart
+                              :chartData="
+                                this.chartDataComponentBlocksCategories.data
+                              "
+                              :chartLabels="
+                                this.chartDataComponentBlocksCategories.labels
+                              "
+                              class="bar-chart"
+                            ></LineChart>
+                          </div>
+                          <div id="noData" v-else>
+                            <v-icon x-large> mdi-eye-off </v-icon>
+                            <p>No data to analyse</p>
+                          </div>
+                        </v-sheet>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-sheet
+                          id="sheet"
+                          rounded="lg"
+                          color="#F7F7F7"
+                          height="100%"
+                          elevation="2"
+                        >
+                          <p class="card_title">
+                            User Interface component blocks
+                          </p>
+                          <div
+                            v-if="
+                              this.sumOfArray(
+                                this.chartDataUIComponentBlocks.data
+                              ) != 0
+                            "
+                          >
+                            <LineChart
+                              :chartData="this.chartDataUIComponentBlocks.data"
+                              :chartLabels="
+                                this.chartDataUIComponentBlocks.labels
+                              "
+                              class="bar-chart"
+                            ></LineChart>
+                          </div>
+                          <div id="noData" v-else>
+                            <v-icon x-large> mdi-eye-off </v-icon>
+                            <p>No data to analyse</p>
+                          </div>
+                        </v-sheet>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-sheet
+                          id="sheet"
+                          rounded="lg"
+                          color="#F7F7F7"
+                          height="100%"
+                          elevation="2"
+                        >
+                          <p class="card_title">Control blocks types</p>
+                          <div
+                            v-if="
+                              this.sumOfArray(
+                                this.chartDataControlBlocksTypes.data
+                              ) != 0
+                            "
+                          >
+                            <PieChart
+                              :chartData="this.chartDataControlBlocksTypes.data"
+                              :chartLabels="
+                                this.chartDataControlBlocksTypes.labels
+                              "
+                              class="pie-chart"
+                            ></PieChart>
+                          </div>
+                          <div id="noData" v-else>
+                            <v-icon x-large> mdi-eye-off </v-icon>
+                            <p>No data to analyse</p>
+                          </div>
+                        </v-sheet>
+                      </v-col>
+                      <v-col>
+                        <v-sheet
+                          id="sheet"
+                          rounded="lg"
+                          color="#F7F7F7"
+                          height="100%"
+                          elevation="2"
+                        >
+                          <p class="card_title">Procedure blocks types</p>
+                          <div
+                            v-if="
+                              this.sumOfArray(
+                                this.chartDataProcedureBlocksTypes.data
+                              ) != 0
+                            "
+                          >
+                            <PieChart
+                              :chartData="
+                                this.chartDataProcedureBlocksTypes.data
+                              "
+                              :chartLabels="
+                                this.chartDataProcedureBlocksTypes.labels
+                              "
+                              class="pie-chart"
+                            ></PieChart>
+                          </div>
+                          <div id="noData" v-else>
+                            <v-icon x-large> mdi-eye-off </v-icon>
+                            <p>No data to analyse</p>
+                          </div>
+                        </v-sheet>
+                      </v-col>
+                    </v-row>
+                  </v-card>
+                  <v-card id="card">
+                    <h1 id="heading">
+                      <v-icon large color="#26a69a">
+                        mdi-chart-timeline-variant
+                      </v-icon>
+                      Per project analysis
+                    </h1>
+
+                    <v-row>
+                      <v-col>
+                        <v-sheet
+                          id="sheet"
+                          rounded="lg"
+                          color="#F7F7F7"
+                          height="100%"
+                          elevation="2"
+                        >
+                          <p class="card_title">Blocks per project</p>
+                          <div
+                            v-if="
+                              this.sumOfArray(
+                                this.chartDataBlocksPerProject.data
+                              ) != 0
+                            "
+                          >
+                            <BarChart
+                              :chartData="this.chartDataBlocksPerProject.data"
+                              :chartLabels="
+                                this.chartDataBlocksPerProject.labels
+                              "
+                              class="bar-chart"
+                            ></BarChart>
+                          </div>
+                          <div id="noData" v-else>
+                            <v-icon x-large> mdi-eye-off </v-icon>
+                            <p>No data to analyse</p>
+                          </div>
+                        </v-sheet>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-sheet
+                          id="sheet"
+                          rounded="lg"
+                          color="#F7F7F7"
+                          height="100%"
+                          elevation="2"
+                        >
+                          <p class="card_title">Components per project</p>
+                          <div
+                            v-if="
+                              this.sumOfArray(
+                                this.chartDataComponentsPerProject.data
+                              ) != 0
+                            "
+                          >
+                            <BarChart
+                              :chartData="
+                                this.chartDataComponentsPerProject.data
+                              "
+                              :chartLabels="
+                                this.chartDataComponentsPerProject.labels
+                              "
+                              class="bar-chart"
+                            ></BarChart>
+                          </div>
+                          <div id="noData" v-else>
+                            <v-icon x-large> mdi-eye-off </v-icon>
+                            <p>No data to analyse</p>
+                          </div>
+                        </v-sheet>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-sheet
+                          id="sheet"
+                          rounded="lg"
+                          color="#F7F7F7"
+                          height="100%"
+                          elevation="2"
+                        >
+                          <p class="card_title">Screens per project</p>
+                          <div
+                            v-if="
+                              this.sumOfArray(
+                                this.chartDataScreensPerProject.data
+                              ) != 0
+                            "
+                          >
+                            <BarChart
+                              :chartData="this.chartDataScreensPerProject.data"
+                              :chartLabels="
+                                this.chartDataScreensPerProject.labels
+                              "
+                              class="bar-chart"
+                            ></BarChart>
+                          </div>
+                          <div id="noData" v-else>
+                            <v-icon x-large> mdi-eye-off </v-icon>
+                            <p>No data to analyse</p>
+                          </div>
+                        </v-sheet>
+                      </v-col>
+                    </v-row>
+                  </v-card>
+                </v-col>
+              </v-row>
+              <!--<v-row v-if="basicStats != null">
                 <v-col>
                   <BasicStats :data="this.basicStats"></BasicStats>
                 </v-col>
@@ -345,7 +665,7 @@
                     </div>
                   </v-sheet>
                 </v-col>
-              </v-row>
+              </v-row>-->
             </v-sheet>
             <v-sheet id="sheet" min-height="63vh" rounded="lg" v-else>
               <v-icon style="margin-top: 50px" x-large> mdi-eye-off</v-icon>
@@ -423,6 +743,7 @@ export default {
         labels: [],
         data: [],
       },
+      panel: [0, 1],
       chartDataBuiltInBlocks: {
         labels: [],
         data: [],
@@ -1028,8 +1349,26 @@ export default {
 #sheet {
   padding: 30px;
 }
+#card {
+  padding: 30px;
+  margin-bottom: 50px;
+}
+#heading {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 26px;
+}
 .row {
   margin-bottom: 50px;
+}
+#noData {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80%;
+  flex-direction: column;
 }
 #icon:hover {
   color: #26a69a;
@@ -1046,5 +1385,28 @@ export default {
 #divider {
   margin-top: 10px;
   margin-bottom: 20px;
+}
+.logo {
+  display: none;
+}
+.logo2 {
+  display: block;
+  cursor: pointer;
+}
+@media only screen and (max-width: 450px) {
+  #heading {
+    font-size: 20px;
+  }
+  .card_title {
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .logo {
+    display: block;
+    cursor: pointer;
+  }
+  .logo2 {
+    display: none;
+  }
 }
 </style>

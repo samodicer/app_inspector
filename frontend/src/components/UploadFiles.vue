@@ -62,7 +62,7 @@ export default {
   data() {
     return {
       success_snackbar: true,
-      success_snackbar_text: 'Files has been successfully uploaded',
+      success_snackbar_text: 'Files has been successfully uploaded.',
       error_snackbar: false,
       error_snackbar_text: '',
       uploaded: false,
@@ -100,7 +100,7 @@ export default {
             this.crashed = true;
             this.error_snackbar = true;
             this.error_snackbar_text =
-              'The file type must be aia (MIT App Inventor Project File)';
+              'The file type must be aia (MIT App Inventor Project File).';
             this.inputs.files = [];
             this.$refs.fileInputRef = null;
             break;

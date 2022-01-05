@@ -4,11 +4,16 @@
       <v-container class="py-0 fill-height">
         <img
           class="logo"
+          src="../assets/images/logo.png"
+          height="70px"
+          @click="refreshByClick"
+        />
+        <img
+          class="logo2"
           src="../assets/images/logo2.png"
           height="70px"
           @click="refreshByClick"
         />
-
         <v-spacer></v-spacer>
 
         <v-btn text @click="loadPage()"> Sign-in</v-btn>
@@ -146,10 +151,23 @@ export default {
   margin-bottom: 50px;
 }
 .logo {
+  display: none;
+}
+.logo2 {
+  display: block;
   cursor: pointer;
 }
 #divider {
   margin-top: 50px;
   margin-bottom: 30px;
+}
+@media only screen and (max-width: 450px) {
+  .logo {
+    display: block;
+    cursor: pointer;
+  }
+  .logo2 {
+    display: none;
+  }
 }
 </style>

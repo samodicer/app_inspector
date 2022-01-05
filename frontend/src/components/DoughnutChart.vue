@@ -58,6 +58,7 @@ export default {
       return array;
     },
     renderMyChart() {
+      console.log('Rendering....');
       this.renderChart(
         {
           labels: this.$attrs['chartLabels'],

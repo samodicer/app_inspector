@@ -3,9 +3,11 @@
     <v-app-bar app color="white" flat height="80px">
       <v-container class="py-0 fill-height">
         <router-link v-bind:to="'/'">
-          <img src="../assets/images/logo2.png" height="70px" />
+          <img class="logo" src="../assets/images/logo.png" height="70px" />
         </router-link>
-
+        <router-link v-bind:to="'/'">
+          <img class="logo2" src="../assets/images/logo2.png" height="70px" />
+        </router-link>
         <v-spacer></v-spacer>
         <v-btn v-for="link in links" :key="link" text>
           {{ link }}
@@ -170,5 +172,22 @@ export default {
 }
 #content {
   margin-bottom: 50px;
+}
+.logo {
+  display: none;
+}
+.logo2 {
+  display: block;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 450px) {
+  .logo {
+    display: block;
+    cursor: pointer;
+  }
+  .logo2 {
+    display: none;
+  }
 }
 </style>

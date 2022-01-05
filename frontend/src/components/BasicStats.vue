@@ -51,9 +51,24 @@ export default {
   font-size: 60px;
   color: #26a69a;
 }
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
   #sheet {
     width: 300px;
+  }
+}
+@media only screen and (max-width: 450px) {
+  #sheet {
+    width: 200px;
+  }
+  .card_title {
+    font-size: 14px;
+  }
+  .card_number {
+    font-size: 50px;
+  }
+  .card_number:hover {
+    font-size: 50px;
+    color: #26a69a;
   }
 }
 </style>
