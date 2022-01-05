@@ -1,8 +1,27 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col>
-        <h1 style="text-align: left" id="heading">What is App Inspector?</h1>
+    <v-row id="content">
+      <v-sheet id="sheet" rounded="lg" color="#F7F7F7" elevation="2">
+        <h1 id="heading">
+          Analyse your MIT App Inventor projects via App Inspector
+        </h1>
+        <v-sparkline
+          :height="50"
+          :value="value"
+          :gradient="gradient"
+          :smooth="radius || false"
+          :padding="padding"
+          :line-width="width"
+          :stroke-linecap="lineCap"
+          :gradient-direction="gradientDirection"
+          :fill="fill"
+          :type="type"
+          :auto-line-width="autoLineWidth"
+          auto-draw
+        ></v-sparkline>
+
+        <h1 id="heading">What is App Inspector?</h1>
+        <br />
         <p style="text-align: left">
           Contrary to popular belief, Lorem Ipsum is not simply random text. It
           has roots in a piece of classical Latin literature from 45 BC, making
@@ -21,24 +40,7 @@
           reproduced in their exact original form, accompanied by English
           versions from the 1914 translation by H. Rackham.
         </p>
-      </v-col>
-      <v-row id="chart" align="center" justify="center">
-        <v-col>
-          <v-sparkline
-            :value="value"
-            :gradient="gradient"
-            :smooth="radius || false"
-            :padding="padding"
-            :line-width="width"
-            :stroke-linecap="lineCap"
-            :gradient-direction="gradientDirection"
-            :fill="fill"
-            :type="type"
-            :auto-line-width="autoLineWidth"
-            auto-draw
-          ></v-sparkline>
-        </v-col>
-      </v-row>
+      </v-sheet>
     </v-row>
   </v-container>
 </template>
@@ -48,9 +50,9 @@ export default {
   components: {},
   data() {
     return {
-      width: 4,
+      width: 3,
       radius: 10,
-      padding: 8,
+      padding: 14,
       lineCap: 'round',
       gradient: ['#1c857b', '#32d1c2', '#24f2cc'],
       value: Array.from({ length: 17 }, () => Math.floor(Math.random() * 20)),
@@ -67,12 +69,19 @@ export default {
 </script>
 
 <style scoped>
+#sheet {
+  width: 100%;
+  padding: 30px;
+}
+#content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 @media only screen and (max-width: 800px) {
   #heading {
     font-size: 20px;
-  }
-  #chart {
-    display: none;
   }
 }
 </style>

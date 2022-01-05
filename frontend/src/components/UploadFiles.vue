@@ -1,5 +1,5 @@
 <template>
-  <v-card id="card">
+  <v-card id="card" color="#F7F7F7">
     <div id="main_content">
       <h1 id="heading">Select files to upload</h1>
       <div class="file_input">

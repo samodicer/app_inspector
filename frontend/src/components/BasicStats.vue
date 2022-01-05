@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row align="center" justify="center">
+    <v-row id="content" align="center" justify="space-between">
       <div v-for="(number, title) in data" :key="title">
         <v-col id="col">
           <v-sheet id="sheet" rounded="lg" color="#F7F7F7" elevation="2">
@@ -30,7 +30,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 400px;
+  width: 450px;
   height: 300px;
 }
 .card_title {
@@ -51,14 +51,25 @@ export default {
   font-size: 60px;
   color: #26a69a;
 }
+@media only screen and (max-width: 1264px) {
+  #content {
+    justify-content: center !important;
+  }
+}
 @media only screen and (max-width: 600px) {
   #sheet {
     width: 300px;
+  }
+  #content {
+    justify-content: center !important;
   }
 }
 @media only screen and (max-width: 450px) {
   #sheet {
     width: 200px;
+  }
+  #content {
+    justify-content: center !important;
   }
   .card_title {
     font-size: 14px;

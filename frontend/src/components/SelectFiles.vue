@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" id="card">
+  <v-card class="mx-auto" id="card" color="#F7F7F7">
     <v-toolbar color="#26a69a" dark>
       <v-toolbar-title>Uploaded files</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -11,7 +11,7 @@
       ></v-checkbox>
     </v-toolbar>
 
-    <v-list subheader>
+    <v-list subheader color="#F7F7F7">
       <v-list-item v-for="file in getUploadedFiles" :key="file.id">
         <v-list-item-avatar width="30px" height="30px">
           <v-icon class="grey lighten-1" dark> mdi-file </v-icon>

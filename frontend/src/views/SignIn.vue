@@ -18,7 +18,7 @@
     <v-main class="grey lighten-3">
       <v-container id="content">
         <v-sheet id="sheet" rounded="lg">
-          <v-card id="card">
+          <v-card id="card" color="#F7F7F7">
             <div class="form">
               <h1 id="heading">Sign-in</h1>
               <v-text-field
@@ -151,6 +151,7 @@ export default {
 #card {
   padding: 30px;
   width: 500px;
+  border-radius: 15px;
 }
 .form {
   display: flex;
