@@ -233,6 +233,77 @@
                           height="100%"
                           elevation="2"
                         >
+                          <p class="card_title">
+                            Drawing and Animation component blocks
+                          </p>
+                          <div
+                            v-if="
+                              this.sumOfArray(
+                                this.chartDataDrawAndAnimComponentBlocks.data
+                              ) != 0
+                            "
+                          >
+                            <PieChart
+                              :chartData="
+                                this.chartDataDrawAndAnimComponentBlocks.data
+                              "
+                              :chartLabels="
+                                this.chartDataDrawAndAnimComponentBlocks.labels
+                              "
+                              class="pie-chart"
+                            ></PieChart>
+                          </div>
+                          <div id="noData" v-else>
+                            <v-icon x-large> mdi-eye-off </v-icon>
+                            <p>No data to analyse</p>
+                          </div>
+                        </v-sheet>
+                      </v-col>
+                      <v-col>
+                        <v-sheet
+                          id="sheet"
+                          rounded="lg"
+                          color="#F7F7F7"
+                          height="100%"
+                          elevation="2"
+                        >
+                          <p class="card_title">
+                            Storage and Experimental component blocks
+                          </p>
+                          <div
+                            v-if="
+                              this.sumOfArray(
+                                this.chartDataStorageAndExpComponentBlocks.data
+                              ) != 0
+                            "
+                          >
+                            <PieChart
+                              :chartData="
+                                this.chartDataStorageAndExpComponentBlocks.data
+                              "
+                              :chartLabels="
+                                this.chartDataStorageAndExpComponentBlocks
+                                  .labels
+                              "
+                              class="pie-chart"
+                            ></PieChart>
+                          </div>
+                          <div id="noData" v-else>
+                            <v-icon x-large> mdi-eye-off </v-icon>
+                            <p>No data to analyse</p>
+                          </div>
+                        </v-sheet>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-sheet
+                          id="sheet"
+                          rounded="lg"
+                          color="#F7F7F7"
+                          height="100%"
+                          elevation="2"
+                        >
                           <p class="card_title">Control blocks types</p>
                           <div
                             v-if="
@@ -398,274 +469,6 @@
                   </v-card>
                 </v-col>
               </v-row>
-              <!--<v-row v-if="basicStats != null">
-                <v-col>
-                  <BasicStats :data="this.basicStats"></BasicStats>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-sheet
-                    id="sheet"
-                    rounded="lg"
-                    color="#F7F7F7"
-                    height="100%"
-                    elevation="2"
-                  >
-                    <p class="card_title">Built-in blocks</p>
-                    <div
-                      v-if="
-                        this.sumOfArray(this.chartDataBuiltInBlocks.data) != 0
-                      "
-                    >
-                      <DoughnutChart
-                        :chartData="this.chartDataBuiltInBlocks.data"
-                        :chartLabels="this.chartDataBuiltInBlocks.labels"
-                        class="doughnut-chart"
-                      ></DoughnutChart>
-                    </div>
-                    <div v-else>
-                      <v-icon x-large> mdi-eye-off </v-icon>
-                      <p>No data to analyse</p>
-                    </div>
-                  </v-sheet>
-                </v-col>
-                <v-col>
-                  <v-sheet
-                    id="sheet"
-                    rounded="lg"
-                    color="#F7F7F7"
-                    height="100%"
-                    elevation="2"
-                  >
-                    <p class="card_title">Component blocks</p>
-                    <div
-                      v-if="
-                        this.sumOfArray(this.chartDataComponentBlocks.data) != 0
-                      "
-                    >
-                      <DoughnutChart
-                        :chartData="this.chartDataComponentBlocks.data"
-                        :chartLabels="this.chartDataComponentBlocks.labels"
-                        class="doughnut-chart"
-                      ></DoughnutChart>
-                    </div>
-                    <div v-else>
-                      <v-icon x-large> mdi-eye-off </v-icon>
-                      <p>No data to analyse</p>
-                    </div>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-sheet
-                    id="sheet"
-                    rounded="lg"
-                    color="#F7F7F7"
-                    height="100%"
-                    elevation="2"
-                  >
-                    <p class="card_title">Component blocks types</p>
-                    <div
-                      v-if="
-                        this.sumOfArray(
-                          this.chartDataComponentBlocksCategories.data
-                        ) != 0
-                      "
-                    >
-                      <LineChart
-                        :chartData="
-                          this.chartDataComponentBlocksCategories.data
-                        "
-                        :chartLabels="
-                          this.chartDataComponentBlocksCategories.labels
-                        "
-                        class="bar-chart"
-                      ></LineChart>
-                    </div>
-                    <div v-else>
-                      <v-icon x-large> mdi-eye-off </v-icon>
-                      <p>No data to analyse</p>
-                    </div>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-sheet
-                    id="sheet"
-                    rounded="lg"
-                    color="#F7F7F7"
-                    height="100%"
-                    elevation="2"
-                  >
-                    <p class="card_title">User Interface component blocks</p>
-                    <div
-                      v-if="
-                        this.sumOfArray(this.chartDataUIComponentBlocks.data) !=
-                        0
-                      "
-                    >
-                      <LineChart
-                        :chartData="this.chartDataUIComponentBlocks.data"
-                        :chartLabels="this.chartDataUIComponentBlocks.labels"
-                        class="bar-chart"
-                      ></LineChart>
-                    </div>
-                    <div v-else>
-                      <v-icon x-large> mdi-eye-off </v-icon>
-                      <p>No data to analyse</p>
-                    </div>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-sheet
-                    id="sheet"
-                    rounded="lg"
-                    color="#F7F7F7"
-                    height="100%"
-                    elevation="2"
-                  >
-                    <p class="card_title">Control blocks types</p>
-                    <div
-                      v-if="
-                        this.sumOfArray(
-                          this.chartDataControlBlocksTypes.data
-                        ) != 0
-                      "
-                    >
-                      <PieChart
-                        :chartData="this.chartDataControlBlocksTypes.data"
-                        :chartLabels="this.chartDataControlBlocksTypes.labels"
-                        class="pie-chart"
-                      ></PieChart>
-                    </div>
-                    <div v-else>
-                      <v-icon x-large> mdi-eye-off </v-icon>
-                      <p>No data to analyse</p>
-                    </div>
-                  </v-sheet>
-                </v-col>
-                <v-col>
-                  <v-sheet
-                    id="sheet"
-                    rounded="lg"
-                    color="#F7F7F7"
-                    height="100%"
-                    elevation="2"
-                  >
-                    <p class="card_title">Procedure blocks types</p>
-                    <div
-                      v-if="
-                        this.sumOfArray(
-                          this.chartDataProcedureBlocksTypes.data
-                        ) != 0
-                      "
-                    >
-                      <PieChart
-                        :chartData="this.chartDataProcedureBlocksTypes.data"
-                        :chartLabels="this.chartDataProcedureBlocksTypes.labels"
-                        class="pie-chart"
-                      ></PieChart>
-                    </div>
-                    <div v-else>
-                      <v-icon x-large> mdi-eye-off </v-icon>
-                      <p>No data to analyse</p>
-                    </div>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-sheet
-                    id="sheet"
-                    rounded="lg"
-                    color="#F7F7F7"
-                    height="100%"
-                    elevation="2"
-                  >
-                    <p class="card_title">Blocks per project</p>
-                    <div
-                      v-if="
-                        this.sumOfArray(this.chartDataBlocksPerProject.data) !=
-                        0
-                      "
-                    >
-                      <BarChart
-                        :chartData="this.chartDataBlocksPerProject.data"
-                        :chartLabels="this.chartDataBlocksPerProject.labels"
-                        class="bar-chart"
-                      ></BarChart>
-                    </div>
-                    <div v-else>
-                      <v-icon x-large> mdi-eye-off </v-icon>
-                      <p>No data to analyse</p>
-                    </div>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-sheet
-                    id="sheet"
-                    rounded="lg"
-                    color="#F7F7F7"
-                    height="100%"
-                    elevation="2"
-                  >
-                    <p class="card_title">Components per project</p>
-                    <div
-                      v-if="
-                        this.sumOfArray(
-                          this.chartDataComponentsPerProject.data
-                        ) != 0
-                      "
-                    >
-                      <BarChart
-                        :chartData="this.chartDataComponentsPerProject.data"
-                        :chartLabels="this.chartDataComponentsPerProject.labels"
-                        class="bar-chart"
-                      ></BarChart>
-                    </div>
-                    <div v-else>
-                      <v-icon x-large> mdi-eye-off </v-icon>
-                      <p>No data to analyse</p>
-                    </div>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-sheet
-                    id="sheet"
-                    rounded="lg"
-                    color="#F7F7F7"
-                    height="100%"
-                    elevation="2"
-                  >
-                    <p class="card_title">Screens per project</p>
-                    <div
-                      v-if="
-                        this.sumOfArray(this.chartDataScreensPerProject.data) !=
-                        0
-                      "
-                    >
-                      <BarChart
-                        :chartData="this.chartDataScreensPerProject.data"
-                        :chartLabels="this.chartDataScreensPerProject.labels"
-                        class="bar-chart"
-                      ></BarChart>
-                    </div>
-                    <div v-else>
-                      <v-icon x-large> mdi-eye-off </v-icon>
-                      <p>No data to analyse</p>
-                    </div>
-                  </v-sheet>
-                </v-col>
-              </v-row>-->
             </v-sheet>
             <v-sheet id="sheet" min-height="63vh" rounded="lg" v-else>
               <v-icon style="margin-top: 50px" x-large> mdi-eye-off</v-icon>
@@ -760,6 +563,14 @@ export default {
         labels: [],
         data: [],
       },
+      chartDataDrawAndAnimComponentBlocks: {
+        labels: [],
+        data: [],
+      },
+      chartDataStorageAndExpComponentBlocks: {
+        labels: [],
+        data: [],
+      },
       chartDataControlBlocksTypes: {
         labels: [],
         data: [],
@@ -839,6 +650,30 @@ export default {
               data: {
                 importable: true,
                 tableTitle: 'User Interface component blocks',
+                headerDefinition: [],
+              },
+            },
+          },
+          {
+            sheetName: 'Drawing & Ani. component blocks',
+            startingRowNumber: 2,
+            gapBetweenTwoTables: 2,
+            tableSettings: {
+              data: {
+                importable: true,
+                tableTitle: 'Drawing and Animation component blocks',
+                headerDefinition: [],
+              },
+            },
+          },
+          {
+            sheetName: 'Storage & Exp. component blocks',
+            startingRowNumber: 2,
+            gapBetweenTwoTables: 2,
+            tableSettings: {
+              data: {
+                importable: true,
+                tableTitle: 'Storage and Experimental component blocks',
                 headerDefinition: [],
               },
             },
@@ -936,6 +771,12 @@ export default {
         {
           data: [],
         },
+        {
+          data: [],
+        },
+        {
+          data: [],
+        },
       ],
     };
   },
@@ -990,6 +831,22 @@ export default {
       )) {
         this.chartDataUIComponentBlocks.labels.push(key);
         this.chartDataUIComponentBlocks.data.push(value);
+      }
+
+      //populate labels and data from server response data
+      for (const [key, value] of Object.entries(
+        val[0].drawingAndAnimationComponentBlocks
+      )) {
+        this.chartDataDrawAndAnimComponentBlocks.labels.push(key);
+        this.chartDataDrawAndAnimComponentBlocks.data.push(value);
+      }
+
+      //populate labels and data from server response data
+      for (const [key, value] of Object.entries(
+        val[0].storageAndExperimentalComponentBlocks
+      )) {
+        this.chartDataStorageAndExpComponentBlocks.labels.push(key);
+        this.chartDataStorageAndExpComponentBlocks.data.push(value);
       }
 
       //populate labels and data from server response data
@@ -1062,6 +919,14 @@ export default {
           this.chartDataUIComponentBlocks.labels = sortedLabels;
           this.chartDataUIComponentBlocks.data = sortedData;
           break;
+        case 'drawingAndAnimationComponentBlocks':
+          this.chartDataDrawAndAnimComponentBlocks.labels = sortedLabels;
+          this.chartDataDrawAndAnimComponentBlocks.data = sortedData;
+          break;
+        case 'storageAndExperimentalComponentBlocks':
+          this.chartDataStorageAndExpComponentBlocks.labels = sortedLabels;
+          this.chartDataStorageAndExpComponentBlocks.data = sortedData;
+          break;
         case 'controlBlocksTypes':
           this.chartDataControlBlocksTypes.labels = sortedLabels;
           this.chartDataControlBlocksTypes.data = sortedData;
@@ -1132,25 +997,33 @@ export default {
           this.SETTINGS_FOR_EXPORT.workSheets[4].tableSettings.data.headerDefinition = tableHeaders;
           this.dataToExport[4].data = [tableDataMerged];
           break;
-        case 'controlBlocksTypes':
+        case 'drawingAndAnimationComponentBlocks':
           this.SETTINGS_FOR_EXPORT.workSheets[5].tableSettings.data.headerDefinition = tableHeaders;
           this.dataToExport[5].data = [tableDataMerged];
           break;
-        case 'procedureBlocksType':
+        case 'storageAndExperimentalComponentBlocks':
           this.SETTINGS_FOR_EXPORT.workSheets[6].tableSettings.data.headerDefinition = tableHeaders;
           this.dataToExport[6].data = [tableDataMerged];
           break;
-        case 'blocksPerProject':
+        case 'controlBlocksTypes':
           this.SETTINGS_FOR_EXPORT.workSheets[7].tableSettings.data.headerDefinition = tableHeaders;
           this.dataToExport[7].data = [tableDataMerged];
           break;
-        case 'componentsPerProject':
+        case 'procedureBlocksType':
           this.SETTINGS_FOR_EXPORT.workSheets[8].tableSettings.data.headerDefinition = tableHeaders;
           this.dataToExport[8].data = [tableDataMerged];
           break;
-        case 'screensPerProject':
+        case 'blocksPerProject':
           this.SETTINGS_FOR_EXPORT.workSheets[9].tableSettings.data.headerDefinition = tableHeaders;
           this.dataToExport[9].data = [tableDataMerged];
+          break;
+        case 'componentsPerProject':
+          this.SETTINGS_FOR_EXPORT.workSheets[10].tableSettings.data.headerDefinition = tableHeaders;
+          this.dataToExport[10].data = [tableDataMerged];
+          break;
+        case 'screensPerProject':
+          this.SETTINGS_FOR_EXPORT.workSheets[11].tableSettings.data.headerDefinition = tableHeaders;
+          this.dataToExport[11].data = [tableDataMerged];
           break;
       }
     },
@@ -1182,6 +1055,16 @@ export default {
         'userInterfaceComponentBlocks',
         this.chartDataUIComponentBlocks.labels,
         this.chartDataUIComponentBlocks.data
+      );
+      this.sortData(
+        'drawingAndAnimationComponentBlocks',
+        this.chartDataDrawAndAnimComponentBlocks.labels,
+        this.chartDataDrawAndAnimComponentBlocks.data
+      );
+      this.sortData(
+        'storageAndExperimentalComponentBlocks',
+        this.chartDataStorageAndExpComponentBlocks.labels,
+        this.chartDataStorageAndExpComponentBlocks.data
       );
       this.sortData(
         'controlBlocksTypes',
@@ -1241,6 +1124,16 @@ export default {
         this.chartDataUIComponentBlocks.data
       );
       this.setExportData(
+        'drawingAndAnimationComponentBlocks',
+        this.chartDataDrawAndAnimComponentBlocks.labels,
+        this.chartDataDrawAndAnimComponentBlocks.data
+      );
+      this.setExportData(
+        'storageAndExperimentalComponentBlocks',
+        this.chartDataStorageAndExpComponentBlocks.labels,
+        this.chartDataStorageAndExpComponentBlocks.data
+      );
+      this.setExportData(
         'controlBlocksTypes',
         this.chartDataControlBlocksTypes.labels,
         this.chartDataControlBlocksTypes.data
@@ -1280,6 +1173,10 @@ export default {
       this.chartDataComponentBlocksCategories.data = [];
       this.chartDataUIComponentBlocks.labels = [];
       this.chartDataUIComponentBlocks.data = [];
+      this.chartDataDrawAndAnimComponentBlocks.labels = [];
+      this.chartDataDrawAndAnimComponentBlocks.data = [];
+      this.chartDataStorageAndExpComponentBlocks.labels = [];
+      this.chartDataStorageAndExpComponentBlocks.data = [];
       this.chartDataControlBlocksTypes.data = [];
       this.chartDataControlBlocksTypes.labels = [];
       this.chartDataProcedureBlocksTypes.data = [];
@@ -1301,6 +1198,8 @@ export default {
       this.SETTINGS_FOR_EXPORT.workSheets[7].tableSettings.data.headerDefinition = [];
       this.SETTINGS_FOR_EXPORT.workSheets[8].tableSettings.data.headerDefinition = [];
       this.SETTINGS_FOR_EXPORT.workSheets[9].tableSettings.data.headerDefinition = [];
+      this.SETTINGS_FOR_EXPORT.workSheets[10].tableSettings.data.headerDefinition = [];
+      this.SETTINGS_FOR_EXPORT.workSheets[11].tableSettings.data.headerDefinition = [];
       this.dataToExport[0].data = [];
       this.dataToExport[1].data = [];
       this.dataToExport[2].data = [];
@@ -1311,6 +1210,8 @@ export default {
       this.dataToExport[7].data = [];
       this.dataToExport[8].data = [];
       this.dataToExport[9].data = [];
+      this.dataToExport[10].data = [];
+      this.dataToExport[11].data = [];
     },
     sumOfArray(data) {
       return (

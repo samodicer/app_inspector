@@ -72,7 +72,10 @@ export default {
       if (this.selectedFiles.length != 0) {
         this.analyzeFile(this.selectedFiles);
         this.changeAnalysed(true);
-        this.$router.push('overview');
+        console.log('route: ' + this.$router.currentRoute.path);
+        if (this.$router.currentRoute.path != '/overview') {
+          this.$router.push('overview');
+        }
       } else {
         this.error_snackbar = true;
       }

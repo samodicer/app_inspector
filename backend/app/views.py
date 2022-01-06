@@ -52,8 +52,8 @@ def getFilesData(request):
 
 def analyze(files):
     data= {"basicStats":{}, "builtInBlocks": {}, "componentBlocks": {}, "componentBlocksCategories": {},
-           "userInterfaceComponentBlocks": {}, "controlBlocksTypes": {}, "procedureBlocksTypes":{},"blocksPerProject":{},
-           "componentsPerProject":{}, "screensPerProject":{},}
+           "userInterfaceComponentBlocks": {}, "drawingAndAnimationComponentBlocks":{}, "storageAndExperimentalComponentBlocks":{},
+           "controlBlocksTypes": {}, "procedureBlocksTypes":{}, "blocksPerProject":{},"componentsPerProject":{}, "screensPerProject":{},}
     number_of_blocks = 0
     number_of_components = 0
     number_of_projects = len(files)
@@ -107,6 +107,14 @@ def analyze(files):
     screen = 0
     procNoReturn = 0
     procWithReturn = 0
+    canvas = 0
+    imageSprite = 0
+    ball = 0
+    cloudDb = 0
+    storageFile = 0
+    tinyDb = 0
+    tinyWebDb = 0
+    firebaseDb = 0
 
     for file in files:
         path = "./media/unzipped_files/"+str(file.id)
@@ -162,6 +170,7 @@ def analyze(files):
                     method_blocks += len(tree.xpath("//block[contains(@type,'component_method')]"))
                     componentObject_blocks += len(tree.xpath("//block[contains(@type,'component_component_block')]"))
                     helpers_assets_blocks += len(tree.xpath("//block[contains(@type,'helpers_assets')]"))
+                    helpers_assets_blocks += len(tree.xpath("//block[contains(@type,'helpers_dropdown')]"))
 
                     #design components
                     userInterface += len(tree.xpath("//mutation[@component_type='Button']"))
@@ -252,7 +261,7 @@ def analyze(files):
                     legoMindstorms += len(tree.xpath("//mutation[@component_type='Ev3Commands']"))
                     experimental += len(tree.xpath("//mutation[@component_type='FirebaseDB']"))
 
-                    #user inferface components block
+                    #user inferface component blocks
                     buttons += len(tree.xpath("//mutation[@component_type='Button']"))
                     checkboxes += len(tree.xpath("//mutation[@component_type='CheckBox']"))
                     datePickers += len(tree.xpath("//mutation[@component_type='DatePicker']"))
@@ -268,6 +277,18 @@ def analyze(files):
                     textBoxes += len(tree.xpath("//mutation[@component_type='TextBox']"))
                     timePickers += len(tree.xpath("//mutation[@component_type='TimePicker']"))
                     webViewers += len(tree.xpath("//mutation[@component_type='WebViewer']"))
+
+                    #drawing and animation component blocks
+                    canvas += len(tree.xpath("//mutation[@component_type='Canvas']"))
+                    imageSprite += len(tree.xpath("//mutation[@component_type='ImageSprite']"))
+                    ball += len(tree.xpath("//mutation[@component_type='Ball']"))
+
+                    #storage and experimental component blocks
+                    cloudDb += len(tree.xpath("//mutation[@component_type='CloudDB']"))
+                    storageFile += len(tree.xpath("//mutation[@component_type='File']"))
+                    tinyDb += len(tree.xpath("//mutation[@component_type='TinyDB']"))
+                    tinyWebDb += len(tree.xpath("//mutation[@component_type='TinyWebDB']"))
+                    firebaseDb += len(tree.xpath("//mutation[@component_type='FirebaseDB']"))
 
                     #control blocks types
                     conditional += len(tree.xpath("//block[@type='controls_if']"))
@@ -395,6 +416,14 @@ def analyze(files):
     data['userInterfaceComponentBlocks']['Text boxes'] =  textBoxes
     data['userInterfaceComponentBlocks']['Time pickers'] =  timePickers
     data['userInterfaceComponentBlocks']['Web viewers'] =  webViewers
+    data['drawingAndAnimationComponentBlocks']['Canvas'] =  canvas
+    data['drawingAndAnimationComponentBlocks']['Image Sprite'] =  imageSprite
+    data['drawingAndAnimationComponentBlocks']['Ball'] =  ball
+    data['storageAndExperimentalComponentBlocks']['CloudDB'] =  cloudDb
+    data['storageAndExperimentalComponentBlocks']['File'] =  storageFile
+    data['storageAndExperimentalComponentBlocks']['TinyDB'] =  tinyDb
+    data['storageAndExperimentalComponentBlocks']['TinyWebDB'] =  tinyWebDb
+    data['storageAndExperimentalComponentBlocks']['FirebaseDB'] =  firebaseDb
     data['controlBlocksTypes']['Conditional'] =  conditional
     data['controlBlocksTypes']['Loop'] =  loop
     data['controlBlocksTypes']['Screen'] =  screen
