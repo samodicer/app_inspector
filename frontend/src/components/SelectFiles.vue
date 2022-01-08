@@ -10,7 +10,9 @@
         @click="setChecked()"
       ></v-checkbox>
     </v-toolbar>
-
+    <div id="loader" v-if="getLoading">
+      <v-progress-circular indeterminate color="#26a69a"></v-progress-circular>
+    </div>
     <v-list subheader color="#F7F7F7">
       <v-list-item v-for="file in getUploadedFiles" :key="file.id">
         <v-list-item-avatar width="30px" height="30px">
@@ -101,6 +103,7 @@ export default {
   computed: {
     ...mapGetters({
       getUploadedFiles: 'files/getUploadedFiles',
+      getLoading: 'files/getLoading',
     }),
   },
 };
@@ -151,5 +154,8 @@ h1 {
 }
 .field {
   margin-right: 8px;
+}
+#loader {
+  margin-top: 10px;
 }
 </style>

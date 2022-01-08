@@ -130,6 +130,7 @@ export default {
     ...mapGetters({
       allFiles: 'files/allFiles',
       getUploaded: 'files/getUploaded',
+      getUploadedFiles: 'files/getUploadedFiles',
     }),
   },
   mounted() {

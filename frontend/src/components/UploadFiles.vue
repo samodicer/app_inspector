@@ -79,6 +79,7 @@ export default {
     ...mapActions({
       fetchFiles: 'files/fetchFiles',
       analyzeFile: 'files/analyzeFile',
+      changeLoading: 'files/changeLoading',
       changeUploaded: 'files/changeUploaded',
       changeUploadedFiles: 'files/changeUploadedFiles',
     }),
@@ -111,6 +112,7 @@ export default {
           console.log(value);
         }*/
         if (!this.crashed) {
+          this.changeLoading(true);
           axios({
             method: 'post',
             url: 'http://127.0.0.1:8000/upload-file/',
@@ -126,6 +128,7 @@ export default {
               this.uploaded_files.push(myFile);
               this.selectedFiles.push(myFile['id']);
             }
+            this.changeLoading(false);
             console.log(response);
           });
           this.uploaded = true;
