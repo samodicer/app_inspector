@@ -7,6 +7,7 @@ const state = {
   isLoading: false,
   isUploaded: false,
   isAnalysed: false,
+  moreInfoDialog: false,
 };
 
 const getters = {
@@ -16,6 +17,7 @@ const getters = {
   getAnalysed: (state) => state.isAnalysed,
   allFiles: (state) => state.files,
   getAnalyzedData: (state) => state.analyzedData,
+  getMoreInfoDialog: (state) => state.moreInfoDialog,
 };
 
 const actions = {
@@ -93,6 +95,9 @@ const actions = {
   async changeUploadedFiles({ commit }, array) {
     commit('setUploadedFiles', array);
   },
+  async changeMoreInfoDialog({ commit }, value) {
+    commit('setMoreInfoDialog', value);
+  },
 };
 
 const mutations = {
@@ -108,6 +113,8 @@ const mutations = {
   setUploadedFiles: (state, array) => (state.uploadedFiles = array),
   setFiles: (state, files) => (state.files = files),
   setAnalyzedData: (state, analyzedData) => (state.analyzedData = analyzedData),
+  setMoreInfoDialog: (state, moreInfoDialog) =>
+    (state.moreInfoDialog = moreInfoDialog),
 };
 
 export default {

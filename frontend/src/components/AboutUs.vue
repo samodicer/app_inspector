@@ -6,7 +6,17 @@
           <v-col>
             <v-sheet id="sheet" rounded="lg" color="#FFFFFF" elevation="2">
               <h1 id="heading">
-                <v-icon large color="#26a69a"> mdi-speedometer</v-icon>
+                <v-icon id="icon" large color="#26a69a"> mdi-school</v-icon>
+                Instructive
+              </h1>
+              <p id="text">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry.
+              </p>
+              <h1 id="heading">
+                <v-icon id="icon" large color="#26a69a">
+                  mdi-speedometer</v-icon
+                >
                 Fast
               </h1>
               <p id="text">
@@ -14,16 +24,10 @@
                 industry.
               </p>
               <h1 id="heading">
-                <v-icon large color="#26a69a"> mdi-check-circle-outline</v-icon>
+                <v-icon id="icon" large color="#26a69a">
+                  mdi-check-circle-outline</v-icon
+                >
                 Free
-              </h1>
-              <p id="text">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </p>
-              <h1 id="heading">
-                <v-icon large color="#26a69a"> mdi-school</v-icon>
-                Instructive
               </h1>
               <p id="text">
                 Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -39,7 +43,7 @@
               elevation="2"
               style="height: 100%"
             >
-              <h1 id="heading" style="text-align: center">
+              <h1 id="heading2">
                 Analyse your MIT App Inventor <br />
                 projects via App Inspector
               </h1>
@@ -60,9 +64,7 @@
             </v-sheet>
           </v-col>
         </v-row>
-        <h1 id="heading" style="margin-top: 30px; text-align: center">
-          What is App Inspector?
-        </h1>
+        <h1 id="heading2" style="margin-top: 30px">What is App Inspector?</h1>
         <br />
         <p style="text-align: left">
           Contrary to popular belief, Lorem Ipsum is not simply random text. It
@@ -112,7 +114,14 @@ export default {
 
 <style scoped>
 #heading {
+  display: flex;
   text-align: left;
+}
+#heading2 {
+  text-align: center;
+}
+#icon {
+  margin-right: 5px;
 }
 #text {
   text-align: left;

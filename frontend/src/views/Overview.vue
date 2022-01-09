@@ -105,7 +105,12 @@
                           height="100%"
                           elevation="2"
                         >
-                          <p class="card_title">Built-in blocks</p>
+                          <p
+                            class="card_title"
+                            @click="bindMoreInfo('Built-in blocks')"
+                          >
+                            Built-in blocks
+                          </p>
                           <div
                             v-if="
                               this.sumOfArray(
@@ -133,7 +138,12 @@
                           height="100%"
                           elevation="2"
                         >
-                          <p class="card_title">Component blocks</p>
+                          <p
+                            class="card_title"
+                            @click="bindMoreInfo('Component blocks')"
+                          >
+                            Component blocks
+                          </p>
                           <div
                             v-if="
                               this.sumOfArray(
@@ -165,7 +175,12 @@
                           height="100%"
                           elevation="2"
                         >
-                          <p class="card_title">Component blocks types</p>
+                          <p
+                            class="card_title"
+                            @click="bindMoreInfo('Component blocks types')"
+                          >
+                            Component blocks types
+                          </p>
                           <div
                             v-if="
                               this.sumOfArray(
@@ -199,7 +214,12 @@
                           height="100%"
                           elevation="2"
                         >
-                          <p class="card_title">
+                          <p
+                            class="card_title"
+                            @click="
+                              bindMoreInfo('User Interface component blocks')
+                            "
+                          >
                             User Interface component blocks
                           </p>
                           <div
@@ -233,7 +253,14 @@
                           height="100%"
                           elevation="2"
                         >
-                          <p class="card_title">
+                          <p
+                            class="card_title"
+                            @click="
+                              bindMoreInfo(
+                                'Drawing and Animation component blocks'
+                              )
+                            "
+                          >
                             Drawing and Animation component blocks
                           </p>
                           <div
@@ -267,7 +294,14 @@
                           height="100%"
                           elevation="2"
                         >
-                          <p class="card_title">
+                          <p
+                            class="card_title"
+                            @click="
+                              bindMoreInfo(
+                                'Storage and Experimental component blocks'
+                              )
+                            "
+                          >
                             Storage and Experimental component blocks
                           </p>
                           <div
@@ -474,6 +508,12 @@
               <v-icon style="margin-top: 50px" x-large> mdi-eye-off</v-icon>
               <p>No data to analyse</p>
             </v-sheet>
+            <div v-if="getMoreInfoDialog">
+              <MoreInfo
+                v-bind:type="moreInfoType"
+                v-bind:text="moreInfoText"
+              ></MoreInfo>
+            </div>
           </v-col>
         </v-row>
       </v-container>
@@ -523,6 +563,7 @@ import SelectFiles from '../components/SelectFiles.vue';
 import BasicStats from '../components/BasicStats.vue';
 import PieChart from '../components/PieChart.vue';
 import LineChart from '../components/LineChart.vue';
+import MoreInfo from '../components/MoreInfo.vue';
 
 export default {
   name: 'Overview',
@@ -533,12 +574,15 @@ export default {
     LineChart,
     SelectFiles,
     BasicStats,
+    MoreInfo,
   },
   data() {
     return {
       //analyzedData: Object,
       renderChart: false,
       settingsDialog: false,
+      moreInfoType: '',
+      moreInfoText: '',
       links: ['Sign in'],
       icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
       basicStats: Object,
@@ -784,11 +828,13 @@ export default {
     ...mapGetters({
       getAnalyzedData: 'files/getAnalyzedData',
       getAnalysed: 'files/getAnalysed',
+      getMoreInfoDialog: 'files/getMoreInfoDialog',
     }),
   },
   methods: {
     ...mapActions({
       changeAnalysed: 'files/changeAnalysed',
+      changeMoreInfoDialog: 'files/changeMoreInfoDialog',
     }),
     setChartData(val) {
       //populate labels and data from server response data
@@ -1224,6 +1270,36 @@ export default {
       this.settingsDialog = true;
       this.changeAnalysed(false);
     },
+    bindMoreInfo(type) {
+      switch (type) {
+        case 'Built-in blocks':
+          this.moreInfoText =
+            'Built-in blocks are available regardless of which components are in your project. This chart represtents different types of built-in blocks used in your project/s';
+          break;
+        case 'Component blocks':
+          this.moreInfoText =
+            'Each component in your project has its own set of blocks specific to its own events, methods, and properties. This chart represtents different types of component blocks used in your project/s.';
+          break;
+        case 'Component blocks types':
+          this.moreInfoText =
+            'Component blocks are divided into categories, based on various types of work: User Interface components, Layout components, Media components, Drawing and Animation components, Map components, Sensor components, Social components, Storage components, Connectivity components, LEGO® MINDSTORMS® components and Experimental components. This chart represtents different types of component blocks used in your project/s.';
+          break;
+        case 'User Interface component blocks':
+          this.moreInfoText =
+            'User Interface components interact with users using various visual elements, such as: Button, CheckBox, DatePicker, Image, Label, ListPicker, ListView, Notifier, PasswordTextBox, Screen, Slider, Spinner, Switch, TextBox, TimePicker and WebViewer. This chart represtents different types of User Interface component blocks used in your project/s.';
+          break;
+        case 'Drawing and Animation component blocks':
+          this.moreInfoText =
+            'Drawing and Animation components are: Ball, Canvas, ImageSprite. As the name suggests, these components are used to work with animation. This chart represtents different types of Drawing and Animation component blocks used in your project/s.';
+          break;
+        case 'Storage and Experimental component blocks':
+          this.moreInfoText =
+            'This chart represtents different types of Drawing and Animation component blocks used in your project/s.';
+          break;
+      }
+      this.moreInfoType = type;
+      this.changeMoreInfoDialog(true);
+    },
   },
   watch: {
     getAnalyzedData: function (val) {
@@ -1275,8 +1351,12 @@ export default {
   color: #26a69a;
 }
 .card_title {
+  cursor: help;
   font-weight: 700;
   font-size: 20px;
+}
+.card_title:hover {
+  color: #26a69a;
 }
 .selectFiles {
   margin-left: 50px;
