@@ -159,7 +159,7 @@ export default {
   cursor: pointer;
 }
 #divider {
-  margin-top: 50px;
+  margin-top: 30px;
   margin-bottom: 30px;
 }
 @media only screen and (max-width: 450px) {

@@ -30,7 +30,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 450px;
+  width: 490px;
   height: 300px;
 }
 .card_title {

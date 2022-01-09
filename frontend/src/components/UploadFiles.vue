@@ -194,7 +194,6 @@ export default {
   padding: 10px;
 }
 #card {
-  margin-top: 30px;
   margin-bottom: 30px;
   border-radius: 15px;
 }

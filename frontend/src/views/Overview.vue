@@ -1281,7 +1281,7 @@ export default {
 .selectFiles {
   margin-left: 50px;
   margin-right: 50px;
-  margin-top: 20px;
+  padding-bottom: 30px;
 }
 #divider {
   margin-top: 10px;

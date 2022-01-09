@@ -27,9 +27,37 @@ export default {
   },
   props: ['chartData', 'chartLables'],
   mounted() {
+    this.multiplyColors();
     this.renderMyChart();
   },
   methods: {
+    multiplyColors() {
+      if (this.chartData.length > this.backgroundColor.length) {
+        this.backgroundColor = [];
+        for (var i = 0; i < this.chartData.length; i++) {
+          this.backgroundColor.push('#26a69a');
+        }
+      } else {
+        this.backgroundColor = [];
+        this.backgroundColor = [
+          '#F78585',
+          '#F8AD72',
+          '#F8EB78',
+          '#CBF878',
+          '#8FF878',
+          '#78F8A8',
+          '#78F8D5',
+          '#78ECF8',
+          '#78C2F8',
+          '#7888F8',
+          '#A278F8',
+          '#D378F8',
+          '#F878DF',
+          '#D9D9D9',
+          '#AA927D',
+        ];
+      }
+    },
     shuffle(array) {
       let currentIndex = array.length,
         randomIndex;
@@ -82,6 +110,7 @@ export default {
   },
   watch: {
     chartData: function () {
+      this.multiplyColors();
       this.renderMyChart();
     },
   },

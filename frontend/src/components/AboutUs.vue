@@ -2,25 +2,67 @@
   <v-container>
     <v-row id="content">
       <v-sheet id="sheet" rounded="lg" color="#F7F7F7" elevation="2">
-        <h1 id="heading">
-          Analyse your MIT App Inventor projects via App Inspector
+        <v-row id="row">
+          <v-col>
+            <v-sheet id="sheet" rounded="lg" color="#FFFFFF" elevation="2">
+              <h1 id="heading">
+                <v-icon large color="#26a69a"> mdi-speedometer</v-icon>
+                Fast
+              </h1>
+              <p id="text">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry.
+              </p>
+              <h1 id="heading">
+                <v-icon large color="#26a69a"> mdi-check-circle-outline</v-icon>
+                Free
+              </h1>
+              <p id="text">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry.
+              </p>
+              <h1 id="heading">
+                <v-icon large color="#26a69a"> mdi-school</v-icon>
+                Instructive
+              </h1>
+              <p id="text">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry.
+              </p>
+            </v-sheet>
+          </v-col>
+          <v-col>
+            <v-sheet
+              id="sheet"
+              rounded="lg"
+              color="#FFFFFF"
+              elevation="2"
+              style="height: 100%"
+            >
+              <h1 id="heading" style="text-align: center">
+                Analyse your MIT App Inventor <br />
+                projects via App Inspector
+              </h1>
+              <v-sparkline
+                :height="50"
+                :value="value"
+                :gradient="gradient"
+                :smooth="radius || false"
+                :padding="padding"
+                :line-width="width"
+                :stroke-linecap="lineCap"
+                :gradient-direction="gradientDirection"
+                :fill="fill"
+                :type="type"
+                :auto-line-width="autoLineWidth"
+                auto-draw
+              ></v-sparkline>
+            </v-sheet>
+          </v-col>
+        </v-row>
+        <h1 id="heading" style="margin-top: 30px; text-align: center">
+          What is App Inspector?
         </h1>
-        <v-sparkline
-          :height="50"
-          :value="value"
-          :gradient="gradient"
-          :smooth="radius || false"
-          :padding="padding"
-          :line-width="width"
-          :stroke-linecap="lineCap"
-          :gradient-direction="gradientDirection"
-          :fill="fill"
-          :type="type"
-          :auto-line-width="autoLineWidth"
-          auto-draw
-        ></v-sparkline>
-
-        <h1 id="heading">What is App Inspector?</h1>
         <br />
         <p style="text-align: left">
           Contrary to popular belief, Lorem Ipsum is not simply random text. It
@@ -69,19 +111,31 @@ export default {
 </script>
 
 <style scoped>
+#heading {
+  text-align: left;
+}
+#text {
+  text-align: left;
+}
 #sheet {
   width: 100%;
   padding: 30px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 #content {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 @media only screen and (max-width: 800px) {
   #heading {
     font-size: 20px;
+  }
+  #row {
+    flex-direction: column;
   }
 }
 </style>

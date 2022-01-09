@@ -131,7 +131,7 @@ h1 {
 }
 #card {
   margin-top: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 0px !important;
   border-radius: 15px;
 }
 .stat {
