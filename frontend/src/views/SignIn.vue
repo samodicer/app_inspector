@@ -21,11 +21,20 @@
           <v-card id="card" color="#F7F7F7">
             <div class="form">
               <h1 id="heading">Sign-in</h1>
-              <v-text-field
+              <!--<v-text-field
                 v-model="user.email"
                 label="Email"
                 placeholder="Email"
                 :rules="[rules.required, rules.email]"
+                outlined
+                dense
+                color="#26A69A"
+              ></v-text-field>-->
+              <v-text-field
+                v-model="user.username"
+                label="Username"
+                placeholder="Username"
+                :rules="[rules.required]"
                 outlined
                 dense
                 color="#26A69A"
@@ -43,7 +52,7 @@
                 color="#26A69A"
               ></v-text-field>
               <div class="btn">
-                <v-btn color="#26A69A" dark> Sign-in </v-btn>
+                <v-btn color="#26A69A" @click="login()"> Sign-in </v-btn>
               </div>
             </div>
             <v-divider id="divider"></v-divider>
@@ -100,9 +109,11 @@ export default {
   data() {
     return {
       user: {
-        email: '',
+        username: '',
+        //email: '',
         password: '',
       },
+      incorrectAuth: false,
       show: false,
       rules: {
         required: (value) => !!value || 'This field is required',
@@ -122,7 +133,18 @@ export default {
     ...mapActions({
       fetchFiles: 'files/fetchFiles',
       resetStates: 'files/resetStates',
+      userLogin: 'users/userLogin',
     }),
+    login() {
+      this.userLogin(this.user)
+        .then(() => {
+          this.$router.push({ name: 'Home' });
+        })
+        .catch((err) => {
+          console.log(err);
+          this.incorrectAuth = true;
+        });
+    },
   },
   computed: {
     ...mapGetters({

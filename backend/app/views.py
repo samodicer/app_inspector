@@ -11,6 +11,17 @@ from rest_framework.decorators import api_view
 from .models import Document
 from .serializers import DocumentSerializer
 
+from django.contrib.auth.models import User
+
+'''@api_view(['POST'])
+def createUser(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        print("***********USERNAME************",username)
+        user = User.objects.create_user(username=username,password=password)
+        user.save()'''
+
 @api_view(['POST'])
 def uploadFile(request):
     #file = request.data['file']

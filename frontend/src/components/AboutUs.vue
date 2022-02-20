@@ -143,6 +143,9 @@ export default {
   #heading {
     font-size: 20px;
   }
+  #heading2 {
+    font-size: 20px;
+  }
   #row {
     flex-direction: column;
   }

@@ -15,8 +15,8 @@
           @click="refreshByClick"
         />
         <v-spacer></v-spacer>
-
-        <v-btn text @click="loadPage()"> Sign-in</v-btn>
+        <v-btn v-if="accessToken" text @click="logout()"> Sign-out</v-btn>
+        <v-btn text @click="loadSignInPage()"> Sign-in</v-btn>
       </v-container>
     </v-app-bar>
 
@@ -111,6 +111,7 @@ export default {
   },
   data() {
     return {
+      accessToken: localStorage.getItem('accessToken'),
       icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
     };
   },
@@ -118,12 +119,17 @@ export default {
     ...mapActions({
       fetchFiles: 'files/fetchFiles',
       resetStates: 'files/resetStates',
+      userLogout: 'users/userLogout',
     }),
     refreshByClick() {
       this.$router.go();
     },
-    loadPage() {
+    loadSignInPage() {
       this.$router.push('sign-in');
+    },
+    logout() {
+      this.userLogout();
+      location.reload();
     },
   },
   computed: {

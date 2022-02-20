@@ -101,7 +101,7 @@ export default {
             this.crashed = true;
             this.error_snackbar = true;
             this.error_snackbar_text =
-              'The file type must be aia (MIT App Inventor Project File).';
+              'The file type must be AIA (App Inventor Application).';
             this.inputs.files = [];
             this.$refs.fileInputRef = null;
             break;
