@@ -6,7 +6,8 @@ from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshVie
 urlpatterns = [
     path('api-token/', TokenObtainPairView.as_view()),
     path('api-token-refresh/', TokenRefreshView.as_view()),
-    #path('create-account/', views.createUser, name="create-account"),
+    path('register/', views.RegisterView.as_view(), name='auth_register'),
+    path('get-user/', views.getUser, name="get-user"),
     path('get-files/', views.getFiles, name="get-files"),
     path('get-file/<str:pk>', views.getFileById, name="get-file"),
     path('upload-file/', views.uploadFile, name="upload-file"),

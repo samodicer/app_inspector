@@ -15,8 +15,17 @@
           @click="refreshByClick"
         />
         <v-spacer></v-spacer>
+        <p
+          style="margin-bottom: 0px"
+          v-if="this.getUser.username"
+          class="font-weight-black"
+        >
+          {{ this.getUser.username }}
+        </p>
         <v-btn v-if="accessToken" text @click="logout()"> Sign-out</v-btn>
-        <v-btn text @click="loadSignInPage()"> Sign-in</v-btn>
+        <v-btn v-if="!accessToken" text @click="loadSignInPage()">
+          Sign-in</v-btn
+        >
       </v-container>
     </v-app-bar>
 
@@ -120,6 +129,7 @@ export default {
       fetchFiles: 'files/fetchFiles',
       resetStates: 'files/resetStates',
       userLogout: 'users/userLogout',
+      getCurrentUser: 'users/getCurrentUser',
     }),
     refreshByClick() {
       this.$router.go();
@@ -137,11 +147,13 @@ export default {
       allFiles: 'files/allFiles',
       getUploaded: 'files/getUploaded',
       getUploadedFiles: 'files/getUploadedFiles',
+      getUser: 'users/getUser',
     }),
   },
   mounted() {
     this.fetchFiles();
     this.resetStates();
+    this.getCurrentUser(this.accessToken);
   },
 };
 </script>

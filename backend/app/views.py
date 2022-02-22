@@ -7,20 +7,30 @@ import shutil
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.tokens import AccessToken
+
+from .serializers import RegisterSerializer
+from .serializers import DocumentSerializer
+from .serializers import UserSerializer
 
 from .models import Document
-from .serializers import DocumentSerializer
 
 from django.contrib.auth.models import User
 
-'''@api_view(['POST'])
-def createUser(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        print("***********USERNAME************",username)
-        user = User.objects.create_user(username=username,password=password)
-        user.save()'''
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer 
+
+@api_view(['GET'])
+def getUser(request):
+    access_token_obj = AccessToken(request.query_params.get('access_token'))
+    user_id=access_token_obj['user_id']
+    user=User.objects.get(id=user_id)
+    serializer = UserSerializer(user, many= False)
+    return Response(serializer.data)       
 
 @api_view(['POST'])
 def uploadFile(request):

@@ -21,15 +21,6 @@
           <v-card id="card" color="#F7F7F7">
             <div class="form">
               <h1 id="heading">Create account</h1>
-              <!--<v-text-field
-                v-model="user.email"
-                label="Email"
-                placeholder="Email"
-                :rules="[rules.required, rules.email]"
-                outlined
-                dense
-                color="#26A69A"
-              ></v-text-field>-->
               <v-text-field
                 v-model="user.username"
                 label="Username"
@@ -39,6 +30,33 @@
                 dense
                 color="#26A69A"
               ></v-text-field>
+              <v-text-field
+                v-model="user.first_name"
+                label="First name"
+                placeholder="First name"
+                :rules="[rules.required]"
+                outlined
+                dense
+                color="#26A69A"
+              ></v-text-field>
+              <v-text-field
+                v-model="user.last_name"
+                label="Last name"
+                placeholder="Last name"
+                :rules="[rules.required]"
+                outlined
+                dense
+                color="#26A69A"
+              ></v-text-field>
+              <!--<v-text-field
+                v-model="user.email"
+                label="Email"
+                placeholder="Email"
+                :rules="[rules.required, rules.email]"
+                outlined
+                dense
+                color="#26A69A"
+              ></v-text-field>-->
               <v-text-field
                 v-model="user.password"
                 :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -56,7 +74,7 @@
                 :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="[rules.required, rules.min]"
                 :type="show2 ? 'text' : 'password'"
-                label="Confirm Password"
+                label="Confirm password"
                 hint="At least 8 characters"
                 outlined
                 dense
@@ -124,9 +142,10 @@ export default {
     return {
       user: {
         username: '',
-        //email: '',
         password: '',
         confirm_password: '',
+        first_name: '',
+        last_name: '',
       },
       show1: false,
       show2: false,
@@ -135,10 +154,10 @@ export default {
         min: (value) => {
           return value.length >= 8 || 'At least 8 characters';
         },
-        email: (value) => {
+        /*email: (value) => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || 'Invalid Email';
-        },
+        },*/
       },
       links: ['Sign in'],
       icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
