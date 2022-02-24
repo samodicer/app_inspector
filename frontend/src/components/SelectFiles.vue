@@ -4,6 +4,7 @@
       <v-toolbar-title>Uploaded files</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-checkbox
+        v-if="getUploadedFiles.length != 0"
         hide-details
         color="#FFFFFF"
         v-model="headerCheck"
