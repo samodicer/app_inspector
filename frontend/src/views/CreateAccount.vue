@@ -1,20 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar app color="white" flat height="80px">
-      <v-container class="py-0 fill-height">
-        <router-link v-bind:to="'/'">
-          <img class="logo" src="../assets/images/logo.png" height="70px" />
-        </router-link>
-        <router-link v-bind:to="'/'">
-          <img class="logo2" src="../assets/images/logo2.png" height="70px" />
-        </router-link>
-        <v-spacer></v-spacer>
-        <v-btn v-for="link in links" :key="link" text>
-          {{ link }}
-        </v-btn>
-      </v-container>
-    </v-app-bar>
-
+    <Navbar></Navbar>
     <v-main class="grey lighten-3">
       <v-container id="content">
         <v-sheet id="sheet" rounded="lg">
@@ -143,8 +129,13 @@
                 </v-alert>
               </div>
               <div class="btn">
-                <v-btn tabindex="2" color="#26A69A" @click="createAcc()">
-                  Create account
+                <v-btn
+                  class="white--text"
+                  tabindex="2"
+                  color="#26A69A"
+                  @click="createAcc()"
+                >
+                  Create
                 </v-btn>
               </div>
             </div>
@@ -156,49 +147,22 @@
           </v-card>
         </v-sheet>
       </v-container>
-      <v-footer dark padless>
-        <v-card flat tile class="teal lighten-1 white--text text-center">
-          <v-card-text>
-            <v-btn
-              v-for="icon in icons"
-              :key="icon"
-              class="mx-4 white--text"
-              icon
-            >
-              <v-icon size="24px">
-                {{ icon }}
-              </v-icon>
-            </v-btn>
-          </v-card-text>
-
-          <v-card-text class="white--text pt-0">
-            Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet.
-            Mauris cursus commodo interdum. Praesent ut risus eget metus luctus
-            accumsan id ultrices nunc. Sed at orci sed massa consectetur
-            dignissim a sit amet dui. Duis commodo vitae velit et faucibus.
-            Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et
-            magnis dis parturient montes, nascetur ridiculus mus.
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-text class="white--text">
-            {{ new Date().getFullYear() }} — <strong>App Inspector</strong>
-          </v-card-text>
-        </v-card>
-      </v-footer>
+      <Footer></Footer>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import Navbar from '../components/Navbar.vue';
+import Footer from '../components/Footer.vue';
 
 export default {
   name: 'Home',
-  components: {},
+  components: {
+    Navbar,
+    Footer,
+  },
   data() {
     return {
       user: {
@@ -232,15 +196,12 @@ export default {
           return pattern.test(value) || 'Invalid Email';
         },*/
       },
-      links: ['Sign in'],
-      icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
     };
   },
   methods: {
     ...mapActions({
-      fetchFiles: 'files/fetchFiles',
-      resetStates: 'files/resetStates',
       createAccount: 'users/userCreateAccount',
+      refreshMessages: 'users/refreshMessages',
     }),
     createAcc() {
       this.createAccount(this.user).then(() => {
@@ -250,14 +211,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      allFiles: 'files/allFiles',
       getUploaded: 'files/getUploaded',
       getRegisterErrorMessages: 'users/getRegisterErrorMessages',
     }),
   },
   mounted() {
-    this.fetchFiles();
-    this.resetStates();
+    this.refreshMessages();
   },
 };
 </script>
@@ -299,21 +258,9 @@ export default {
 #content {
   margin-bottom: 50px;
 }
-.logo {
-  display: none;
-}
-.logo2 {
-  display: block;
-  cursor: pointer;
-}
-
-@media only screen and (max-width: 450px) {
-  .logo {
-    display: block;
-    cursor: pointer;
-  }
-  .logo2 {
-    display: none;
+@media only screen and (max-width: 500px) {
+  #heading {
+    font-size: 20px;
   }
 }
 </style>

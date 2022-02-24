@@ -1,26 +1,12 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar app color="white" flat height="80px">
-      <v-container class="py-0 fill-height">
-        <router-link v-bind:to="'/'">
-          <img class="logo" src="../assets/images/logo.png" height="70px" />
-        </router-link>
-        <router-link v-bind:to="'/'">
-          <img class="logo2" src="../assets/images/logo2.png" height="70px" />
-        </router-link>
-        <v-spacer></v-spacer>
-        <v-btn v-for="link in links" :key="link" text>
-          {{ link }}
-        </v-btn>
-      </v-container>
-    </v-app-bar>
-
+    <Navbar></Navbar>
     <v-main class="grey lighten-3">
       <v-container id="content">
         <v-sheet id="sheet" rounded="lg">
           <v-card id="card" color="#F7F7F7">
             <div class="form">
-              <h1 id="heading">Sign-in</h1>
+              <h1 id="heading">Sign in</h1>
               <!--<v-text-field
                 v-model="user.email"
                 label="Email"
@@ -53,17 +39,44 @@
                 @click:append="show = !show"
                 color="#26A69A"
               ></v-text-field>
+              <div v-if="getLoginErrorMessages.username">
+                <v-alert
+                  v-for="error in getLoginErrorMessages.username"
+                  :key="error"
+                  dense
+                  outlined
+                  type="error"
+                >
+                  Username: {{ error }}
+                </v-alert>
+              </div>
+              <div v-if="getLoginErrorMessages.password">
+                <v-alert
+                  v-for="error in getLoginErrorMessages.password"
+                  :key="error"
+                  dense
+                  outlined
+                  type="error"
+                >
+                  Password: {{ error }}
+                </v-alert>
+              </div>
               <v-alert
-                v-if="this.getLoginErrorMessage"
+                v-if="this.getLoginErrorMessages.detail"
                 dense
                 outlined
                 type="error"
               >
-                {{ this.getLoginErrorMessage }}
+                {{ this.getLoginErrorMessages.detail }}
               </v-alert>
               <div class="btn">
-                <v-btn tabindex="2" color="#26A69A" @click="login()">
-                  Sign-in
+                <v-btn
+                  class="white--text"
+                  tabindex="2"
+                  color="#26A69A"
+                  @click="login()"
+                >
+                  Sign in
                 </v-btn>
               </div>
             </div>
@@ -75,54 +88,26 @@
           </v-card>
         </v-sheet>
       </v-container>
-      <v-footer dark padless>
-        <v-card flat tile class="teal lighten-1 white--text text-center">
-          <v-card-text>
-            <v-btn
-              v-for="icon in icons"
-              :key="icon"
-              class="mx-4 white--text"
-              icon
-            >
-              <v-icon size="24px">
-                {{ icon }}
-              </v-icon>
-            </v-btn>
-          </v-card-text>
-
-          <v-card-text class="white--text pt-0">
-            Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet.
-            Mauris cursus commodo interdum. Praesent ut risus eget metus luctus
-            accumsan id ultrices nunc. Sed at orci sed massa consectetur
-            dignissim a sit amet dui. Duis commodo vitae velit et faucibus.
-            Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et
-            magnis dis parturient montes, nascetur ridiculus mus.
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-text class="white--text">
-            {{ new Date().getFullYear() }} — <strong>App Inspector</strong>
-          </v-card-text>
-        </v-card>
-      </v-footer>
+      <Footer></Footer>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import Navbar from '../components/Navbar.vue';
+import Footer from '../components/Footer.vue';
 
 export default {
   name: 'Home',
-  components: {},
+  components: {
+    Navbar,
+    Footer,
+  },
   data() {
     return {
       user: {
         username: '',
-        //email: '',
         password: '',
       },
       incorrectAuth: false,
@@ -132,19 +117,15 @@ export default {
         min: (value) => {
           return value.length >= 8 || 'At least 8 characters';
         },
-        email: (value) => {
+        /*email: (value) => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || 'Invalid Email';
-        },
+        },*/
       },
-      links: ['Sign in'],
-      icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
     };
   },
   methods: {
     ...mapActions({
-      fetchFiles: 'files/fetchFiles',
-      resetStates: 'files/resetStates',
       userLogin: 'users/userLogin',
       refreshMessages: 'users/refreshMessages',
     }),
@@ -161,16 +142,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      allFiles: 'files/allFiles',
       getUploaded: 'files/getUploaded',
-      getLoginErrorMessage: 'users/getLoginErrorMessage',
+      getLoginErrorMessages: 'users/getLoginErrorMessages',
     }),
   },
   mounted() {
-    this.fetchFiles();
-    this.resetStates();
     this.refreshMessages();
-    console.log('login mount');
   },
 };
 </script>
@@ -212,21 +189,9 @@ export default {
 #content {
   margin-bottom: 50px;
 }
-.logo {
-  display: none;
-}
-.logo2 {
-  display: block;
-  cursor: pointer;
-}
-
-@media only screen and (max-width: 450px) {
-  .logo {
-    display: block;
-    cursor: pointer;
-  }
-  .logo2 {
-    display: none;
+@media only screen and (max-width: 500px) {
+  #heading {
+    font-size: 20px;
   }
 }
 </style>

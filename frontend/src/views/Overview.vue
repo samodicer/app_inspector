@@ -1,20 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar app color="white" flat height="80px">
-      <v-container class="py-0 fill-height">
-        <router-link v-bind:to="'/'">
-          <img class="logo" src="../assets/images/logo.png" height="70px" />
-        </router-link>
-        <router-link v-bind:to="'/'">
-          <img class="logo2" src="../assets/images/logo2.png" height="70px" />
-        </router-link>
-        <v-spacer></v-spacer>
-        <v-btn v-for="link in links" :key="link" text>
-          {{ link }}
-        </v-btn>
-      </v-container>
-    </v-app-bar>
-
+    <Navbar></Navbar>
     <v-main id="main" class="grey lighten-3">
       <v-container>
         <v-row>
@@ -517,45 +503,14 @@
           </v-col>
         </v-row>
       </v-container>
-      <v-footer dark padless>
-        <v-card flat tile class="teal lighten-1 white--text text-center">
-          <v-card-text>
-            <v-btn
-              v-for="icon in icons"
-              :key="icon"
-              class="mx-4 white--text"
-              icon
-            >
-              <v-icon size="24px">
-                {{ icon }}
-              </v-icon>
-            </v-btn>
-          </v-card-text>
-
-          <v-card-text class="white--text pt-0">
-            Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet.
-            Mauris cursus commodo interdum. Praesent ut risus eget metus luctus
-            accumsan id ultrices nunc. Sed at orci sed massa consectetur
-            dignissim a sit amet dui. Duis commodo vitae velit et faucibus.
-            Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et
-            magnis dis parturient montes, nascetur ridiculus mus.
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-text class="white--text">
-            {{ new Date().getFullYear() }} — <strong>App Inspector</strong>
-          </v-card-text>
-        </v-card>
-      </v-footer>
+      <Footer></Footer>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import Navbar from '../components/Navbar.vue';
 import DoughnutChart from '../components/DoughnutChart.vue';
 import BarChart from '../components/BarChart.vue';
 import ExcelExport from 'export-xlsx';
@@ -564,10 +519,13 @@ import BasicStats from '../components/BasicStats.vue';
 import PieChart from '../components/PieChart.vue';
 import LineChart from '../components/LineChart.vue';
 import MoreInfo from '../components/MoreInfo.vue';
+import Footer from '../components/Footer.vue';
 
 export default {
   name: 'Overview',
   components: {
+    Navbar,
+    Footer,
     DoughnutChart,
     BarChart,
     PieChart,
@@ -583,8 +541,6 @@ export default {
       settingsDialog: false,
       moreInfoType: '',
       moreInfoText: '',
-      links: ['Sign in'],
-      icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
       basicStats: Object,
       basicStatsExportData: {
         labels: [],

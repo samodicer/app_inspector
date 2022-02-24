@@ -4,6 +4,7 @@ import Home from './views/Home';
 import Overview from './views/Overview';
 import SignIn from './views/SignIn';
 import CreateAccount from './views/CreateAccount';
+import UserMenu from './views/UserMenu';
 
 Vue.use(VueRouter);
 
@@ -29,6 +30,14 @@ export default new VueRouter({
       path: '/create-account',
       name: 'CreateAccount',
       component: CreateAccount,
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: UserMenu,
+      meta: {
+        requiresLogin: true,
+      },
     },
   ],
 });

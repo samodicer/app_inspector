@@ -13,27 +13,43 @@
     <div id="loader" v-if="getLoading">
       <v-progress-circular indeterminate color="#26a69a"></v-progress-circular>
     </div>
-    <v-list subheader color="#F7F7F7">
-      <v-list-item v-for="file in getUploadedFiles" :key="file.id">
-        <v-list-item-avatar width="30px" height="30px">
-          <v-icon class="grey lighten-1" dark> mdi-file </v-icon>
-        </v-list-item-avatar>
+    <div v-else-if="getUploadedFiles.length != 0">
+      <v-card class="mx-auto" id="innerCard" color="#F7F7F7">
+        <v-virtual-scroll
+          :items="getUploadedFiles"
+          height="300"
+          item-height="64"
+        >
+          <template v-slot:default="{ item }">
+            <v-list-item :key="item.id">
+              <v-list-item-avatar width="30px" height="30px">
+                <v-icon class="grey lighten-1" dark> mdi-file </v-icon>
+              </v-list-item-avatar>
 
-        <v-list-item-content>
-          <v-list-item-title v-text="file.title"></v-list-item-title>
-        </v-list-item-content>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title"></v-list-item-title>
+              </v-list-item-content>
 
-        <v-list-item-action class="field">
-          <v-checkbox
-            v-model="selectedFiles"
-            color="#26a69a"
-            :value="file.id"
-          ></v-checkbox>
-        </v-list-item-action>
-      </v-list-item>
-    </v-list>
-    <div class="btn">
-      <v-btn color="#26A69A" dark @click="analyze()"> Analyse files </v-btn>
+              <v-list-item-action class="field">
+                <v-checkbox
+                  v-model="selectedFiles"
+                  color="#26a69a"
+                  :value="item.id"
+                ></v-checkbox>
+              </v-list-item-action>
+            </v-list-item>
+
+            <v-divider></v-divider>
+          </template>
+        </v-virtual-scroll>
+        <div class="btn">
+          <v-btn color="#26A69A" dark @click="analyze()"> Analyse files </v-btn>
+        </div>
+      </v-card>
+    </div>
+    <div class="noData" v-else>
+      <v-icon x-large> mdi-eye-off </v-icon>
+      <p>No uploaded files</p>
     </div>
     <v-snackbar v-if="error_snackbar" v-model="error_snackbar" timeout="3000">
       {{ error_snackbar_text }}
@@ -74,7 +90,6 @@ export default {
       if (this.selectedFiles.length != 0) {
         this.analyzeFile(this.selectedFiles);
         this.changeAnalysed(true);
-        console.log('route: ' + this.$router.currentRoute.path);
         if (this.$router.currentRoute.path != '/overview') {
           this.$router.push('overview');
         }
@@ -110,21 +125,6 @@ export default {
 </script>
 
 <style scoped>
-#main_content1 {
-  padding: 20px;
-  margin-left: 100px;
-  margin-right: 100px;
-}
-#main_content2 {
-  padding: 20px;
-}
-h1 {
-  color: #26a69a;
-  text-align: center;
-}
-.file_input {
-  margin: auto;
-}
 .btn {
   text-align: center;
   padding: 10px;
@@ -133,29 +133,23 @@ h1 {
   margin-top: 30px;
   margin-bottom: 0px !important;
   border-radius: 15px;
+  padding: 0px !important;
 }
-.stat {
-  text-align: center;
-}
-.stat .headline {
-  padding: 20px;
-  color: #26a69a;
-  text-align: center;
-}
-.stat .num_data {
-  font-weight: bold;
-  font-size: 70px;
-  text-align: center;
-}
-.stat .text_data {
-  font-weight: bold;
-  font-size: 30px;
-  text-align: center;
+#innerCard {
+  margin-top: 10px;
+  margin-bottom: 0px !important;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  padding: 0px !important;
 }
 .field {
   margin-right: 8px;
 }
 #loader {
-  margin-top: 10px;
+  padding: 30px;
+}
+.noData {
+  color: grey;
+  padding: 30px;
 }
 </style>

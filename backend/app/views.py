@@ -36,15 +36,18 @@ def getUser(request):
 def uploadFile(request):
     #file = request.data['file']
     #title = request.data['title']
-    files = request.FILES.getlist('files')
-    created_files = []
-    for currentFile in files:
-        created = Document.objects.create(title=currentFile.name, file=currentFile)
-        created_files.append(created)
+    if request.method == "POST":
+        files = request.FILES.getlist('files')
+        uid = request.POST.get('user_id')
+        print("uid: ",uid)
+        created_files = []
+        for currentFile in files:
+            created = Document.objects.create(title=currentFile.name, file=currentFile, user_id = uid)
+            created_files.append(created)
 
-    #created = Document.objects.create(title=title, file=file)
-    serializer = DocumentSerializer(created_files, many=True)
-    return Response(serializer.data)
+        #created = Document.objects.create(title=title, file=file)
+        serializer = DocumentSerializer(created_files, many=True)
+        return Response(serializer.data)
 
 @api_view(['GET'])
 def getFiles(request):

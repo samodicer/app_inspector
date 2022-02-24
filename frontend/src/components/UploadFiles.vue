@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import axios from 'axios';
 
 export default {
@@ -75,9 +75,13 @@ export default {
       selectedFiles: [],
     };
   },
+  computed: {
+    ...mapGetters({
+      getUser: 'users/getUser',
+    }),
+  },
   methods: {
     ...mapActions({
-      fetchFiles: 'files/fetchFiles',
       analyzeFile: 'files/analyzeFile',
       changeLoading: 'files/changeLoading',
       changeUploaded: 'files/changeUploaded',
@@ -90,6 +94,11 @@ export default {
       //this.inputs.title = this.inputs.files.name;
       if (this.inputs.files.length != 0) {
         const fd = new FormData();
+        if (this.getUser.id != null) {
+          fd.append('user_id', this.getUser.id);
+        } else {
+          fd.append('user_id', -1);
+        }
         for (let i = 0; i < this.inputs.files.length; i++) {
           var idxDot = this.inputs.files[i].name.lastIndexOf('.') + 1;
           var extFile = this.inputs.files[i].name

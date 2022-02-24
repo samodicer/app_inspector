@@ -4,46 +4,54 @@ const state = {
   accessToken: null,
   refreshToken: null,
   currentUser: {
-    id: '',
+    id: null,
     username: '',
     first_name: '',
     last_name: '',
   },
-  loginErrorMessage: '',
   registerErrorMessages: {
     username: [],
     first_name: [],
     last_name: [],
     password: [],
   },
+  loginErrorMessages: {
+    username: [],
+    password: [],
+    detail: '',
+  },
 };
 
 const getters = {
   getUser: (state) => state.currentUser,
-  getLoginErrorMessage: (state) => state.loginErrorMessage,
+  getLoginErrorMessages: (state) => state.loginErrorMessages,
   getRegisterErrorMessages: (state) => state.registerErrorMessages,
 };
 
 const actions = {
   async refreshAccessToken({ commit }) {
-    var refreshToken = localStorage.getItem('refreshToken');
-    localStorage.removeItem('accessToken');
-    return new Promise((resolve, reject) => {
-      getAPI
-        .post('/api-token-refresh/', {
-          refresh: refreshToken,
-        })
-        .then((response) => {
-          commit('updateStorage', {
-            access: response.data.access,
+    if (localStorage.getItem('refreshToken') != null) {
+      var refreshToken = localStorage.getItem('refreshToken');
+      localStorage.removeItem('accessToken');
+      return new Promise((resolve, reject) => {
+        getAPI
+          .post('/api-token-refresh/', {
             refresh: refreshToken,
+          })
+          .then((response) => {
+            commit('updateStorage', {
+              access: response.data.access,
+              refresh: refreshToken,
+            });
+            resolve();
+          })
+          .catch((err) => {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            reject(err);
           });
-          resolve();
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
+      });
+    }
   },
   async userLogin({ commit }, user) {
     localStorage.removeItem('accessToken');
@@ -62,7 +70,8 @@ const actions = {
         })
         .catch((err) => {
           if (err.response) {
-            commit('setLoginErrorMessage', err.response.data.detail);
+            localStorage.removeItem('accessToken');
+            commit('setLoginErrorMessages', err.response.data);
           }
           reject(err);
         });
@@ -96,14 +105,12 @@ const actions = {
         });
     });
   },
-  async getCurrentUser({ commit, dispatch }, token) {
+  async getCurrentUser({ commit }, token) {
     if (localStorage.getItem('accessToken') != null) {
-      dispatch('refreshAccessToken');
       return new Promise((resolve, reject) => {
         getAPI
           .get('/get-user/?access_token=' + token)
           .then((response) => {
-            console.log(response);
             commit('setCurrentUser', response.data);
             resolve();
           })
@@ -143,8 +150,26 @@ const mutations = {
     state.currentUser.first_name = '';
     state.currentUser.last_name = '';
   },
-  setLoginErrorMessage: (state, message) => {
-    state.loginErrorMessage = message;
+  setLoginErrorMessages: (state, errors) => {
+    state.loginErrorMessages.username = [];
+    state.loginErrorMessages.password = [];
+    state.loginErrorMessages.detail = '';
+    if (errors.username != null) {
+      errors.username.forEach((username_error) => {
+        state.loginErrorMessages.username.push(username_error);
+        console.log(username_error);
+      });
+    }
+    if (errors.password != null) {
+      errors.password.forEach((password_error) => {
+        state.loginErrorMessages.password.push(password_error);
+        console.log(password_error);
+      });
+    }
+    if (errors.detail != null) {
+      state.loginErrorMessages.detail = errors.detail;
+      console.log(errors.detail);
+    }
   },
   setRegisterErrorMessages: (state, messages) => {
     state.registerErrorMessages.username = [];
@@ -173,7 +198,13 @@ const mutations = {
     }
   },
   removeMessages: (state) => {
-    state.loginErrorMessage = '';
+    state.loginErrorMessages.username = [];
+    state.loginErrorMessages.password = [];
+    state.loginErrorMessages.detail = '';
+    state.registerErrorMessages.username = [];
+    state.registerErrorMessages.first_name = [];
+    state.registerErrorMessages.last_name = [];
+    state.registerErrorMessages.password = [];
   },
 };
 

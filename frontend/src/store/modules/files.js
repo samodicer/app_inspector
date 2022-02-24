@@ -15,7 +15,7 @@ const getters = {
   getUploadedFiles: (state) => state.uploadedFiles,
   getUploaded: (state) => state.isUploaded,
   getAnalysed: (state) => state.isAnalysed,
-  allFiles: (state) => state.files,
+  //allFiles: (state) => state.files,
   getAnalyzedData: (state) => state.analyzedData,
   getMoreInfoDialog: (state) => state.moreInfoDialog,
 };
@@ -36,7 +36,7 @@ const actions = {
   async resetStates({ commit }) {
     commit('resetStates');
   },
-  async fetchFiles({ commit }) {
+  /*async fetchFiles({ commit }) {
     axios
       .get('http://127.0.0.1:8000/get-files/')
       .then((response) => {
@@ -46,7 +46,7 @@ const actions = {
       .catch((err) => {
         console.log(err);
       });
-  },
+  },*/
   async analyzeFile({ commit }, ids) {
     console.log(ids);
     var URL = 'http://127.0.0.1:8000/get-files-data';
