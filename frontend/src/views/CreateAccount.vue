@@ -22,28 +22,35 @@
             <div class="form">
               <h1 id="heading">Create account</h1>
               <v-text-field
+                tabindex="1"
                 v-model="user.username"
                 label="Username"
                 placeholder="Username"
-                :rules="[rules.required]"
+                :rules="[
+                  rules.required,
+                  rules.username_min,
+                  rules.username_max,
+                ]"
                 outlined
                 dense
                 color="#26A69A"
               ></v-text-field>
               <v-text-field
+                tabindex="1"
                 v-model="user.first_name"
                 label="First name"
                 placeholder="First name"
-                :rules="[rules.required]"
+                :rules="[rules.required, rules.names_max]"
                 outlined
                 dense
                 color="#26A69A"
               ></v-text-field>
               <v-text-field
+                tabindex="1"
                 v-model="user.last_name"
                 label="Last name"
                 placeholder="Last name"
-                :rules="[rules.required]"
+                :rules="[rules.required, rules.names_max]"
                 outlined
                 dense
                 color="#26A69A"
@@ -58,9 +65,14 @@
                 color="#26A69A"
               ></v-text-field>-->
               <v-text-field
+                tabindex="1"
                 v-model="user.password"
                 :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                :rules="[rules.required, rules.min]"
+                :rules="[
+                  rules.required,
+                  rules.password_min,
+                  rules.password_max,
+                ]"
                 :type="show1 ? 'text' : 'password'"
                 label="Password"
                 hint="At least 8 characters"
@@ -70,9 +82,14 @@
                 color="#26A69A"
               ></v-text-field>
               <v-text-field
+                tabindex="1"
                 v-model="user.confirm_password"
                 :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                :rules="[rules.required, rules.min]"
+                :rules="[
+                  rules.required,
+                  rules.password_min,
+                  rules.password_max,
+                ]"
                 :type="show2 ? 'text' : 'password'"
                 label="Confirm password"
                 hint="At least 8 characters"
@@ -81,8 +98,52 @@
                 @click:append="show2 = !show2"
                 color="#26A69A"
               ></v-text-field>
+              <div v-if="getRegisterErrorMessages.username">
+                <v-alert
+                  v-for="error in getRegisterErrorMessages.username"
+                  :key="error"
+                  dense
+                  outlined
+                  type="error"
+                >
+                  Username: {{ error }}
+                </v-alert>
+              </div>
+              <div v-if="getRegisterErrorMessages.first_name">
+                <v-alert
+                  v-for="error in getRegisterErrorMessages.first_name"
+                  :key="error"
+                  dense
+                  outlined
+                  type="error"
+                >
+                  First name: {{ error }}
+                </v-alert>
+              </div>
+              <div v-if="getRegisterErrorMessages.last_name">
+                <v-alert
+                  v-for="error in getRegisterErrorMessages.last_name"
+                  :key="error"
+                  dense
+                  outlined
+                  type="error"
+                >
+                  Last name: {{ error }}
+                </v-alert>
+              </div>
+              <div v-if="getRegisterErrorMessages.password">
+                <v-alert
+                  v-for="error in getRegisterErrorMessages.password"
+                  :key="error"
+                  dense
+                  outlined
+                  type="error"
+                >
+                  Password: {{ error }}
+                </v-alert>
+              </div>
               <div class="btn">
-                <v-btn color="#26A69A" @click="createAcc()">
+                <v-btn tabindex="2" color="#26A69A" @click="createAcc()">
                   Create account
                 </v-btn>
               </div>
@@ -151,8 +212,20 @@ export default {
       show2: false,
       rules: {
         required: (value) => !!value || 'This field is required',
-        min: (value) => {
+        username_min: (value) => {
+          return value.length >= 2 || 'At least 2 characters';
+        },
+        username_max: (value) => {
+          return value.length <= 30 || 'No more than 30 characters';
+        },
+        names_max: (value) => {
+          return value.length <= 64 || 'No more than 64 characters';
+        },
+        password_min: (value) => {
           return value.length >= 8 || 'At least 8 characters';
+        },
+        password_max: (value) => {
+          return value.length <= 256 || 'No more than 256 characters';
         },
         /*email: (value) => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -170,13 +243,16 @@ export default {
       createAccount: 'users/userCreateAccount',
     }),
     createAcc() {
-      this.createAccount(this.user);
+      this.createAccount(this.user).then(() => {
+        this.$router.push({ name: 'SignIn' });
+      });
     },
   },
   computed: {
     ...mapGetters({
       allFiles: 'files/allFiles',
       getUploaded: 'files/getUploaded',
+      getRegisterErrorMessages: 'users/getRegisterErrorMessages',
     }),
   },
   mounted() {

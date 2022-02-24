@@ -31,6 +31,7 @@
                 color="#26A69A"
               ></v-text-field>-->
               <v-text-field
+                tabindex="1"
                 v-model="user.username"
                 label="Username"
                 placeholder="Username"
@@ -40,6 +41,7 @@
                 color="#26A69A"
               ></v-text-field>
               <v-text-field
+                tabindex="1"
                 v-model="user.password"
                 :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="[rules.required, rules.min]"
@@ -51,8 +53,18 @@
                 @click:append="show = !show"
                 color="#26A69A"
               ></v-text-field>
+              <v-alert
+                v-if="this.getLoginErrorMessage"
+                dense
+                outlined
+                type="error"
+              >
+                {{ this.getLoginErrorMessage }}
+              </v-alert>
               <div class="btn">
-                <v-btn color="#26A69A" @click="login()"> Sign-in </v-btn>
+                <v-btn tabindex="2" color="#26A69A" @click="login()">
+                  Sign-in
+                </v-btn>
               </div>
             </div>
             <v-divider id="divider"></v-divider>
@@ -134,6 +146,7 @@ export default {
       fetchFiles: 'files/fetchFiles',
       resetStates: 'files/resetStates',
       userLogin: 'users/userLogin',
+      refreshMessages: 'users/refreshMessages',
     }),
     login() {
       this.userLogin(this.user)
@@ -150,11 +163,14 @@ export default {
     ...mapGetters({
       allFiles: 'files/allFiles',
       getUploaded: 'files/getUploaded',
+      getLoginErrorMessage: 'users/getLoginErrorMessage',
     }),
   },
   mounted() {
     this.fetchFiles();
     this.resetStates();
+    this.refreshMessages();
+    console.log('login mount');
   },
 };
 </script>
