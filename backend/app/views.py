@@ -4,6 +4,8 @@ import zipfile
 from lxml import html
 import json
 import shutil
+import random
+import string
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -13,9 +15,11 @@ from rest_framework_simplejwt.tokens import AccessToken
 
 from .serializers import RegisterSerializer
 from .serializers import DocumentSerializer
+from .serializers import AnalyseSerializer
 from .serializers import UserSerializer
 
 from .models import Document
+from .models import Analyse
 
 from django.contrib.auth.models import User
 
@@ -34,15 +38,13 @@ def getUser(request):
 
 @api_view(['POST'])
 def uploadFile(request):
-    #file = request.data['file']
-    #title = request.data['title']
     if request.method == "POST":
         files = request.FILES.getlist('files')
         uid = request.POST.get('user_id')
-        print("uid: ",uid)
+        aid = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
         created_files = []
         for currentFile in files:
-            created = Document.objects.create(title=currentFile.name, file=currentFile, user_id = uid)
+            created = Document.objects.create(title=currentFile.name, file=currentFile, user_id = uid, analyse_id = aid)
             created_files.append(created)
 
         #created = Document.objects.create(title=title, file=file)
@@ -55,21 +57,34 @@ def getFiles(request):
     serializer = DocumentSerializer(files, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
+'''@api_view(['GET'])
 def getFileById(request, pk):
     files = Document.objects.get(id=pk)
     serializer = DocumentSerializer(files, many=False)
     analyze(files.id, files.file)
-    return Response(serializer.data)
+    return Response(serializer.data)'''
 
-@api_view(['GET'])
+'''@api_view(['GET'])
 def getFileData(request, pk):
     files = Document.objects.get(id=pk)
-    return Response(analyze(files.id, files.file))
+    return Response(analyze(files.id, files.file))'''
+
+@api_view(['GET'])
+def getUserHistory(request):
+    uid= request.query_params.get('uid')
+    analyses = Analyse.objects.filter(user_id=uid)
+    print("analyse:",analyses)
+    serializer = AnalyseSerializer(analyses, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def getFilesData(request):
     iDs = request.query_params.getlist('id')
+    userID = request.query_params.get('user_id')
+    isNew = request.query_params.get('is_new')
+    print('new................',isNew)
+    if (isNew == "true"):
+        Analyse.objects.create(files_id=iDs, user_id=userID)
     files = Document.objects.filter(id__in=iDs)
     #serializer = DocumentSerializer(objects, many=True)
     return Response(analyze(files))

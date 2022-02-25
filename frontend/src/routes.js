@@ -25,11 +25,17 @@ export default new VueRouter({
       path: '/sign-in',
       name: 'SignIn',
       component: SignIn,
+      meta: {
+        requiresLogout: true,
+      },
     },
     {
       path: '/create-account',
       name: 'CreateAccount',
       component: CreateAccount,
+      meta: {
+        requiresLogout: true,
+      },
     },
     {
       path: '/profile',

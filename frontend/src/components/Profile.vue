@@ -1,24 +1,26 @@
 <template>
-  <v-card color="#F7F7F7">
-    <div class="content">
-      <v-row align="center" justify="center">
-        <v-col>
-          <v-avatar id="avatar" color="blue" v-bind="attrs" v-on="on">
-            <v-icon id="icon" dark> mdi-account </v-icon>
-          </v-avatar>
+  <div class="content" v-if="this.getUser.id != null">
+    <v-row align="center" justify="center">
+      <v-col>
+        <v-avatar id="avatar" color="blue">
+          <v-icon id="icon" dark> mdi-account </v-icon>
+        </v-avatar>
 
-          <h1 id="heading">{{ this.getUser.username }}</h1>
-          <h2 id="text">
-            {{ this.getUser.first_name + ' ' + this.getUser.last_name }}
-          </h2>
-          <v-divider id="divider"></v-divider>
-          <router-link v-bind:to="'/sign-in'">
-            <p style="margin-top: 20px">Edit profile</p>
-          </router-link>
-        </v-col>
-      </v-row>
-    </div>
-  </v-card>
+        <h1 id="heading">{{ this.getUser.username }}</h1>
+        <h2 id="text">
+          {{ this.getUser.first_name + ' ' + this.getUser.last_name }}
+        </h2>
+        <v-divider id="divider"></v-divider>
+        <router-link v-bind:to="'/sign-in'">
+          <p style="margin-top: 20px">Edit profile</p>
+        </router-link>
+      </v-col>
+    </v-row>
+  </div>
+  <div class="noData" v-else>
+    <v-icon x-large> mdi-eye-off </v-icon>
+    <p>No data to show</p>
+  </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
@@ -65,6 +67,15 @@ export default {
 #icon {
   font-size: 140px;
 }
+.noData {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 30px;
+  color: grey;
+}
+
 @media only screen and (max-width: 500px) {
   #heading {
     font-size: 20px;

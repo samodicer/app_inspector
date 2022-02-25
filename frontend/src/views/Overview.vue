@@ -380,7 +380,7 @@
                       </v-col>
                     </v-row>
                   </v-card>
-                  <v-card id="card">
+                  <v-card id="card" v-if="this.numberOfProjects > 1">
                     <h1 id="heading">
                       <v-icon large color="#26a69a">
                         mdi-chart-timeline-variant
@@ -537,11 +537,11 @@ export default {
   data() {
     return {
       //analyzedData: Object,
+      numberOfProjects: 0,
       renderChart: false,
       settingsDialog: false,
       moreInfoType: '',
       moreInfoText: '',
-      basicStats: Object,
       basicStatsExportData: {
         labels: [],
         data: [],
@@ -805,6 +805,9 @@ export default {
       for (const [key, value] of Object.entries(val[0].basicStats)) {
         this.basicStatsExportData.labels.push(key);
         this.basicStatsExportData.data.push(value);
+        if (key == 'Number of projects') {
+          this.numberOfProjects = value;
+        }
       }
 
       //populate labels and data from server response data

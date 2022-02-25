@@ -9,11 +9,13 @@ const state = {
     first_name: '',
     last_name: '',
   },
+  userHistory: [],
   registerErrorMessages: {
     username: [],
     first_name: [],
     last_name: [],
     password: [],
+    password2: [],
   },
   loginErrorMessages: {
     username: [],
@@ -24,6 +26,7 @@ const state = {
 
 const getters = {
   getUser: (state) => state.currentUser,
+  getHistory: (state) => state.userHistory,
   getLoginErrorMessages: (state) => state.loginErrorMessages,
   getRegisterErrorMessages: (state) => state.registerErrorMessages,
 };
@@ -115,10 +118,26 @@ const actions = {
             resolve();
           })
           .catch((err) => {
+            if (err.response.status == 500) {
+              commit('destroyToken');
+            }
             reject(err);
           });
       });
     }
+  },
+  async getUserHistory({ commit }, uid) {
+    return new Promise((resolve, reject) => {
+      getAPI
+        .get('/get-user-history/?uid=' + uid)
+        .then((response) => {
+          commit('setUserHistory', response.data);
+          resolve();
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   },
   async refreshMessages({ commit }) {
     commit('removeMessages');
@@ -145,10 +164,13 @@ const mutations = {
     state.currentUser.last_name = user.last_name;
   },
   removeCurrentUser: (state) => {
-    state.currentUser.id = '';
+    state.currentUser.id = null;
     state.currentUser.username = '';
     state.currentUser.first_name = '';
     state.currentUser.last_name = '';
+  },
+  setUserHistory: (state, analyses) => {
+    state.userHistory = analyses;
   },
   setLoginErrorMessages: (state, errors) => {
     state.loginErrorMessages.username = [];
@@ -196,6 +218,11 @@ const mutations = {
         state.registerErrorMessages.password.push(password_error);
       });
     }
+    if (messages.password2 != null) {
+      messages.password2.forEach((password2_error) => {
+        state.registerErrorMessages.password2.push(password2_error);
+      });
+    }
   },
   removeMessages: (state) => {
     state.loginErrorMessages.username = [];
@@ -205,6 +232,7 @@ const mutations = {
     state.registerErrorMessages.first_name = [];
     state.registerErrorMessages.last_name = [];
     state.registerErrorMessages.password = [];
+    state.registerErrorMessages.password2 = [];
   },
 };
 

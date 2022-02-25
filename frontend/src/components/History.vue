@@ -1,34 +1,55 @@
 <template>
-  <v-card color="#F7F7F7">
-    <div class="content">
-      <v-list subheader two-line color="#F7F7F7">
-        <v-subheader inset>File upload history</v-subheader>
+  <div class="content" v-if="this.getHistory.length != 0">
+    <div>
+      <v-card class="mx-auto" color="#F7F7F7">
+        <v-subheader inset>Analysed files history</v-subheader>
         <v-divider></v-divider>
-        <div v-for="file in files" :key="file.title">
-          <v-list-item>
-            <v-list-item-avatar>
-              <v-icon :class="file.color" dark v-text="file.icon"></v-icon>
-            </v-list-item-avatar>
+        <v-virtual-scroll
+          :items="this.getHistory"
+          height="530"
+          item-height="70"
+        >
+          <template v-slot:default="{ item }">
+            <v-list-item :key="item.id">
+              <v-list-item-avatar width="40px" height="40px">
+                <v-icon
+                  :class="'blue'"
+                  dark
+                  v-text="'mdi-file-eye-outline'"
+                ></v-icon>
+              </v-list-item-avatar>
 
-            <v-list-item-content>
-              <v-list-item-title v-text="file.title"></v-list-item-title>
+              <v-list-item-content>
+                <v-list-item-title
+                  v-text="getNumber(item.files_id)"
+                ></v-list-item-title>
+                <v-list-item-subtitle
+                  v-text="formatDate(item.date)"
+                ></v-list-item-subtitle>
+              </v-list-item-content>
 
-              <v-list-item-subtitle
-                v-text="file.subtitle"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
+              <v-list-item-action>
+                <v-btn
+                  class="white--text"
+                  tabindex="2"
+                  color="#26A69A"
+                  @click="analyze(getFiles(item.files_id))"
+                >
+                  Show
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
 
-            <v-list-item-action>
-              <v-btn class="white--text" tabindex="2" color="#26A69A">
-                Show
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-          <v-divider></v-divider>
-        </div>
-      </v-list>
+            <v-divider></v-divider>
+          </template>
+        </v-virtual-scroll>
+      </v-card>
     </div>
-  </v-card>
+  </div>
+  <div class="noData" v-else>
+    <v-icon x-large> mdi-eye-off </v-icon>
+    <p>No data to show</p>
+  </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
@@ -37,39 +58,80 @@ export default {
   name: 'Home',
   components: {},
   data() {
-    return {
-      files: [
-        {
-          color: 'blue',
-          icon: 'mdi-clipboard-text',
-          subtitle: 'Jan 20, 2014',
-          title: 'Vacation itinerary',
-        },
-        {
-          color: 'blue',
-          icon: 'mdi-clipboard-text',
-          subtitle: 'Feb 10, 2014',
-          title: 'Kitchen remodel',
-        },
-      ],
-    };
+    return {};
   },
   methods: {
-    ...mapActions({}),
+    ...mapActions({
+      getUserHistory: 'users/getUserHistory',
+      analyzeFile: 'files/analyzeFile',
+      changeAnalysed: 'files/changeAnalysed',
+    }),
+    formatDate(dateStr) {
+      var options = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+      };
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', options);
+    },
+    getFiles(filesIdStr) {
+      var newStr = filesIdStr
+        .replaceAll("'", '')
+        .replaceAll('[', '')
+        .replaceAll(']', '');
+      var array = newStr.split(',').map(Number);
+      return array;
+    },
+    getNumber(filesIdStr) {
+      var number = this.getFiles(filesIdStr).length;
+      if (number == 1) {
+        return number + ' File';
+      } else return number + ' Files';
+    },
+    analyze(ids) {
+      if (ids.length != 0) {
+        if (this.getUser.id != null) {
+          this.user_id = this.getUser.id;
+        } else {
+          this.user_id = -1;
+        }
+        this.analyzeFile({ ids: ids, uid: this.user_id, isNew: 'false' });
+        this.changeAnalysed(true);
+        if (this.$router.currentRoute.path != '/overview') {
+          this.$router.push('overview');
+        }
+      }
+    },
   },
   computed: {
-    ...mapGetters({}),
+    ...mapGetters({
+      getUser: 'users/getUser',
+      getHistory: 'users/getHistory',
+    }),
   },
-  mounted() {},
+  mounted() {
+    if (this.getUser.id != null) {
+      this.getUserHistory(this.getUser.id);
+    }
+  },
 };
 </script>
 
 <style scoped>
-.content {
-  padding-top: 20px;
-}
 .v-subheader {
   margin-left: 0px;
   font-weight: bold;
+  color: rgb(224, 224, 224);
+}
+.noData {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 30px;
+  color: grey;
 }
 </style>

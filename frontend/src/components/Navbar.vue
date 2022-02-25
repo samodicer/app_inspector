@@ -35,26 +35,22 @@
           </template>
 
           <v-list>
-            <v-list-item
-              v-for="(option, index) in options"
-              :key="index"
-              style="cursor: pointer"
-            >
-              <div v-if="option.item == 'Profile'">
-                <v-list-item-title @click="loadProfilePage()">{{
-                  option.item
-                }}</v-list-item-title>
-              </div>
-              <div v-if="option.item == 'Sign out'">
-                <v-list-item-title @click="logout()">{{
-                  option.item
-                }}</v-list-item-title>
-              </div>
+            <v-list-item style="cursor: pointer" @click="loadProfilePage()">
+              <v-list-item-title>{{ options[0].item }}</v-list-item-title>
+            </v-list-item>
+            <v-list-item style="cursor: pointer" @click="logout()">
+              <v-list-item-title>{{ options[1].item }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
       </div>
-      <v-btn v-if="!accessToken" text @click="loadSignInPage()"> Sign in</v-btn>
+      <v-btn
+        v-if="this.getUser.id == null && !accessToken"
+        text
+        @click="loadSignInPage()"
+      >
+        Sign in</v-btn
+      >
     </v-container>
   </v-app-bar>
 </template>
@@ -84,7 +80,9 @@ export default {
       }
     },
     loadSignInPage() {
-      this.$router.push('sign-in');
+      if (this.$route.name != 'SignIn') {
+        this.$router.push('sign-in');
+      }
     },
     logout() {
       this.userLogout().then(() => {
@@ -92,7 +90,9 @@ export default {
       });
     },
     loadProfilePage() {
-      this.$router.push('profile');
+      if (this.$route.name != 'Profile') {
+        this.$router.push('profile');
+      }
     },
   },
   computed: {

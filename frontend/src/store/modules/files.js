@@ -36,7 +36,7 @@ const actions = {
   async resetStates({ commit }) {
     commit('resetStates');
   },
-  /*async fetchFiles({ commit }) {
+  async fetchFiles({ commit }) {
     axios
       .get('http://127.0.0.1:8000/get-files/')
       .then((response) => {
@@ -46,15 +46,15 @@ const actions = {
       .catch((err) => {
         console.log(err);
       });
-  },*/
-  async analyzeFile({ commit }, ids) {
-    console.log(ids);
+  },
+  async analyzeFile({ commit }, { ids, uid, isNew }) {
     var URL = 'http://127.0.0.1:8000/get-files-data';
     for (let i = 0; i < ids.length; i++) {
       if (i == 0) URL = URL + '?';
       URL = URL + 'id=' + ids[i] + '&';
     }
-    URL = URL.substring(0, URL.length - 1);
+    //URL = URL.substring(0, URL.length - 1);
+    URL = URL + 'user_id=' + uid + '&' + 'is_new=' + isNew;
 
     axios({
       method: 'get',

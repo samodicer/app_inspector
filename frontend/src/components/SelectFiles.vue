@@ -19,7 +19,7 @@
         <v-virtual-scroll
           :items="getUploadedFiles"
           height="300"
-          item-height="64"
+          item-height="50"
         >
           <template v-slot:default="{ item }">
             <v-list-item :key="item.id">
@@ -76,6 +76,7 @@ export default {
   components: {},
   data() {
     return {
+      user_id: null,
       selectedFiles: [],
       headerCheck: true,
       error_snackbar: false,
@@ -89,7 +90,17 @@ export default {
     }),
     analyze() {
       if (this.selectedFiles.length != 0) {
-        this.analyzeFile(this.selectedFiles);
+        if (this.getUser.id != null) {
+          this.user_id = this.getUser.id;
+        } else {
+          this.user_id = -1;
+        }
+        this.analyzeFile({
+          ids: this.selectedFiles,
+          uid: this.user_id,
+          isNew: 'true',
+        });
+        //this.analyzeFile(this.selectedFiles, uid);
         this.changeAnalysed(true);
         if (this.$router.currentRoute.path != '/overview') {
           this.$router.push('overview');
@@ -120,6 +131,7 @@ export default {
     ...mapGetters({
       getUploadedFiles: 'files/getUploadedFiles',
       getLoading: 'files/getLoading',
+      getUser: 'users/getUser',
     }),
   },
 };
@@ -137,8 +149,9 @@ export default {
   padding: 0px !important;
 }
 #innerCard {
-  margin-top: 10px;
   margin-bottom: 0px !important;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
   border-bottom-right-radius: 15px;
   border-bottom-left-radius: 15px;
   padding: 0px !important;

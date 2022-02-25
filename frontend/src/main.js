@@ -13,6 +13,12 @@ router.beforeEach((to, from, next) => {
     } else {
       next();
     }
+  } else if (to.matched.some((record) => record.meta.requiresLogout)) {
+    if (localStorage.getItem('accessToken') != null) {
+      next({ name: 'Home' });
+    } else {
+      next();
+    }
   } else {
     next();
   }

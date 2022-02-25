@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Document
+from .models import Analyse
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
@@ -7,7 +8,12 @@ from django.contrib.auth.password_validation import validate_password
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
-        fields = ['id', 'title', 'file','user_id','date']
+        fields = ['id', 'title', 'file','date','user_id','analyse_id']
+
+class AnalyseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Analyse
+        fields = ['id', 'files_id', 'user_id','date']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

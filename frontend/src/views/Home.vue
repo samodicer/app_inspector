@@ -44,6 +44,7 @@ export default {
   methods: {
     ...mapActions({
       resetStates: 'files/resetStates',
+      fetchFiles: 'files/fetchFiles',
     }),
   },
   computed: {
@@ -53,6 +54,7 @@ export default {
   },
   mounted() {
     this.resetStates();
+    this.fetchFiles();
   },
 };
 </script>

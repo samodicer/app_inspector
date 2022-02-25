@@ -128,6 +128,17 @@
                   Password: {{ error }}
                 </v-alert>
               </div>
+              <div v-if="getRegisterErrorMessages.password2">
+                <v-alert
+                  v-for="error in getRegisterErrorMessages.password2"
+                  :key="error"
+                  dense
+                  outlined
+                  type="error"
+                >
+                  Confirm password: {{ error }}
+                </v-alert>
+              </div>
               <div class="btn">
                 <v-btn
                   class="white--text"
@@ -142,7 +153,7 @@
             <v-divider id="divider"></v-divider>
             <p>Already have an account?</p>
             <router-link v-bind:to="'/sign-in'">
-              <p>Sign-in</p>
+              <p>Sign in</p>
             </router-link>
           </v-card>
         </v-sheet>

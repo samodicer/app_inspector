@@ -87,4 +87,7 @@ export default {
 #content {
   margin-bottom: 50px;
 }
+.theme--light.v-tabs-items {
+  background-color: #f7f7f7 !important;
+}
 </style>
