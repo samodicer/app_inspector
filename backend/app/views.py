@@ -41,13 +41,10 @@ def uploadFile(request):
     if request.method == "POST":
         files = request.FILES.getlist('files')
         uid = request.POST.get('user_id')
-        aid = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
         created_files = []
         for currentFile in files:
-            created = Document.objects.create(title=currentFile.name, file=currentFile, user_id = uid, analyse_id = aid)
+            created = Document.objects.create(title=currentFile.name, file=currentFile, user_id = uid)
             created_files.append(created)
-
-        #created = Document.objects.create(title=title, file=file)
         serializer = DocumentSerializer(created_files, many=True)
         return Response(serializer.data)
 
@@ -73,26 +70,32 @@ def getFileData(request, pk):
 def getUserHistory(request):
     uid= request.query_params.get('uid')
     analyses = Analyse.objects.filter(user_id=uid)
-    print("analyse:",analyses)
     serializer = AnalyseSerializer(analyses, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
-def getFilesData(request):
+def getAnalysedData(request):
     iDs = request.query_params.getlist('id')
     userID = request.query_params.get('user_id')
     isNew = request.query_params.get('is_new')
-    print('new................',isNew)
     if (isNew == "true"):
         Analyse.objects.create(files_id=iDs, user_id=userID)
     files = Document.objects.filter(id__in=iDs)
-    #serializer = DocumentSerializer(objects, many=True)
     return Response(analyze(files))
 
 def analyze(files):
-    data= {"basicStats":{}, "builtInBlocks": {}, "componentBlocks": {}, "componentBlocksCategories": {},
-           "userInterfaceComponentBlocks": {}, "drawingAndAnimationComponentBlocks":{}, "storageAndExperimentalComponentBlocks":{},
-           "controlBlocksTypes": {}, "procedureBlocksTypes":{}, "blocksPerProject":{},"componentsPerProject":{}, "screensPerProject":{},}
+    data= {"basicStats":{},
+           "builtInBlocks": {},
+           "componentBlocks": {},
+           "componentBlocksCategories": {},
+           "userInterfaceComponentBlocks": {},
+           "drawingAndAnimationComponentBlocks":{},
+           "storageAndExperimentalComponentBlocks":{},
+           "controlBlocksTypes": {},
+           "procedureBlocksTypes":{}, 
+           "blocksPerProject":{},
+           "componentsPerProject":{}, 
+           "screensPerProject":{}}
     number_of_blocks = 0
     number_of_components = 0
     number_of_projects = len(files)
@@ -168,7 +171,6 @@ def analyze(files):
                 # skip directories
                 if not filename:
                     continue
-
                 # copy file (taken from zipfile's extract)
                 source = zip_file.open(member)
                 target = open(os.path.join(my_dir, filename), "wb")
@@ -179,18 +181,13 @@ def analyze(files):
         number = 1
         while noMoreScreens == False:
             if os.path.isfile("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".bky"):
-
                 f = open("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".bky", "r")
-
                 if f.mode == "r":
                     content = f.read()
-
                     tree = html.fromstring(content)
-
                     #basic stats
                     number_of_blocks += len(tree.xpath("//block"))
                     number_of_screens += 1
-
                     #built-in blocks
                     control_blocks += len(tree.xpath("//block[contains(@type,'control')]"))
                     logic_blocks += len(tree.xpath("//block[contains(@type,'logic')]"))
@@ -202,7 +199,6 @@ def analyze(files):
                     variables_blocks += len(tree.xpath("//block[contains(@type,'lexical_variable') or contains(@type,'local_declaration') or contains(@type,'global_declaration')]"))
                     procedures_blocks += len(tree.xpath("//block[contains(@type,'procedures')]"))
                     helpers_names_blocks += len(tree.xpath("//block[contains(@type,'helpers_screen_names')]"))
-
                     #component blocks
                     event_blocks += len(tree.xpath("//block[contains(@type,'component_event')]"))
                     setGet_blocks += len(tree.xpath("//block[contains(@type,'component_set_get')]"))
@@ -210,7 +206,6 @@ def analyze(files):
                     componentObject_blocks += len(tree.xpath("//block[contains(@type,'component_component_block')]"))
                     helpers_assets_blocks += len(tree.xpath("//block[contains(@type,'helpers_assets')]"))
                     helpers_assets_blocks += len(tree.xpath("//block[contains(@type,'helpers_dropdown')]"))
-
                     #design components
                     userInterface += len(tree.xpath("//mutation[@component_type='Button']"))
                     userInterface += len(tree.xpath("//mutation[@component_type='CheckBox']"))
@@ -299,7 +294,6 @@ def analyze(files):
                     legoMindstorms += len(tree.xpath("//mutation[@component_type='Ev3UI']"))
                     legoMindstorms += len(tree.xpath("//mutation[@component_type='Ev3Commands']"))
                     experimental += len(tree.xpath("//mutation[@component_type='FirebaseDB']"))
-
                     #user inferface component blocks
                     buttons += len(tree.xpath("//mutation[@component_type='Button']"))
                     checkboxes += len(tree.xpath("//mutation[@component_type='CheckBox']"))
@@ -316,19 +310,16 @@ def analyze(files):
                     textBoxes += len(tree.xpath("//mutation[@component_type='TextBox']"))
                     timePickers += len(tree.xpath("//mutation[@component_type='TimePicker']"))
                     webViewers += len(tree.xpath("//mutation[@component_type='WebViewer']"))
-
                     #drawing and animation component blocks
                     canvas += len(tree.xpath("//mutation[@component_type='Canvas']"))
                     imageSprite += len(tree.xpath("//mutation[@component_type='ImageSprite']"))
                     ball += len(tree.xpath("//mutation[@component_type='Ball']"))
-
                     #storage and experimental component blocks
                     cloudDb += len(tree.xpath("//mutation[@component_type='CloudDB']"))
                     storageFile += len(tree.xpath("//mutation[@component_type='File']"))
                     tinyDb += len(tree.xpath("//mutation[@component_type='TinyDB']"))
                     tinyWebDb += len(tree.xpath("//mutation[@component_type='TinyWebDB']"))
                     firebaseDb += len(tree.xpath("//mutation[@component_type='FirebaseDB']"))
-
                     #control blocks types
                     conditional += len(tree.xpath("//block[@type='controls_if']"))
                     conditional += len(tree.xpath("//block[@type='controls_choose']"))
@@ -343,19 +334,15 @@ def analyze(files):
                     screen += len(tree.xpath("//block[@type='controls_closeScreenWithValue']"))
                     screen += len(tree.xpath("//block[@type='controls_getPlainStartText']"))
                     screen += len(tree.xpath("//block[@type='controls_closeScreenWithPlainText']"))
-
                     #procedure blocks types
                     procNoReturn += len(tree.xpath("//block[@type='procedures_defnoreturn']"))
                     #procNoReturn += len(tree.xpath("//block[@type='procedures_callnoreturn']"))
                     procWithReturn += len(tree.xpath("//block[@type='procedures_defreturn']"))
                     #procWithReturn += len(tree.xpath("//block[@type='procedures_callreturn']"))
-
                     #per project
                     number_of_blocks_per_project += len(tree.xpath("//block"))
                     number_of_screens_per_project += 1
-
                     number += 1
-
                 f.close()
             else:
                 data["blocksPerProject"][file.title] = number_of_blocks_per_project
@@ -383,26 +370,19 @@ def analyze(files):
                     f.writelines(lines[2:-1])
 
                 f.close()'''
-
                 f = open("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm", "r")
-
                 if f.mode == "r":
                     content = f.read()
-
                     #basic stats
                     number_of_components += content.count("Uuid")-1
-
                     #per project
-                    number_of_components_per_project += content.count("Uuid")-1
-                    
+                    number_of_components_per_project += content.count("Uuid")-1    
                 f.close()
-
                 number += 1 
             else:
                 data["componentsPerProject"][file.title] = number_of_components_per_project
                 number_of_components_per_project = 0
                 noMoreScreens = True
-
 
     for file in files:
         my_dir = "./media/unzipped_files/"+str(file.id)
@@ -468,7 +448,6 @@ def analyze(files):
     data['controlBlocksTypes']['Screen'] =  screen
     data['procedureBlocksTypes']['Without return'] =  procNoReturn
     data['procedureBlocksTypes']['With return'] =  procWithReturn
-
 
     return [data]
 

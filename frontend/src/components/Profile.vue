@@ -5,15 +5,11 @@
         <v-avatar id="avatar" color="blue">
           <v-icon id="icon" dark> mdi-account </v-icon>
         </v-avatar>
-
         <h1 id="heading">{{ this.getUser.username }}</h1>
+        <v-divider id="divider"></v-divider>
         <h2 id="text">
           {{ this.getUser.first_name + ' ' + this.getUser.last_name }}
         </h2>
-        <v-divider id="divider"></v-divider>
-        <router-link v-bind:to="'/sign-in'">
-          <p style="margin-top: 20px">Edit profile</p>
-        </router-link>
       </v-col>
     </v-row>
   </div>
@@ -55,7 +51,9 @@ export default {
 }
 #divider {
   margin: auto;
-  width: 300px;
+  width: 200px;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 #avatar {
   width: 180px !important;
@@ -92,6 +90,8 @@ export default {
   }
   #divider {
     width: 150px;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   .content {
     padding-top: 100px;

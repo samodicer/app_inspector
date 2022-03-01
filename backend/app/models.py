@@ -11,7 +11,6 @@ class Document(models.Model):
     file = models.FileField(blank=True, null=True, upload_to=upload_path)
     date = models.DateTimeField(auto_now_add=True)
     user_id = models.IntegerField(null=True)
-    analyse_id = models.CharField(editable=False, max_length=10)
 
     def __unicode__(self):
         return self.title
