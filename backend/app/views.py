@@ -1,5 +1,6 @@
 import os
 import shutil
+from turtle import title
 import zipfile
 from lxml import html
 import json
@@ -41,9 +42,17 @@ def uploadFile(request):
     if request.method == "POST":
         files = request.FILES.getlist('files')
         uid = request.POST.get('user_id')
+        if uid != "-1":
+            user = User.objects.get(id=uid)
+            print(">>>>>>>>>>>>>>>=0")
+        else:
+            user = None  
+        analyse = Analyse.objects.create(user_id= user)
+        field_object = Analyse._meta.get_field("id")
+        aid = field_object.value_from_object(analyse)
         created_files = []
         for currentFile in files:
-            created = Document.objects.create(title=currentFile.name, file=currentFile, user_id = uid)
+            created = Document.objects.create(title=currentFile.name, file=currentFile, user_id = user, analyse_id = analyse)
             created_files.append(created)
         serializer = DocumentSerializer(created_files, many=True)
         return Response(serializer.data)
@@ -70,16 +79,29 @@ def getFileData(request, pk):
 def getUserHistory(request):
     uid= request.query_params.get('uid')
     analyses = Analyse.objects.filter(user_id=uid)
-    serializer = AnalyseSerializer(analyses, many=True)
-    return Response(serializer.data)
+    fetched_files = []
+    data=[]
+    for analyse in analyses:
+        files = Document.objects.filter(analyse_id= analyse)
+        item = {"analyse_id": analyse.id, "date": analyse.date, "files_count": len(files), "files": []}
+        #item["file"] = {"id":"","title":"","date":""}
+        for file in files:
+            item["files"].append(file.id)
+
+        data.append(item)
+
+    jsonData=json.dumps(data,default=str)
+    print("josn:",jsonData)
+    '''for analyse in analyses:
+        files = Document.objects.get(analyse_id= analyse)
+        fetched_files.append(files.id)
+        
+    serializer = AnalyseSerializer(analyses, many=True)'''
+    return Response(jsonData)
 
 @api_view(['GET'])
 def getAnalysedData(request):
     iDs = request.query_params.getlist('id')
-    userID = request.query_params.get('user_id')
-    isNew = request.query_params.get('is_new')
-    if (isNew == "true"):
-        Analyse.objects.create(files_id=iDs, user_id=userID)
     files = Document.objects.filter(id__in=iDs)
     return Response(analyze(files))
 

@@ -97,8 +97,6 @@ export default {
         }
         this.analyzeFile({
           ids: this.selectedFiles,
-          uid: this.user_id,
-          isNew: 'true',
         });
         //this.analyzeFile(this.selectedFiles, uid);
         this.changeAnalysed(true);

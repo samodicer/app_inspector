@@ -2,7 +2,7 @@
   <div class="content" v-if="this.getHistory.length != 0">
     <div>
       <v-card class="mx-auto" color="#F7F7F7">
-        <v-subheader inset>Analysed files history</v-subheader>
+        <v-subheader inset>Uploaded files history</v-subheader>
         <v-divider></v-divider>
         <v-virtual-scroll
           :items="this.getHistory"
@@ -10,7 +10,7 @@
           item-height="70"
         >
           <template v-slot:default="{ item }">
-            <v-list-item :key="item.id">
+            <v-list-item :key="item.analyse_id">
               <v-list-item-avatar width="40px" height="40px">
                 <v-icon
                   :class="'blue'"
@@ -21,7 +21,7 @@
 
               <v-list-item-content>
                 <v-list-item-title
-                  v-text="getNumber(item.files_id)"
+                  v-text="addPostfix(item.files_count)"
                 ></v-list-item-title>
                 <v-list-item-subtitle
                   v-text="formatDate(item.date)"
@@ -33,9 +33,9 @@
                   class="white--text"
                   tabindex="2"
                   color="#26A69A"
-                  @click="analyze(getFiles(item.files_id))"
+                  @click="analyze(item.files)"
                 >
-                  Show
+                  Analyse
                 </v-btn>
               </v-list-item-action>
             </v-list-item>
@@ -85,8 +85,7 @@ export default {
       var array = newStr.split(',').map(Number);
       return array;
     },
-    getNumber(filesIdStr) {
-      var number = this.getFiles(filesIdStr).length;
+    addPostfix(number) {
       if (number == 1) {
         return number + ' File';
       } else return number + ' Files';
@@ -98,7 +97,7 @@ export default {
         } else {
           this.user_id = -1;
         }
-        this.analyzeFile({ ids: ids, uid: this.user_id, isNew: 'false' });
+        this.analyzeFile({ ids: ids });
         this.changeAnalysed(true);
         if (this.$router.currentRoute.path != '/overview') {
           this.$router.push('overview');

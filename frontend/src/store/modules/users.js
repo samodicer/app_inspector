@@ -170,7 +170,7 @@ const mutations = {
     state.currentUser.last_name = '';
   },
   setUserHistory: (state, analyses) => {
-    state.userHistory = analyses;
+    state.userHistory = JSON.parse(analyses);
   },
   setLoginErrorMessages: (state, errors) => {
     state.loginErrorMessages.username = [];
