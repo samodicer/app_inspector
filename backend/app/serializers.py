@@ -8,7 +8,7 @@ from django.contrib.auth.password_validation import validate_password
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
-        fields = ['id', 'title', 'file','date','user_id','analyse_id']
+        fields = ['id', 'title', 'file','user_id','analyse_id']
 
 class AnalyseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,8 +45,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
 
-        if len(attrs['password']) > 256:
-            raise serializers.ValidationError({"password": "Password cannot contain more than 256 characters."})    
+        if len(attrs['password']) > 255:
+            raise serializers.ValidationError({"password": "Password cannot contain more than 255 characters."})    
 
         return attrs
 

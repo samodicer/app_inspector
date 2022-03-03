@@ -44,11 +44,7 @@
           </v-list>
         </v-menu>
       </div>
-      <v-btn
-        v-if="this.getUser.id == null && !accessToken"
-        text
-        @click="loadSignInPage()"
-      >
+      <v-btn v-if="this.getUser.id == null" text @click="loadSignInPage()">
         Sign in</v-btn
       >
     </v-container>

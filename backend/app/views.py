@@ -78,8 +78,7 @@ def getFileData(request, pk):
 @api_view(['GET'])
 def getUserHistory(request):
     uid= request.query_params.get('uid')
-    analyses = Analyse.objects.filter(user_id=uid)
-    fetched_files = []
+    analyses = Analyse.objects.filter(user_id=uid).order_by('-date')
     data=[]
     for analyse in analyses:
         files = Document.objects.filter(analyse_id= analyse)
@@ -91,12 +90,7 @@ def getUserHistory(request):
         data.append(item)
 
     jsonData=json.dumps(data,default=str)
-    print("josn:",jsonData)
-    '''for analyse in analyses:
-        files = Document.objects.get(analyse_id= analyse)
-        fetched_files.append(files.id)
-        
-    serializer = AnalyseSerializer(analyses, many=True)'''
+
     return Response(jsonData)
 
 @api_view(['GET'])
