@@ -54,7 +54,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import axios from 'axios';
+//import axios from 'axios';
 
 export default {
   name: 'UploadFiles',
@@ -70,9 +70,6 @@ export default {
       inputs: {
         files: [],
       },
-      uploaded_files: [],
-      current_file_id: null,
-      selectedFiles: [],
     };
   },
   computed: {
@@ -83,15 +80,14 @@ export default {
   methods: {
     ...mapActions({
       analyzeFile: 'files/analyzeFile',
+      uploadFiles: 'files/uploadFiles',
       changeLoading: 'files/changeLoading',
       changeUploaded: 'files/changeUploaded',
-      changeUploadedFiles: 'files/changeUploadedFiles',
     }),
 
     onSelected() {
       this.crashed = false;
       this.error_snackbar = false;
-      //this.inputs.title = this.inputs.files.name;
       if (this.inputs.files.length != 0) {
         const fd = new FormData();
         if (this.getUser.id != null) {
@@ -117,69 +113,19 @@ export default {
           }
         }
 
-        /*for (var value of fd.values()) {
-          console.log(value);
-        }*/
         if (!this.crashed) {
           this.changeLoading(true);
-          axios({
-            method: 'post',
-            url: 'http://127.0.0.1:8000/upload-file/',
-            data: fd,
-            body: fd,
-          }).then((response) => {
-            //this.inputs.id = response.data.id;
-            for (let i = 0; i < response.data.length; i++) {
-              var myFile = [];
-              myFile['id'] = response.data[i].id;
-              myFile['title'] = response.data[i].title;
-              myFile['file'] = response.data[i].file;
-              this.uploaded_files.push(myFile);
-              this.selectedFiles.push(myFile['id']);
-            }
+          this.uploadFiles(fd).then(() => {
             this.changeLoading(false);
-            console.log(response);
           });
           this.uploaded = true;
           this.changeUploaded(true);
-          this.changeUploadedFiles(this.uploaded_files);
         }
       } else {
         this.crashed = true;
         this.error_snackbar = true;
         this.error_snackbar_text = 'You have not selected any files.';
       }
-
-      if (this.inputs.files) {
-        /*var idxDot = this.inputs.file.name.lastIndexOf('.') + 1;
-        var extFile = this.inputs.file.name
-          .substr(idxDot, this.inputs.file.name.length)
-          .toLowerCase();
-        if (extFile == 'aia') {
-          const fd = new FormData();
-          fd.append('title', this.inputs.title);
-          fd.append('file', this.inputs.file);
-          axios({
-            method: 'post',
-            url: 'http://127.0.0.1:8000/upload-file/',
-            data: fd,
-            body: fd,
-          }).then((response) => {
-            this.inputs.id = response.data.id;
-            console.log(response);
-          });
-          this.uploaded = true;
-        } else {
-          this.alert = true;
-          this.inputs.file = null;
-          this.inputs.title = '';
-          this.$refs.fileInputRef = null;
-          console.log(this.$refs.fileInputRef);
-        }*/
-      }
-    },
-    analyze() {
-      this.analyzeFile(this.selectedFiles);
     },
   },
 };

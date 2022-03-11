@@ -5,8 +5,6 @@ import zipfile
 from lxml import html
 import json
 import shutil
-import random
-import string
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -44,12 +42,9 @@ def uploadFile(request):
         uid = request.POST.get('user_id')
         if uid != "-1":
             user = User.objects.get(id=uid)
-            print(">>>>>>>>>>>>>>>=0")
         else:
             user = None  
         analyse = Analyse.objects.create(user_id= user)
-        field_object = Analyse._meta.get_field("id")
-        aid = field_object.value_from_object(analyse)
         created_files = []
         for currentFile in files:
             created = Document.objects.create(title=currentFile.name, file=currentFile, user_id = user, analyse_id = analyse)
@@ -63,18 +58,6 @@ def getFiles(request):
     serializer = DocumentSerializer(files, many=True)
     return Response(serializer.data)
 
-'''@api_view(['GET'])
-def getFileById(request, pk):
-    files = Document.objects.get(id=pk)
-    serializer = DocumentSerializer(files, many=False)
-    analyze(files.id, files.file)
-    return Response(serializer.data)'''
-
-'''@api_view(['GET'])
-def getFileData(request, pk):
-    files = Document.objects.get(id=pk)
-    return Response(analyze(files.id, files.file))'''
-
 @api_view(['GET'])
 def getUserHistory(request):
     uid= request.query_params.get('uid')
@@ -83,9 +66,9 @@ def getUserHistory(request):
     for analyse in analyses:
         files = Document.objects.filter(analyse_id= analyse)
         item = {"analyse_id": analyse.id, "date": analyse.date, "files_count": len(files), "files": []}
-        #item["file"] = {"id":"","title":"","date":""}
         for file in files:
-            item["files"].append(file.id)
+            serializer = DocumentSerializer(file, many=False)
+            item["files"].append(serializer.data)
 
         data.append(item)
 
@@ -372,20 +355,6 @@ def analyze(files):
         number = 1
         while noMoreScreens == False:
             if os.path.isfile("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm"):
-
-                '''f = open("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm", "r")
-
-                if f.mode == "r":
-                    lines = f.read().splitlines(True)
-
-                f.close()
-
-                f = open("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm", "w")
-
-                if f.mode == "w":
-                    f.writelines(lines[2:-1])
-
-                f.close()'''
                 f = open("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm", "r")
                 if f.mode == "r":
                     content = f.read()

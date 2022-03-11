@@ -98,7 +98,6 @@ export default {
         this.analyzeFile({
           ids: this.selectedFiles,
         });
-        //this.analyzeFile(this.selectedFiles, uid);
         this.changeAnalysed(true);
         if (this.$router.currentRoute.path != '/overview') {
           this.$router.push('overview');

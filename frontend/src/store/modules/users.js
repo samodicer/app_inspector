@@ -51,6 +51,7 @@ const actions = {
           .catch((err) => {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
+            console.log(err);
             reject(err);
           });
       });
@@ -76,6 +77,7 @@ const actions = {
             localStorage.removeItem('accessToken');
             commit('setLoginErrorMessages', err.response.data);
           }
+          console.log(err);
           reject(err);
         });
     });
@@ -104,6 +106,7 @@ const actions = {
           if (err.response) {
             commit('setRegisterErrorMessages', err.response.data);
           }
+          console.log(err);
           reject(err);
         });
     });
@@ -121,6 +124,7 @@ const actions = {
             if (err.response.status == 500) {
               commit('destroyToken');
             }
+            console.log(err);
             reject(err);
           });
       });
@@ -135,6 +139,7 @@ const actions = {
           resolve();
         })
         .catch((err) => {
+          console.log(err);
           reject(err);
         });
     });
@@ -179,18 +184,15 @@ const mutations = {
     if (errors.username != null) {
       errors.username.forEach((username_error) => {
         state.loginErrorMessages.username.push(username_error);
-        console.log(username_error);
       });
     }
     if (errors.password != null) {
       errors.password.forEach((password_error) => {
         state.loginErrorMessages.password.push(password_error);
-        console.log(password_error);
       });
     }
     if (errors.detail != null) {
       state.loginErrorMessages.detail = errors.detail;
-      console.log(errors.detail);
     }
   },
   setRegisterErrorMessages: (state, messages) => {

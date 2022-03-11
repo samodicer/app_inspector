@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { getAPI } from '../../axios-api';
 
 const state = {
   files: [],
@@ -7,7 +7,6 @@ const state = {
   isLoading: false,
   isUploaded: false,
   isAnalysed: false,
-  moreInfoDialog: false,
 };
 
 const getters = {
@@ -15,72 +14,50 @@ const getters = {
   getUploadedFiles: (state) => state.uploadedFiles,
   getUploaded: (state) => state.isUploaded,
   getAnalysed: (state) => state.isAnalysed,
-  //allFiles: (state) => state.files,
   getAnalyzedData: (state) => state.analyzedData,
-  getMoreInfoDialog: (state) => state.moreInfoDialog,
 };
 
 const actions = {
-  /*async uploadFile(){
-        /*const fd = new FormData();
-        fd.append('title',data.title);
-        fd.append('file',data.file);
-        console.log("data:"+data.file);
-        axios({
-            method: 'post',
-            url: 'http://127.0.0.1:8000/documents/',
-            data: fd,
-            body: fd
+  async uploadFiles({ commit }, fd) {
+    return new Promise((resolve, reject) => {
+      getAPI
+        .post('/upload-file/', fd, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         })
-    },*/
-  async resetStates({ commit }) {
-    commit('resetStates');
+        .then((response) => {
+          commit('setUploadedFiles', response.data);
+          resolve();
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        });
+    });
   },
-  /*async fetchFiles({ commit }) {
-    axios
-      .get('http://127.0.0.1:8000/get-files/')
-      .then((response) => {
-        commit('setFiles', response.data);
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },*/
   async analyzeFile({ commit }, { ids }) {
-    var URL = 'http://127.0.0.1:8000/get-files-data';
-    for (let i = 0; i < ids.length; i++) {
-      if (i == 0) URL = URL + '?';
-      URL = URL + 'id=' + ids[i] + '&';
-    }
-    URL = URL.substring(0, URL.length - 1);
-
-    axios({
-      method: 'get',
-      url: URL,
-    })
-      .then((response) => {
-        //commit('setAnalyzedData', response.data);
-        console.log(response);
-        commit('setAnalyzedData', response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    commit('setAnalyzedData', '');
-    /*for (var id in ids) {
-      console.log(id);
-    }*/
-    /*
-    axios
-      .get('http://127.0.0.1:8000/get-files-data/' + ids)
-      .then((response) => {
-        commit('setAnalyzedData', response.data);
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });*/
+    return new Promise((resolve, reject) => {
+      var query = '';
+      for (let i = 0; i < ids.length; i++) {
+        if (i == 0) query = query + '?';
+        query = query + 'id=' + ids[i] + '&';
+      }
+      query = query.substring(0, query.length - 1);
+      getAPI
+        .get('/get-files-data' + query)
+        .then((response) => {
+          commit('setAnalyzedData', response.data);
+          resolve();
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        });
+    });
+  },
+  async changeUploadedFiles({ commit }, array) {
+    commit('setUploadedFiles', array);
   },
   async changeLoading({ commit }, value) {
     commit('setLoading', value);
@@ -91,11 +68,8 @@ const actions = {
   async changeAnalysed({ commit }, value) {
     commit('setAnalysed', value);
   },
-  async changeUploadedFiles({ commit }, array) {
-    commit('setUploadedFiles', array);
-  },
-  async changeMoreInfoDialog({ commit }, value) {
-    commit('setMoreInfoDialog', value);
+  async resetStates({ commit }) {
+    commit('resetStates');
   },
 };
 
@@ -112,8 +86,6 @@ const mutations = {
   setUploadedFiles: (state, array) => (state.uploadedFiles = array),
   setFiles: (state, files) => (state.files = files),
   setAnalyzedData: (state, analyzedData) => (state.analyzedData = analyzedData),
-  setMoreInfoDialog: (state, moreInfoDialog) =>
-    (state.moreInfoDialog = moreInfoDialog),
 };
 
 export default {

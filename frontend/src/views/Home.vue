@@ -7,9 +7,7 @@
           <v-col>
             <v-sheet id="sheet" rounded="lg">
               <UploadFiles></UploadFiles>
-
               <SelectFiles></SelectFiles>
-
               <v-divider id="divider"></v-divider>
               <AboutUs></AboutUs>
             </v-sheet>

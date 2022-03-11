@@ -65,6 +65,7 @@ export default {
       getUserHistory: 'users/getUserHistory',
       analyzeFile: 'files/analyzeFile',
       changeAnalysed: 'files/changeAnalysed',
+      changeUploadedFiles: 'files/changeUploadedFiles',
     }),
     formatDate(dateStr) {
       var options = {
@@ -90,14 +91,19 @@ export default {
         return number + ' File';
       } else return number + ' Files';
     },
-    analyze(ids) {
-      if (ids.length != 0) {
+    analyze(files) {
+      var ids = [];
+      if (files.length != 0) {
+        for (var i = 0; i < files.length; i++) {
+          ids.push(files[i].id);
+        }
         if (this.getUser.id != null) {
           this.user_id = this.getUser.id;
         } else {
           this.user_id = -1;
         }
         this.analyzeFile({ ids: ids });
+        this.changeUploadedFiles(files);
         this.changeAnalysed(true);
         if (this.$router.currentRoute.path != '/overview') {
           this.$router.push('overview');
