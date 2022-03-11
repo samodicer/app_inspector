@@ -5,33 +5,31 @@
         <v-row id="row">
           <v-col>
             <v-sheet id="sheet" rounded="lg" color="#FFFFFF" elevation="2">
-              <h1 id="heading">
+              <h1 id="heading" style="justify-content: start">
                 <v-icon id="icon" large color="#26a69a"> mdi-school</v-icon>
-                Instructive
+                Educational
               </h1>
               <p id="text">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                By using App Inspector, you can gain new insights into your AIA
+                projects and improve them.
               </p>
-              <h1 id="heading">
+              <h1 id="heading" style="justify-content: start">
                 <v-icon id="icon" large color="#26a69a">
                   mdi-speedometer</v-icon
                 >
                 Fast
               </h1>
               <p id="text">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                Analysing AIA projects with App Inspector is quick and easy.
               </p>
-              <h1 id="heading">
+              <h1 id="heading" style="justify-content: start">
                 <v-icon id="icon" large color="#26a69a">
                   mdi-check-circle-outline</v-icon
                 >
                 Free
               </h1>
               <p id="text">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                With App Inspector, you can analyse your AIA projects for free.
               </p>
             </v-sheet>
           </v-col>
@@ -43,9 +41,8 @@
               elevation="2"
               style="height: 100%"
             >
-              <h1 id="heading2">
-                Analyse your MIT App Inventor <br />
-                projects via App Inspector
+              <h1 id="heading">
+                Analyse your MIT App Inventor projects <br />via App Inspector
               </h1>
               <v-sparkline
                 :height="50"
@@ -64,26 +61,22 @@
             </v-sheet>
           </v-col>
         </v-row>
-        <h1 id="heading2" style="margin-top: 30px">What is App Inspector?</h1>
-        <br />
-        <p style="text-align: left">
-          Contrary to popular belief, Lorem Ipsum is not simply random text. It
-          has roots in a piece of classical Latin literature from 45 BC, making
-          it over 2000 years old. Richard McClintock, a Latin professor at
-          Hampden-Sydney College in Virginia, looked up one of the more obscure
-          Latin words, consectetur, from a Lorem Ipsum passage, and going
-          through the cites of the word in classical literature, discovered the
-          undoubtable source. Lorem Ipsum comes from sections 1.10.32 and
-          1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and
-          Evil) by Cicero, written in 45 BC. This book is a treatise on the
-          theory of ethics, very popular during the Renaissance. The first line
-          of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in
-          section 1.10.32. The standard chunk of Lorem Ipsum used since the
-          1500s is reproduced below for those interested. Sections 1.10.32 and
-          1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also
-          reproduced in their exact original form, accompanied by English
-          versions from the 1914 translation by H. Rackham.
-        </p>
+        <v-card id="card">
+          <v-row id="row">
+            <v-col id="col">
+              <h1 id="heading2">What is</h1>
+              <h1 id="heading3">App Inspector?</h1>
+            </v-col>
+            <v-divider id="devider" class="mx-4" vertical></v-divider>
+            <v-col id="col">
+              <p id="aboutText">
+                App Inspector is an online tool that allows you to analyse and
+                compare multiple MIT App Inventor projects. The results can be
+                used for statistical analysis or educational purposes.
+              </p>
+            </v-col>
+          </v-row>
+        </v-card>
       </v-sheet>
     </v-row>
   </v-container>
@@ -94,12 +87,12 @@ export default {
   components: {},
   data() {
     return {
-      width: 3,
+      width: 6,
       radius: 10,
       padding: 14,
       lineCap: 'round',
       gradient: ['#1c857b', '#32d1c2', '#24f2cc'],
-      value: Array.from({ length: 17 }, () => Math.floor(Math.random() * 20)),
+      value: Array.from({ length: 17 }, () => Math.floor(Math.random() * 22)),
       gradientDirection: 'top',
       fill: false,
       type: 'trend',
@@ -115,10 +108,43 @@ export default {
 <style scoped>
 #heading {
   display: flex;
-  text-align: left;
+  justify-content: center;
+  align-items: center;
 }
 #heading2 {
   text-align: center;
+  font-size: 50px;
+}
+#heading3 {
+  text-align: center;
+  font-size: 25px;
+}
+#aboutText {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  font-size: 25px;
+}
+#devider {
+  margin-left: 30px;
+  margin-right: 30px;
+}
+#col {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+}
+#row {
+  margin: 10px;
+}
+#card {
+  display: flex;
+  margin-top: 30px;
+  border-radius: 15px;
+  margin: 20px;
 }
 #icon {
   margin-right: 5px;
@@ -145,6 +171,27 @@ export default {
   }
   #heading2 {
     font-size: 20px;
+  }
+  #heading3 {
+    font-size: 20px;
+  }
+  #row {
+    flex-direction: column;
+  }
+  #aboutText {
+    padding: 0x;
+    font-size: 16px;
+    text-align: center;
+  }
+  #col {
+    padding: 20px;
+    min-width: 180px;
+  }
+  #card {
+    flex-direction: column;
+  }
+  #devider {
+    display: none;
   }
   #row {
     flex-direction: column;

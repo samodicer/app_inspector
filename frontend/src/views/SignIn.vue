@@ -7,15 +7,6 @@
           <v-card id="card" color="#F7F7F7">
             <div class="form">
               <h1 id="heading">Sign in</h1>
-              <!--<v-text-field
-                v-model="user.email"
-                label="Email"
-                placeholder="Email"
-                :rules="[rules.required, rules.email]"
-                outlined
-                dense
-                color="#26A69A"
-              ></v-text-field>-->
               <v-text-field
                 tabindex="1"
                 v-model="user.username"
@@ -117,10 +108,6 @@ export default {
         min: (value) => {
           return value.length >= 8 || 'At least 8 characters';
         },
-        /*email: (value) => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || 'Invalid Email';
-        },*/
       },
     };
   },
