@@ -5,13 +5,13 @@ from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
-# serializer pre súbory
+# serializer pre súbor
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = ['id', 'title', 'file','user_id','analyse_id']
 
-# serializer pre analýzy
+# serializer pre analýzu
 class AnalyseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Analyse
@@ -21,7 +21,7 @@ class AnalyseSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name')
+        fields = ['id', 'username', 'first_name', 'last_name']
 
 # serializer pre registráciu
 class RegisterSerializer(serializers.ModelSerializer):

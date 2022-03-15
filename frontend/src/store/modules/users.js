@@ -32,16 +32,21 @@ const getters = {
 };
 
 const actions = {
+  // obnovenie prístupového tokenu
   async refreshAccessToken({ commit }) {
+    // ak je obnovovací token v lokálnom úložisku
     if (localStorage.getItem('refreshToken') != null) {
       var refreshToken = localStorage.getItem('refreshToken');
       localStorage.removeItem('accessToken');
       return new Promise((resolve, reject) => {
+        // POST požiadavka na koncový bod
+        // ako parameter posielame obnovovací token
         getAPI
           .post('/api-token-refresh/', {
             refresh: refreshToken,
           })
           .then((response) => {
+            // keď príde odooveď zavolá sa mutácia na zmenu tokenov
             commit('updateStorage', {
               access: response.data.access,
               refresh: refreshToken,
@@ -49,6 +54,7 @@ const actions = {
             resolve();
           })
           .catch((err) => {
+            // keď príde chyba odstránime tokeny z lokálneho úložiska
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
             console.log(err);
@@ -57,15 +63,19 @@ const actions = {
       });
     }
   },
+  // prihlásenie
   async userLogin({ commit }, user) {
     localStorage.removeItem('accessToken');
     return new Promise((resolve, reject) => {
+      // POST požiadavka na koncový bod
+      // posielame parametre username a password objektu user
       getAPI
         .post('/api-token/', {
           username: user.username,
           password: user.password,
         })
         .then((response) => {
+          // keď príde odooveď zavolá sa mutácia na zmenu tokenov
           commit('updateStorage', {
             access: response.data.access,
             refresh: response.data.refresh,
@@ -73,6 +83,7 @@ const actions = {
           resolve();
         })
         .catch((err) => {
+          // keď príde chyba odstránime token a zavoláme mutáciu na zmenu chybových hlásení
           if (err.response) {
             localStorage.removeItem('accessToken');
             commit('setLoginErrorMessages', err.response.data);
@@ -82,15 +93,20 @@ const actions = {
         });
     });
   },
+  // odhlásenie
   async userLogout({ commit }) {
     if (localStorage.getItem('accessToken')) {
+      // zavoláme mutácie na vymazanie tokenov a objektu používateľa
       commit('destroyToken');
       commit('removeCurrentUser');
     }
   },
+  // registrácia
   async userCreateAccount({ commit }, user) {
     commit('destroyToken');
     return new Promise((resolve, reject) => {
+      // POST požiadavka na koncový bod
+      // posielame parametre username, password, confirm_password, first_name a last_name objektu user
       getAPI
         .post('/register/', {
           username: user.username,
@@ -100,9 +116,11 @@ const actions = {
           last_name: user.last_name,
         })
         .then(() => {
+          // keď príde odooveď
           resolve();
         })
         .catch((err) => {
+          // keď príde chyba zavoláme mutáciu na zmenu chybových hlásení
           if (err.response) {
             commit('setRegisterErrorMessages', err.response.data);
           }
@@ -111,16 +129,21 @@ const actions = {
         });
     });
   },
+  // údaje o používateľovi
   async getCurrentUser({ commit }, token) {
     if (localStorage.getItem('accessToken') != null) {
       return new Promise((resolve, reject) => {
+        // GET požiadavka na koncový bod
+        // posielame prístupový token
         getAPI
           .get('/get-user/?access_token=' + token)
           .then((response) => {
+            // keď príde odpoveď zavolá sa mutácia na zmenu používateľských údajov
             commit('setCurrentUser', response.data);
             resolve();
           })
           .catch((err) => {
+            // keď príde chyba zmažeme tokeny
             if (err.response.status == 500) {
               commit('destroyToken');
             }
@@ -130,20 +153,26 @@ const actions = {
       });
     }
   },
+  // história nahratých súborov používateľa
   async getUserHistory({ commit }, uid) {
     return new Promise((resolve, reject) => {
+      // GET požiadavka na koncový bod
+      // posielame id používateľa
       getAPI
         .get('/get-user-history/?uid=' + uid)
         .then((response) => {
+          // keď príde odpoveď zavolá sa mutácia na zmenu údajov o histórii používateľa
           commit('setUserHistory', response.data);
           resolve();
         })
         .catch((err) => {
+          // keď príde chyba
           console.log(err);
           reject(err);
         });
     });
   },
+  // zavolá sa mutácia na resetnovanie chybových hlásení
   async refreshMessages({ commit }) {
     commit('removeMessages');
   },
@@ -151,33 +180,39 @@ const actions = {
 
 const mutations = {
   updateStorage(state, { access, refresh }) {
+    // zmena tokenov
     state.accessToken = access;
     state.refreshToken = refresh;
     localStorage.setItem('accessToken', access);
     localStorage.setItem('refreshToken', refresh);
   },
   destroyToken(state) {
+    // zmazanie tokenov
     state.accessToken = null;
     state.refreshToken = null;
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
   },
   setCurrentUser: (state, user) => {
+    // zmena používateľských údajov
     state.currentUser.id = user.id;
     state.currentUser.username = user.username;
     state.currentUser.first_name = user.first_name;
     state.currentUser.last_name = user.last_name;
   },
   removeCurrentUser: (state) => {
+    // zmazanie používateľských údajov
     state.currentUser.id = null;
     state.currentUser.username = '';
     state.currentUser.first_name = '';
     state.currentUser.last_name = '';
   },
   setUserHistory: (state, analyses) => {
+    // zmena používateľskej histórie
     state.userHistory = JSON.parse(analyses);
   },
   setLoginErrorMessages: (state, errors) => {
+    // zmena chybových hlásení pri prihlasovaní
     state.loginErrorMessages.username = [];
     state.loginErrorMessages.password = [];
     state.loginErrorMessages.detail = '';
@@ -196,6 +231,7 @@ const mutations = {
     }
   },
   setRegisterErrorMessages: (state, messages) => {
+    // zmena chybových hlásení pri registrácii
     state.registerErrorMessages.username = [];
     state.registerErrorMessages.first_name = [];
     state.registerErrorMessages.last_name = [];
@@ -227,6 +263,7 @@ const mutations = {
     }
   },
   removeMessages: (state) => {
+    // zmazanie chybových hlásení
     state.loginErrorMessages.username = [];
     state.loginErrorMessages.password = [];
     state.loginErrorMessages.detail = '';
