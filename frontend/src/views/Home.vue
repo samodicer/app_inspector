@@ -50,6 +50,7 @@ export default {
     }),
   },
   mounted() {
+    // resetujeme stavy
     this.resetStates();
   },
 };

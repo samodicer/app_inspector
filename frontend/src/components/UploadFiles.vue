@@ -15,7 +15,8 @@
           truncate-length="40"
         ></v-file-input>
       </div>
-      <div v-if="!this.uploaded" class="btn">
+
+      <div v-if="!this.getUploaded" class="btn">
         <v-btn color="#26A69A" dark @click="onSelected()"> Upload files </v-btn>
       </div>
 
@@ -75,6 +76,7 @@ export default {
   computed: {
     ...mapGetters({
       getUser: 'users/getUser',
+      getUploaded: 'files/getUploaded',
     }),
   },
   methods: {
@@ -88,21 +90,28 @@ export default {
     onSelected() {
       this.crashed = false;
       this.error_snackbar = false;
+      // ak používateľ zvolil nejkaé súbory
       if (this.inputs.files.length != 0) {
         const fd = new FormData();
+        // ak je požívateľ prihlásený vložíme id, ak nie vložíme -1
         if (this.getUser.id != null) {
           fd.append('user_id', this.getUser.id);
         } else {
           fd.append('user_id', -1);
         }
+        // prebehneme po súboroch
         for (let i = 0; i < this.inputs.files.length; i++) {
+          // zoberieme koncovku súboru
           var idxDot = this.inputs.files[i].name.lastIndexOf('.') + 1;
           var extFile = this.inputs.files[i].name
             .substr(idxDot, this.inputs.files[i].name.length)
             .toLowerCase();
+
           if (extFile == 'aia') {
+            // ak je aia, tak pridáme súbor do pola
             fd.append('files', this.inputs.files[i]);
           } else {
+            // ak nie, zobrazíme chybu
             this.crashed = true;
             this.error_snackbar = true;
             this.error_snackbar_text =
@@ -114,6 +123,7 @@ export default {
         }
 
         if (!this.crashed) {
+          // zmeníme stavy a nahráme súbory
           this.changeLoading(true);
           this.uploadFiles(fd).then(() => {
             this.changeLoading(false);

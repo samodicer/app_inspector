@@ -39,16 +39,16 @@ export default {
   },
   methods: {
     shuffle(array) {
+      // náhodné poradie farieb
       let currentIndex = array.length,
         randomIndex;
 
-      // While there remain elements to shuffle...
+      // výber náhodného indexu
       while (currentIndex != 0) {
-        // Pick a remaining element...
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
-        // And swap it with the current element.
+        // zámena indexov
         [array[currentIndex], array[randomIndex]] = [
           array[randomIndex],
           array[currentIndex],
@@ -58,6 +58,7 @@ export default {
       return array;
     },
     renderMyChart() {
+      // vykreslíme graf za pomoci poslaných dát (chartLables, chartData)
       this.renderChart(
         {
           labels: this.$attrs['chartLabels'],
@@ -81,9 +82,7 @@ export default {
   },
   watch: {
     chartData: function () {
-      this.renderMyChart();
-    },
-    myChartLabels: function () {
+      // ak sa zmení chartData, vykreslíme graf
       this.renderMyChart();
     },
   },

@@ -68,6 +68,7 @@ export default {
       changeUploadedFiles: 'files/changeUploadedFiles',
     }),
     formatDate(dateStr) {
+      // formátovanie dátumu
       var options = {
         year: 'numeric',
         month: 'short',
@@ -78,33 +79,26 @@ export default {
       const date = new Date(dateStr);
       return date.toLocaleDateString('en-US', options);
     },
-    getFiles(filesIdStr) {
-      var newStr = filesIdStr
-        .replaceAll("'", '')
-        .replaceAll('[', '')
-        .replaceAll(']', '');
-      var array = newStr.split(',').map(Number);
-      return array;
-    },
     addPostfix(number) {
+      // ak ju počet súborv viac ako 1, aplikujeme množného číslo (Files)
       if (number == 1) {
         return number + ' File';
       } else return number + ' Files';
     },
     analyze(files) {
       var ids = [];
+      // ak sú nejaké súbory
       if (files.length != 0) {
+        // pridáme do pola id súborov
         for (var i = 0; i < files.length; i++) {
           ids.push(files[i].id);
         }
-        if (this.getUser.id != null) {
-          this.user_id = this.getUser.id;
-        } else {
-          this.user_id = -1;
-        }
+        // id súborov sú posleané na anlýzu
         this.analyzeFile({ ids: ids });
+        // zmeníme stavy
         this.changeUploadedFiles(files);
         this.changeAnalysed(true);
+        // používateľ je presmerovaný na Overview
         if (this.$router.currentRoute.path != '/overview') {
           this.$router.push('overview');
         }
@@ -119,6 +113,7 @@ export default {
   },
   mounted() {
     if (this.getUser.id != null) {
+      // získame dáta histórie
       this.getUserHistory(this.getUser.id);
     }
   },

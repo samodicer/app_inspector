@@ -23,66 +23,86 @@ from .models import Analyse
 from django.contrib.auth.models import User
 
 class RegisterView(generics.CreateAPIView):
+    # údaje pošleme do serializéra na validáciu
+    # ak prebehne bez problémov, vytvorí sa nový objekt User
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer 
 
 @api_view(['GET'])
 def getUser(request):
+    # zoberieme zaslaný prístupový token a na základe neho získame id používateľa
     access_token_obj = AccessToken(request.query_params.get('access_token'))
     user_id=access_token_obj['user_id']
+    # podľa id vyberieme User objekt
     user=User.objects.get(id=user_id)
+    # prekonvertujeme na JSON
     serializer = UserSerializer(user, many= False)
+    # vrátime odpoveď
     return Response(serializer.data)       
 
 @api_view(['POST'])
 def uploadFile(request):
+    # ak je metóda POST
     if request.method == "POST":
+        # zoberieme zoznam súborov
         files = request.FILES.getlist('files')
+        # zoberieme id používateľa
+        # ak je id -1 nastavíme user na None
+        # ak nie, získame User objekt podľa id
         uid = request.POST.get('user_id')
         if uid != "-1":
             user = User.objects.get(id=uid)
         else:
             user = None  
+        # vytvoríme obejkt Analyse s id používateľa
         analyse = Analyse.objects.create(user_id= user)
         created_files = []
+        # prebehneme po súboroch a pre každý vytvoríme obejkt Document
         for currentFile in files:
             created = Document.objects.create(title=currentFile.name, file=currentFile, user_id = user, analyse_id = analyse)
             created_files.append(created)
+        # súbory konvertujeme na JSON
         serializer = DocumentSerializer(created_files, many=True)
+        # vrátime odpoveď
         return Response(serializer.data)
 
 @api_view(['GET'])
-def getFiles(request):
-    files = Document.objects.all()
-    serializer = DocumentSerializer(files, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
 def getUserHistory(request):
+    # zoberieme si z parametrov id používateľa
     uid= request.query_params.get('uid')
+    # získame Analyse objekty podľa id používateľa, od najnovšieho po najstaršie (dátum)
     analyses = Analyse.objects.filter(user_id=uid).order_by('-date')
     data=[]
+    # prebehneme po objektoch Analyse
     for analyse in analyses:
+        # zísakme objekty Document prislúchajúce k Analyse obejktu
         files = Document.objects.filter(analyse_id= analyse)
+        # vložíme potrebné dáta
         item = {"analyse_id": analyse.id, "date": analyse.date, "files_count": len(files), "files": []}
+        # prebehneme po súboroch a pridáme ich do pola files
         for file in files:
             serializer = DocumentSerializer(file, many=False)
             item["files"].append(serializer.data)
 
         data.append(item)
 
+    # prekonvertujeme na JSON
     jsonData=json.dumps(data,default=str)
-
+    # vrátime odpoveď
     return Response(jsonData)
 
 @api_view(['GET'])
 def getAnalysedData(request):
+    # zoberieme zoznam id súborov
     iDs = request.query_params.getlist('id')
+    # získame Document objekty podľa id zoznamu
     files = Document.objects.filter(id__in=iDs)
+    # ako odpoveď vrátime výstup funkcie analyze
     return Response(analyze(files))
 
 def analyze(files):
+    # inicializácia premenných
     data= {"basicStats":{},
            "builtInBlocks": {},
            "componentBlocks": {},
@@ -156,33 +176,36 @@ def analyze(files):
     tinyDb = 0
     tinyWebDb = 0
     firebaseDb = 0
-
+    # prebehneme po súboroch
     for file in files:
+        # zadefinujeme si cesty
         path = "./media/unzipped_files/"+str(file.id)
-        print('path:', path)
         os.mkdir(path)
         my_dir = "./media/unzipped_files/"+str(file.id)
         my_zip = "./media/"+str(file.file)
-
+        # rozbalíme súbor
         with zipfile.ZipFile(my_zip) as zip_file:
             for member in zip_file.namelist():
                 filename = os.path.basename(member)
-                # skip directories
+                # preskočiť adresáre
                 if not filename:
                     continue
-                # copy file (taken from zipfile's extract)
+                # skopírujeme súbor (zísakný z extrakcie zipfile)
                 source = zip_file.open(member)
                 target = open(os.path.join(my_dir, filename), "wb")
                 with source, target:
                     shutil.copyfileobj(source, target)
-
         noMoreScreens = False
         number = 1
+        # pokiaľ sú v porjekte nejaké obrazovky
         while noMoreScreens == False:
+            # zoberieme XML súbor Screen.bky
             if os.path.isfile("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".bky"):
                 f = open("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".bky", "r")
+                # prečítame súbor
                 if f.mode == "r":
                     content = f.read()
+                    # vytvoríme si strom na základe ktorého môžeme vyberať uzly pomocou XPath 
                     tree = html.fromstring(content)
                     #basic stats
                     number_of_blocks += len(tree.xpath("//block"))
@@ -335,15 +358,14 @@ def analyze(files):
                     screen += len(tree.xpath("//block[@type='controls_closeScreenWithPlainText']"))
                     #procedure blocks types
                     procNoReturn += len(tree.xpath("//block[@type='procedures_defnoreturn']"))
-                    #procNoReturn += len(tree.xpath("//block[@type='procedures_callnoreturn']"))
                     procWithReturn += len(tree.xpath("//block[@type='procedures_defreturn']"))
-                    #procWithReturn += len(tree.xpath("//block[@type='procedures_callreturn']"))
                     #per project
                     number_of_blocks_per_project += len(tree.xpath("//block"))
                     number_of_screens_per_project += 1
                     number += 1
                 f.close()
             else:
+                # pre každý súbor zísakme potrebné údaje
                 data["blocksPerProject"][file.title] = number_of_blocks_per_project
                 data["screensPerProject"][file.title] = number_of_screens_per_project
                 number_of_blocks_per_project = 0
@@ -353,9 +375,12 @@ def analyze(files):
 
         noMoreScreens = False
         number = 1
+        # pokiaľ sú v porjekte nejaké obrazovky
         while noMoreScreens == False:
+            # zoberieme JSON súbor Screen.scm
             if os.path.isfile("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm"):
                 f = open("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm", "r")
+                # prečítame śubor
                 if f.mode == "r":
                     content = f.read()
                     #basic stats
@@ -365,14 +390,17 @@ def analyze(files):
                 f.close()
                 number += 1 
             else:
+                # pre každý súbor zísakme potrebné údaje
                 data["componentsPerProject"][file.title] = number_of_components_per_project
                 number_of_components_per_project = 0
                 noMoreScreens = True
 
+    # odstránieme rozbalené súbory
     for file in files:
         my_dir = "./media/unzipped_files/"+str(file.id)
         shutil.rmtree(my_dir, ignore_errors=True)
 
+    # vložíme výsledné hodnoty do data, ktoré vrátime ako odpoveď
     data['basicStats']['Number of projects'] = number_of_projects
     data['basicStats']['Number of screens'] = number_of_screens
     data['basicStats']['Number of blocks'] = number_of_blocks

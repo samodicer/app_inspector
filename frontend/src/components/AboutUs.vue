@@ -10,8 +10,8 @@
                 Educational
               </h1>
               <p id="text">
-                By using App Inspector, you can gain new insights into your AIA
-                projects and improve them.
+                You can gain new insights into your AIA projects and improve
+                them.
               </p>
               <h1 id="heading" style="justify-content: start">
                 <v-icon id="icon" large color="#26a69a">
@@ -19,18 +19,14 @@
                 >
                 Fast
               </h1>
-              <p id="text">
-                Analysing AIA projects with App Inspector is quick and easy.
-              </p>
+              <p id="text">You can analyse your AIA projects quick and easy.</p>
               <h1 id="heading" style="justify-content: start">
                 <v-icon id="icon" large color="#26a69a">
                   mdi-check-circle-outline</v-icon
                 >
                 Free
               </h1>
-              <p id="text">
-                With App Inspector, you can analyse your AIA projects for free.
-              </p>
+              <p id="text">You can analyse your AIA projects for free.</p>
             </v-sheet>
           </v-col>
           <v-col>
@@ -71,8 +67,8 @@
             <v-col id="col">
               <p id="aboutText">
                 App Inspector is an online tool that allows you to analyse and
-                compare multiple MIT App Inventor projects. The results can be
-                used for statistical analysis or educational purposes.
+                compare multiple MIT App Inventor projects. The results of the
+                analysis can be used for statistical or educational purposes.
               </p>
             </v-col>
           </v-row>

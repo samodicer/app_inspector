@@ -27,11 +27,13 @@ export default {
   },
   props: ['chartData', 'chartLables'],
   mounted() {
-    this.multiplyColors();
+    this.checkColors();
     this.renderMyChart();
   },
   methods: {
-    multiplyColors() {
+    checkColors() {
+      // ak je viac stĺpcov ako farieb, použije sa rovnaká farba
+      // ak nie, použijú sa definované farby
       if (this.chartData.length > this.backgroundColor.length) {
         this.backgroundColor = [];
         for (var i = 0; i < this.chartData.length; i++) {
@@ -59,25 +61,25 @@ export default {
       }
     },
     shuffle(array) {
+      // náhodné poradie farieb
       let currentIndex = array.length,
         randomIndex;
 
-      // While there remain elements to shuffle...
       while (currentIndex != 0) {
-        // Pick a remaining element...
+        // výber náhodného indexu
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
-        // And swap it with the current element.
+        // zámena indexov
         [array[currentIndex], array[randomIndex]] = [
           array[randomIndex],
           array[currentIndex],
         ];
       }
-
       return array;
     },
     renderMyChart() {
+      // vykreslíme graf za pomoci poslaných dát (chartLables, chartData)
       this.renderChart(
         {
           labels: this.$attrs['chartLabels'],
@@ -110,7 +112,8 @@ export default {
   },
   watch: {
     chartData: function () {
-      this.multiplyColors();
+      // ak sa zmení chartData, nastavíme farby a vykreslíme graf
+      this.checkColors();
       this.renderMyChart();
     },
   },

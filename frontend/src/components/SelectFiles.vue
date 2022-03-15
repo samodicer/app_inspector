@@ -89,16 +89,15 @@ export default {
       changeAnalysed: 'files/changeAnalysed',
     }),
     analyze() {
+      // ak sú vybrané nejaké súbory analyzujeme ich, ak nie zobrazíme snackbar
       if (this.selectedFiles.length != 0) {
-        if (this.getUser.id != null) {
-          this.user_id = this.getUser.id;
-        } else {
-          this.user_id = -1;
-        }
+        // id súborov pošleme na analýzu
         this.analyzeFile({
           ids: this.selectedFiles,
         });
+        // zmeníme stav
         this.changeAnalysed(true);
+        // presmerovanie na Overview
         if (this.$router.currentRoute.path != '/overview') {
           this.$router.push('overview');
         }
@@ -107,9 +106,11 @@ export default {
       }
     },
     setSelected(val) {
+      // každý vybraný súbor pridáme do pola
       val.forEach((file) => this.selectedFiles.push(file.id));
     },
     setChecked() {
+      // v hlavičke vyberieme všetky súbory alebo zrušíme výber
       if (this.headerCheck == true) {
         this.setSelected(this.getUploadedFiles);
       } else {
@@ -119,6 +120,7 @@ export default {
   },
   watch: {
     getUploadedFiles: function (val) {
+      // ak sa nahrajú súbory nastavíme ich ako vybrané
       if (val) {
         this.setSelected(val);
       }

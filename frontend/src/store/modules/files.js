@@ -79,6 +79,8 @@ const mutations = {
     state.analyzedData = [];
     state.uploadedFiles = [];
     state.isUploaded = false;
+    state.isLoading = false;
+    state.isAnalysed = false;
   },
   setLoading: (state, loading) => (state.isLoading = loading),
   setUploaded: (state, uploaded) => (state.isUploaded = uploaded),

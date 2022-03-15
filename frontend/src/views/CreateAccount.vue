@@ -177,6 +177,7 @@ export default {
       show1: false,
       show2: false,
       rules: {
+        // validácia polí
         required: (value) => !!value || 'This field is required',
         username_min: (value) => {
           return value.length >= 2 || 'At least 2 characters';
@@ -202,6 +203,8 @@ export default {
       refreshMessages: 'users/refreshMessages',
     }),
     createAcc() {
+      // ak stlačíme tlačidlo registrácie odošleme obejkt user do metódy pre registráciu
+      // ak prebehne úspešne presmerujeme používateľa na prihlásenie
       this.createAccount(this.user).then(() => {
         this.$router.push({ name: 'SignIn' });
       });
@@ -214,6 +217,7 @@ export default {
     }),
   },
   mounted() {
+    // obnovíme chybové hlásenia
     this.refreshMessages();
   },
 };

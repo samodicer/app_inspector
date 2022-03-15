@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+# cesta pre nahraté súbory
 def upload_path(instance, filename):
     return '/'.join(['files', str(instance.title)])
 
-
+# model pre súbory
 class Document(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=250)
@@ -15,6 +16,7 @@ class Document(models.Model):
     def __unicode__(self):
         return self.title
 
+# model pre analýzy
 class Analyse(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User,null=True,on_delete=models.CASCADE)

@@ -748,7 +748,7 @@ export default {
     setChartData(val) {
       this.basicStats = val[0].basicStats;
 
-      //populate labels and data from server response data
+      // naplníme názvy a hodnoty pomocou dát zo servera
       for (const [key, value] of Object.entries(val[0].basicStats)) {
         this.basicStatsExportData.labels.push(key);
         this.basicStatsExportData.data.push(value);
@@ -821,7 +821,7 @@ export default {
       }
     },
     sortData(type, labels, data) {
-      //create object
+      // vytvoríme objekt
       var chartObj = labels.map(function (d, i) {
         return {
           label: d,
@@ -829,12 +829,12 @@ export default {
         };
       });
 
-      //sort data
+      // zoradíme dáta
       var sortedChartObj = chartObj.sort(function (a, b) {
         return b.data - a.data;
       });
 
-      //populate sorted labels and data arrays
+      // naplníme polia usporiadanými názvami a hodnotami
       var sortedLabels = [];
       var sortedData = [];
       sortedChartObj.forEach(function (d) {
@@ -842,7 +842,7 @@ export default {
         sortedData.push(d.data);
       });
 
-      //set data for each type
+      // nastavíme dáta pre každý typ
       switch (type) {
         case 'builtInBlocks':
           this.chartDataBuiltInBlocks.labels = sortedLabels;
@@ -891,12 +891,12 @@ export default {
       }
     },
     setExportData(type, labels, data) {
-      //create style object for header cell
+      // vytvoríme štýlovací objekt pre hlavičku
       const style = {
         alignment: { horizontal: 'center', vertical: 'middle' },
       };
 
-      //create header object array
+      // vytvoríme objekt pre hlavičku
       var tableHeaders = labels.map(function (d) {
         return {
           name: d,
@@ -906,17 +906,17 @@ export default {
         };
       });
 
-      //create data object array
+      //  vytvoríme objekt pre dáta
       var tableData = data.map(function (d, i) {
         return {
           [labels[i]]: d,
         };
       });
 
-      //merge all data objects to single object
+      // spojíme všetky dátové objekty do jedného
       const tableDataMerged = Object.assign({}, ...tableData);
 
-      //set table data for each type
+      // pre každý typ nastavíme dáta pre tabuľku
       switch (type) {
         case 'basicStats':
           this.SETTINGS_FOR_EXPORT.workSheets[0].tableSettings.data.headerDefinition = tableHeaders;
@@ -969,14 +969,15 @@ export default {
       }
     },
     exportToExcel() {
+      // stiahneme Excel súbor s analyzovaními dátami
       const excelExport = new ExcelExport();
       excelExport.downloadExcel(this.SETTINGS_FOR_EXPORT, this.dataToExport);
     },
     setData(val) {
-      //set chart data and labels
+      // nastavíme dáta pre názvy a hodnoty grafov
       this.setChartData(val);
 
-      //sort all data and labels
+      // usporidame všetky dáta
       this.sortData(
         'builtInBlocks',
         this.chartDataBuiltInBlocks.labels,
@@ -1037,7 +1038,7 @@ export default {
         this.chartDataScreensPerProject.data
       );
 
-      //set all data to excel export
+      // nastavíme dáta na export do Excelu
       this.setExportData(
         'basicStats',
         this.basicStatsExportData.labels,
@@ -1099,10 +1100,11 @@ export default {
         this.chartDataScreensPerProject.labels,
         this.chartDataScreensPerProject.data
       );
-      //render charts
+      // vykreslíme grafy
       this.renderChart = true;
     },
     resetData() {
+      // resetneme všetky dáta
       this.basicStats = null;
       this.basicStatsExportData.labels = [];
       this.basicStatsExportData.data = [];
@@ -1128,7 +1130,6 @@ export default {
       this.chartDataComponentsPerProject.data = [];
       this.chartDataScreensPerProject.labels = [];
       this.chartDataScreensPerProject.data = [];
-
       this.SETTINGS_FOR_EXPORT.workSheets[0].tableSettings.data.headerDefinition = [];
       this.SETTINGS_FOR_EXPORT.workSheets[1].tableSettings.data.headerDefinition = [];
       this.SETTINGS_FOR_EXPORT.workSheets[2].tableSettings.data.headerDefinition = [];
@@ -1155,6 +1156,7 @@ export default {
       this.dataToExport[11].data = [];
     },
     sumOfArray(data) {
+      // vráti súčet prvkov poľa
       return (
         data.reduce(function (a, b) {
           return a + b;
@@ -1162,17 +1164,20 @@ export default {
       );
     },
     openSettings() {
+      // orvorí kartu s nastaveniami
       this.settingsDialog = true;
       this.changeAnalysed(false);
     },
   },
   watch: {
+    // ak sa zmenia analyzované dáta obnoví sa celý proces vykreslenia grafov
     getAnalyzedData: function (val) {
       if (val) {
         this.resetData();
         this.setData(val);
       }
     },
+    // ak začne proces analýzy, zavrieme kartu
     getAnalysed: function (val) {
       if (val) {
         if (val == true) {

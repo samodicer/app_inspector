@@ -5,21 +5,25 @@ from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
+# serializer pre súbory
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = ['id', 'title', 'file','user_id','analyse_id']
 
+# serializer pre analýzy
 class AnalyseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Analyse
         fields = ['id','user_id','date']
 
+# serializer pre používateľa
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name')
 
+# serializer pre registráciu
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
@@ -29,6 +33,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'password', 'password2', 'first_name', 'last_name')
 
+    # validácia polí
     def validate(self, attrs):
         if len(attrs['username']) < 2:
             raise serializers.ValidationError({"username": "Username must contain at least 2 characters."})

@@ -45,11 +45,14 @@ export default {
   },
   methods: {
     loadPage(name) {
+      // ak sa odchytí udalosť kliknutia, nastane presmerovanie na stránku
       if (name == 'SignIn') {
+        //ak sme na prihlasovacej stránke, presmerovanie nenastane
         if (this.$route.name != 'SignIn') {
           this.$router.push({ name: 'SignIn' });
         }
       } else {
+        //ak sme na stránke registrácie, presmerovanie nenastane
         if (this.$route.name != 'CreateAccount') {
           this.$router.push({ name: 'CreateAccount' });
         }

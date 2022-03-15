@@ -101,13 +101,11 @@ export default {
         username: '',
         password: '',
       },
-      incorrectAuth: false,
       show: false,
       rules: {
+        //validácia polí
         required: (value) => !!value || 'This field is required',
-        min: (value) => {
-          return value.length >= 8 || 'At least 8 characters';
-        },
+        min: (value) => value.length >= 8 || 'At least 8 characters',
       },
     };
   },
@@ -117,14 +115,11 @@ export default {
       refreshMessages: 'users/refreshMessages',
     }),
     login() {
-      this.userLogin(this.user)
-        .then(() => {
-          this.$router.push({ name: 'Home' });
-        })
-        .catch((err) => {
-          console.log(err);
-          this.incorrectAuth = true;
-        });
+      // ak klikneme na login tlačidlo, odošle sa objekt user do metódy na prihlásenie
+      // ak prebehne úspešne, prejdeme na úvodnú stránku
+      this.userLogin(this.user).then(() => {
+        this.$router.push({ name: 'Home' });
+      });
     },
   },
   computed: {
@@ -134,6 +129,7 @@ export default {
     }),
   },
   mounted() {
+    // obnovíme chybové hlásenia
     this.refreshMessages();
   },
 };

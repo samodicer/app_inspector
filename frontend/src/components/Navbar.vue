@@ -67,25 +67,33 @@ export default {
       userLogout: 'users/userLogout',
       getCurrentUser: 'users/getCurrentUser',
       refreshAccessToken: 'users/refreshAccessToken',
+      resetStates: 'files/resetStates',
     }),
     refreshByClick() {
+      // ak klikneme na logo, budeme presmerovaní na úvodnú stránku
+      // ak sme na úvodnej stránke, obnovia sa stavy
       if (this.$route.name != 'Home') {
         this.$router.push({ name: 'Home' });
       } else {
-        this.$router.go();
+        this.resetStates();
       }
     },
     loadSignInPage() {
+      // presmerovanie na prihlasovaciu stránku
       if (this.$route.name != 'SignIn') {
         this.$router.push('sign-in');
       }
     },
     logout() {
+      // odhlásime používateľa, ak je na stránke Profile, presmerujeme ho na úvodnú stránku
       this.userLogout().then(() => {
-        this.$router.go();
+        if (this.$route.name == 'Profile') {
+          this.$router.push({ name: 'Home' });
+        }
       });
     },
     loadProfilePage() {
+      // presmerovanie na profilovú stránku
       if (this.$route.name != 'Profile') {
         this.$router.push('profile');
       }
@@ -98,6 +106,7 @@ export default {
   },
   mounted() {
     this.refreshAccessToken().then(() => {
+      // na začiatok zistíme či je používateľ prihlásený
       this.getCurrentUser(localStorage.getItem('accessToken'));
     });
   },
