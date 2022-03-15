@@ -106,7 +106,8 @@ const actions = {
     commit('destroyToken');
     return new Promise((resolve, reject) => {
       // POST požiadavka na koncový bod
-      // posielame parametre username, password, confirm_password, first_name a last_name objektu user
+      // posielame parametre username, password,
+      // confirm_password, first_name a last_name objektu user
       getAPI
         .post('/register/', {
           username: user.username,
@@ -116,7 +117,7 @@ const actions = {
           last_name: user.last_name,
         })
         .then(() => {
-          // keď príde odooveď
+          // keď príde odpoveď
           resolve();
         })
         .catch((err) => {
@@ -236,6 +237,7 @@ const mutations = {
     state.registerErrorMessages.first_name = [];
     state.registerErrorMessages.last_name = [];
     state.registerErrorMessages.password = [];
+    state.registerErrorMessages.password2 = [];
     if (messages.username != null) {
       messages.username.forEach((username_error) => {
         state.registerErrorMessages.username.push(username_error);

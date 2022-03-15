@@ -48,7 +48,7 @@ import Profile from '../components/Profile.vue';
 import History from '../components/History.vue';
 
 export default {
-  name: 'Home',
+  name: 'Account',
   components: {
     Navbar,
     Footer,

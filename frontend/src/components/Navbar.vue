@@ -35,7 +35,7 @@
           </template>
 
           <v-list>
-            <v-list-item style="cursor: pointer" @click="loadProfilePage()">
+            <v-list-item style="cursor: pointer" @click="loadAccountPage()">
               <v-list-item-title>{{ options[0].item }}</v-list-item-title>
             </v-list-item>
             <v-list-item style="cursor: pointer" @click="logout()">
@@ -59,7 +59,7 @@ export default {
   data() {
     return {
       accessToken: localStorage.getItem('accessToken'),
-      options: [{ item: 'Profile' }, { item: 'Sign out' }],
+      options: [{ item: 'Account' }, { item: 'Sign out' }],
     };
   },
   methods: {
@@ -85,17 +85,17 @@ export default {
       }
     },
     logout() {
-      // odhlásime používateľa, ak je na stránke Profile, presmerujeme ho na úvodnú stránku
+      // odhlásime používateľa, ak je na stránke Account, presmerujeme ho na úvodnú stránku
       this.userLogout().then(() => {
-        if (this.$route.name == 'Profile') {
+        if (this.$route.name == 'Account') {
           this.$router.push({ name: 'Home' });
         }
       });
     },
-    loadProfilePage() {
+    loadAccountPage() {
       // presmerovanie na profilovú stránku
-      if (this.$route.name != 'Profile') {
-        this.$router.push('profile');
+      if (this.$route.name != 'Account') {
+        this.$router.push('account');
       }
     },
   },

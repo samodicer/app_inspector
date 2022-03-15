@@ -13,7 +13,11 @@
           class="mx-4 white--text"
           icon
         >
-          <v-icon size="24px" @click="loadPage(link.name)">
+          <v-icon
+            size="24px"
+            @click="loadPage(link.name)"
+            :disabled="getUser.id != null"
+          >
             {{ link.icon }}
           </v-icon>
         </v-btn>
@@ -33,6 +37,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   name: 'Footer',
   data() {
@@ -42,6 +47,11 @@ export default {
         { icon: 'mdi-account-plus-outline', name: 'CreateAccount' },
       ],
     };
+  },
+  computed: {
+    ...mapGetters({
+      getUser: 'users/getUser',
+    }),
   },
   methods: {
     loadPage(name) {

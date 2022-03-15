@@ -4,10 +4,11 @@ import Home from './views/Home';
 import Overview from './views/Overview';
 import SignIn from './views/SignIn';
 import CreateAccount from './views/CreateAccount';
-import UserMenu from './views/UserMenu';
+import Account from './views/Account';
 
 Vue.use(VueRouter);
 
+// k cestám priradíme komponenty
 export default new VueRouter({
   mode: 'history',
   routes: [
@@ -38,9 +39,9 @@ export default new VueRouter({
       },
     },
     {
-      path: '/profile',
-      name: 'Profile',
-      component: UserMenu,
+      path: '/account',
+      name: 'Account',
+      component: Account,
       meta: {
         requiresLogin: true,
       },

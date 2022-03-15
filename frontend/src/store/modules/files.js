@@ -29,7 +29,7 @@ const actions = {
           },
         })
         .then((response) => {
-          // keď príde odooveď zavolá sa mutácia
+          // keď príde odpoveď zavolá sa mutácia, ktorá zmení nahraté súbory
           commit('setUploadedFiles', response.data);
           resolve();
         })

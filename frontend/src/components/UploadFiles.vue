@@ -90,7 +90,7 @@ export default {
     onSelected() {
       this.crashed = false;
       this.error_snackbar = false;
-      // ak používateľ zvolil nejkaé súbory
+      // ak používateľ zvolil nejaké súbory
       if (this.inputs.files.length != 0) {
         const fd = new FormData();
         // ak je požívateľ prihlásený vložíme id, ak nie vložíme -1

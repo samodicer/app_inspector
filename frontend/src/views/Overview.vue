@@ -1156,7 +1156,7 @@ export default {
       this.dataToExport[11].data = [];
     },
     sumOfArray(data) {
-      // vráti súčet prvkov poľa
+      // vráti súčet prvkov pola
       return (
         data.reduce(function (a, b) {
           return a + b;

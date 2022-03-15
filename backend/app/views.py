@@ -55,12 +55,15 @@ def uploadFile(request):
             user = User.objects.get(id=uid)
         else:
             user = None  
-        # vytvoríme obejkt Analyse s id používateľa
+        # vytvoríme objekt Analyse s id používateľa
         analyse = Analyse.objects.create(user_id= user)
         created_files = []
-        # prebehneme po súboroch a pre každý vytvoríme obejkt Document
+        # prebehneme po súboroch a pre každý vytvoríme objekt Document
         for currentFile in files:
-            created = Document.objects.create(title=currentFile.name, file=currentFile, user_id = user, analyse_id = analyse)
+            created = Document.objects.create(title=currentFile.name, 
+                                              file=currentFile, 
+                                              user_id = user, 
+                                              analyse_id = analyse)
             created_files.append(created)
         # súbory konvertujeme na JSON
         serializer = DocumentSerializer(created_files, many=True)
