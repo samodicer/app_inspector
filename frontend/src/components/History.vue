@@ -63,7 +63,7 @@ export default {
   methods: {
     ...mapActions({
       getUserHistory: 'users/getUserHistory',
-      analyzeFile: 'files/analyzeFile',
+      analyseFile: 'files/analyseFile',
       changeAnalysed: 'files/changeAnalysed',
       changeUploadedFiles: 'files/changeUploadedFiles',
     }),
@@ -93,15 +93,16 @@ export default {
         for (var i = 0; i < files.length; i++) {
           ids.push(files[i].id);
         }
-        // id súborov sú posleané na anlýzu
-        this.analyzeFile({ ids: ids });
-        // zmeníme stavy
-        this.changeUploadedFiles(files);
-        this.changeAnalysed(true);
-        // používateľ je presmerovaný na Overview
-        if (this.$router.currentRoute.path != '/overview') {
-          this.$router.push('overview');
-        }
+        // id súborov pošleme na analýzu
+        this.analyseFile({ ids: ids }).then(() => {
+          // zmeníme stavy
+          this.changeUploadedFiles(files);
+          this.changeAnalysed(true);
+          // presmerovanie na Overview
+          if (this.$router.currentRoute.path != '/overview') {
+            this.$router.push('overview');
+          }
+        });
       }
     },
   },

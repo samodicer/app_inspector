@@ -108,7 +108,7 @@ export default {
             .toLowerCase();
 
           if (extFile == 'aia') {
-            // ak je aia, tak pridáme súbor do pola
+            // ak je koncovka aia, tak pridáme súbor do pola
             fd.append('files', this.inputs.files[i]);
           } else {
             // ak nie, zobrazíme chybu

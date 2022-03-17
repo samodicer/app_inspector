@@ -737,7 +737,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getAnalyzedData: 'files/getAnalyzedData',
+      getAnalysedData: 'files/getAnalysedData',
       getAnalysed: 'files/getAnalysed',
     }),
   },
@@ -1168,10 +1168,15 @@ export default {
       this.settingsDialog = true;
       this.changeAnalysed(false);
     },
+    startProcess() {
+      //resetne a nastaví nové dáta
+      this.resetData();
+      this.setData(this.getAnalysedData);
+    },
   },
   watch: {
     // ak sa zmenia analyzované dáta obnoví sa celý proces vykreslenia grafov
-    getAnalyzedData: function (val) {
+    getAnalysedData: function (val) {
       if (val) {
         this.resetData();
         this.setData(val);
@@ -1185,6 +1190,10 @@ export default {
         }
       }
     },
+  },
+  mounted() {
+    //pri montovaní komponentu spustí celý proces
+    this.startProcess();
   },
 };
 </script>

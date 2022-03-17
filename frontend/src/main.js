@@ -6,7 +6,7 @@ import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false;
 
-// overíme či má používateľ povelený prístup na stránku
+// overíme či má používateľ povolený prístup na stránku
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresLogin)) {
     if (localStorage.getItem('accessToken') == null) {

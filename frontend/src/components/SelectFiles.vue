@@ -85,22 +85,29 @@ export default {
   },
   methods: {
     ...mapActions({
-      analyzeFile: 'files/analyzeFile',
+      analyseFile: 'files/analyseFile',
       changeAnalysed: 'files/changeAnalysed',
     }),
     analyze() {
       // ak sú vybrané nejaké súbory analyzujeme ich, ak nie zobrazíme snackbar
       if (this.selectedFiles.length != 0) {
         // id súborov pošleme na analýzu
-        this.analyzeFile({
+        this.analyseFile({
           ids: this.selectedFiles,
+        }).then(() => {
+          // zmeníme stav
+          this.changeAnalysed(true);
+          // presmerovanie na Overview
+          if (this.$router.currentRoute.path != '/overview') {
+            this.$router.push('overview');
+          }
         });
         // zmeníme stav
-        this.changeAnalysed(true);
+        /*this.changeAnalysed(true);
         // presmerovanie na Overview
         if (this.$router.currentRoute.path != '/overview') {
           this.$router.push('overview');
-        }
+        }*/
       } else {
         this.error_snackbar = true;
       }

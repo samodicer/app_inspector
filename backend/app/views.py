@@ -60,10 +60,7 @@ def uploadFile(request):
         created_files = []
         # prebehneme po súboroch a pre každý vytvoríme objekt Document
         for currentFile in files:
-            created = Document.objects.create(title=currentFile.name, 
-                                              file=currentFile, 
-                                              user_id = user, 
-                                              analyse_id = analyse)
+            created = Document.objects.create(title=currentFile.name, file=currentFile, user_id = user,  analyse_id = analyse)
             created_files.append(created)
         # súbory konvertujeme na JSON
         serializer = DocumentSerializer(created_files, many=True)
@@ -102,9 +99,9 @@ def getAnalysedData(request):
     # získame Document objekty podľa id zoznamu
     files = Document.objects.filter(id__in=iDs)
     # ako odpoveď vrátime výstup funkcie analyze
-    return Response(analyze(files))
+    return Response(analyse(files))
 
-def analyze(files):
+def analyse(files):
     # inicializácia premenných
     data= {"basicStats":{},
            "builtInBlocks": {},
@@ -383,7 +380,7 @@ def analyze(files):
             # zoberieme JSON súbor Screen.scm
             if os.path.isfile("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm"):
                 f = open("./media/unzipped_files/"+str(file.id)+"/Screen"+str(number)+".scm", "r")
-                # prečítame śubor
+                # prečítame súbor
                 if f.mode == "r":
                     content = f.read()
                     #basic stats

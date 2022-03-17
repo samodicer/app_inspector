@@ -2,7 +2,7 @@ import { getAPI } from '../../axios-api';
 
 const state = {
   files: [],
-  analyzedData: [],
+  analysedData: [],
   uploadedFiles: [],
   isLoading: false,
   isUploaded: false,
@@ -14,7 +14,7 @@ const getters = {
   getUploadedFiles: (state) => state.uploadedFiles,
   getUploaded: (state) => state.isUploaded,
   getAnalysed: (state) => state.isAnalysed,
-  getAnalyzedData: (state) => state.analyzedData,
+  getAnalysedData: (state) => state.analysedData,
 };
 
 const actions = {
@@ -41,7 +41,7 @@ const actions = {
     });
   },
   // analýza súborov
-  async analyzeFile({ commit }, { ids }) {
+  async analyseFile({ commit }, { ids }) {
     return new Promise((resolve, reject) => {
       // vyskladáme id parametre
       var query = '';
@@ -55,7 +55,7 @@ const actions = {
         .get('/get-files-data' + query)
         .then((response) => {
           // keď príde odooveď zavolá sa mutácia
-          commit('setAnalyzedData', response.data);
+          commit('setAnalysedData', response.data);
           resolve();
         })
         .catch((err) => {
@@ -91,7 +91,7 @@ const mutations = {
   resetStates: (state) => {
     // resetovanie stavov
     state.files = [];
-    state.analyzedData = [];
+    state.analysedData = [];
     state.uploadedFiles = [];
     state.isUploaded = false;
     state.isLoading = false;
@@ -101,7 +101,7 @@ const mutations = {
   setUploaded: (state, uploaded) => (state.isUploaded = uploaded), // zmena stavu isUploaded
   setAnalysed: (state, analysed) => (state.isAnalysed = analysed), // zmena stavu isAnalysed
   setUploadedFiles: (state, array) => (state.uploadedFiles = array), // zmena nahratých súborov
-  setAnalyzedData: (state, analyzedData) => (state.analyzedData = analyzedData), // zmena analyzovaných dát
+  setAnalysedData: (state, analysedData) => (state.analysedData = analysedData), // zmena analyzovaných dát
 };
 
 export default {
