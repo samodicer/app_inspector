@@ -49,7 +49,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"password": "Password cannot contain more than 255 characters."})    
         return attrs
 
-    # vytovrenie User obejktu
+    # vytovrenie User objektu
     def create(self, validated_data):
         user = User.objects.create(
             username=validated_data['username'],

@@ -114,6 +114,7 @@ export default {
     },
     setSelected(val) {
       // každý vybraný súbor pridáme do pola
+      this.selectedFiles = [];
       val.forEach((file) => this.selectedFiles.push(file.id));
     },
     setChecked() {
