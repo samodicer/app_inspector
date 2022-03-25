@@ -72,7 +72,7 @@
               </div>
             </div>
             <v-divider id="divider"></v-divider>
-            <p>New to App Insepctor?</p>
+            <p>New to App Inspector?</p>
             <router-link v-bind:to="'/create-account'">
               <p>Create new account</p>
             </router-link>

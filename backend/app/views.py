@@ -208,7 +208,6 @@ def analyse(files):
                 if f.mode == "r":
                     content = f.read()
                     # vytvoríme si strom na základe ktorého môžeme vyberať uzly pomocou XPath 
-                    print("*************CONTENT**************", content, "file: ",file.id, " screen:", number)
                     if content:   
                         tree = html.fromstring(content)
                         #basic stats
