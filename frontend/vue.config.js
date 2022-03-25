@@ -1,3 +1,4 @@
 module.exports = {
-  transpileDependencies: ["vuetify"],
+  transpileDependencies: ['vuetify'],
+  baseUrl: 'https://appinspector.herokuapp.com',
 };
