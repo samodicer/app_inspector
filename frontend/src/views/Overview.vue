@@ -77,7 +77,7 @@
                       Overall statistics
                     </h1>
 
-                    <v-row v-if="basicStats != null">
+                    <v-row v-if="this.basicStats != null">
                       <v-col>
                         <BasicStats :data="this.basicStats"></BasicStats>
                       </v-col>
@@ -462,7 +462,7 @@
                           <v-select
                             :items="items"
                             color="#26a69a"
-                            label="Criterion"
+                            label="Compare by"
                             v-model="criterion"
                           ></v-select>
                           <p class="card_title">{{ criterion }}</p>
@@ -1710,7 +1710,9 @@ export default {
     startProcess() {
       //resetne a nastaví nové dáta
       this.resetData();
-      this.setData(this.getAnalysedData);
+      if (this.getAnalysedData.length != 0) {
+        this.setData(this.getAnalysedData);
+      }
     },
   },
   watch: {
