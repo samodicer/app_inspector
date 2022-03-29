@@ -114,7 +114,64 @@ def analyse(files):
            "procedureBlocksTypes":{}, 
            "blocksPerProject":{},
            "componentsPerProject":{}, 
-           "screensPerProject":{}}
+           "screensPerProject":{},
+           "buttonsPerProject":{},
+           "checkboxesPerProject":{},
+           "datepickersPerProject":{},
+           "imagesPerProject":{},
+           "labelsPerProject":{},
+           "listpickersPerProject":{},
+           "listviewsPerProject":{},
+           "notifiersPerProject":{},
+           "passwordtextboxesPerProject":{},
+           "slidersPerProject":{},
+           "spinnersPerProject":{},
+           "switchesPerProject":{},
+           "textboxesPerProject":{},
+           "timepickersPerProject":{},
+           "webviewersPerProject":{},
+           "horizontalArrangmentPerProject":{},
+           "horizontalScrollArrangmentPerProject":{},
+           "tableArrangmentPerProject":{},
+           "verticalArrangmentPerProject":{},
+           "verticalScrollArrangmentPerProject":{},
+           "camcordersPerProject":{},
+           "camerasPerProject":{},
+           "imagepickersPerProject":{},
+           "playersPerProject":{},
+           "soundsPerProject":{},
+           "soundrecordersPerProject":{},
+           "speechrecognizersPerProject":{},
+           "texttospeechsPerProject":{},
+           "videoplayersPerProject":{},
+           "yandextranslatorsPerProject":{},
+           "ballsPerProject":{},
+           "canvasesPerProject":{},
+           "imagespritesPerProject":{},
+           "circlesPerProject":{},
+           "featurecollectionsPerProject":{},
+           "linestringsPerProject":{},
+           "mapsPerProject":{},
+           "markersPerProject":{},
+           "navigationsPerProject":{},
+           "polygonsPerProject":{},
+           "rectanglesPerProject":{},
+           "accelerometerSensorsPerProject":{},
+           "barcodeScannersPerProject":{},
+           "barometersPerProject":{},
+           "clocksPerProject":{},
+           "gyroscopeSensorsPerProject":{},
+           "hygrometersPerProject":{},
+           "lightSensorsPerProject":{},
+           "locationSensorsPerProject":{},
+           "magneticFieldSensorsPerProject":{},
+           "nearFieldsPerProject":{},
+           "orientationSensorsPerProject":{},
+           "pedometersPerProject":{},
+           "proximitySensorsPerProject":{},
+           "thermometersPerProject":{},
+           }
+
     number_of_blocks = 0
     number_of_components = 0
     number_of_projects = len(files)
@@ -176,6 +233,62 @@ def analyse(files):
     tinyDb = 0
     tinyWebDb = 0
     firebaseDb = 0
+    number_of_buttons = 0
+    number_of_checkboxes = 0
+    number_of_datepickers = 0
+    number_of_images = 0
+    number_of_labels = 0
+    number_of_listpickers = 0
+    number_of_listviews = 0
+    number_of_notifiers = 0
+    number_of_passwordtextboxes = 0
+    number_of_sliders = 0
+    number_of_spinners = 0
+    number_of_switches = 0
+    number_of_textboxes = 0
+    number_of_timepickers = 0
+    number_of_webviewers = 0
+    number_of_horizontalArr = 0
+    number_of_horizontalScrollArr = 0
+    number_of_tableArr = 0
+    number_of_verticalArr = 0
+    number_of_verticalScrollArr = 0
+    number_of_camcorder = 0
+    number_of_cameras = 0
+    number_of_imagepickers = 0
+    number_of_players = 0
+    number_of_sounds = 0
+    number_of_soundrecorders = 0
+    number_of_speechrecognizers = 0
+    number_of_texttospeechs = 0
+    number_of_videoplayers = 0
+    number_of_yandextranslators = 0
+    number_of_balls = 0
+    number_of_canvases = 0
+    number_of_imagesprites = 0
+    number_of_circles = 0
+    number_of_featurecollections = 0
+    number_of_linestrings = 0
+    number_of_maps = 0
+    number_of_markers = 0
+    number_of_navigations = 0
+    number_of_polygons = 0
+    number_of_rectangles = 0
+    number_of_accelerometerSensors = 0
+    number_of_barcodeScanners = 0
+    number_of_barometers = 0
+    number_of_clocks = 0
+    number_of_gyroscopeSensors = 0
+    number_of_hygrometers = 0
+    number_of_lightSensors = 0
+    number_of_locationSensors = 0
+    number_of_magneticFieldSensors = 0
+    number_of_nearFields = 0
+    number_of_orientationSensors = 0
+    number_of_pedometers = 0
+    number_of_proximitySensors = 0
+    number_of_thermometers = 0
+
     # prebehneme po súboroch
     for file in files:
         # zadefinujeme si cesty
@@ -365,14 +478,183 @@ def analyse(files):
                         #per project
                         number_of_blocks_per_project += len(tree.xpath("//block"))
                         number_of_screens_per_project += 1
+                        number_of_buttons += len(tree.xpath("//mutation[@component_type='Button']"))
+                        number_of_checkboxes += len(tree.xpath("//mutation[@component_type='CheckBox']"))
+                        number_of_datepickers += len(tree.xpath("//mutation[@component_type='DatePicker']"))
+                        number_of_images += len(tree.xpath("//mutation[@component_type='Image']"))
+                        number_of_labels += len(tree.xpath("//mutation[@component_type='Label']"))
+                        number_of_listpickers += len(tree.xpath("//mutation[@component_type='ListPicker']"))
+                        number_of_listviews += len(tree.xpath("//mutation[@component_type='ListView']"))
+                        number_of_notifiers += len(tree.xpath("//mutation[@component_type='Notifier']"))
+                        number_of_passwordtextboxes += len(tree.xpath("//mutation[@component_type='PasswordTextBox']"))
+                        number_of_sliders += len(tree.xpath("//mutation[@component_type='Slider']"))
+                        number_of_spinners += len(tree.xpath("//mutation[@component_type='Spinner']"))
+                        number_of_switches += len(tree.xpath("//mutation[@component_type='Switch']"))
+                        number_of_textboxes += len(tree.xpath("//mutation[@component_type='TextBox']"))
+                        number_of_timepickers += len(tree.xpath("//mutation[@component_type='TimePicker']"))
+                        number_of_webviewers += len(tree.xpath("//mutation[@component_type='WebViewer']"))
+                        number_of_horizontalArr += len(tree.xpath("//mutation[@component_type='HorizontalArrangement']"))
+                        number_of_horizontalScrollArr += len(tree.xpath("//mutation[@component_type='HorizontalScrollArrangement']"))
+                        number_of_tableArr += len(tree.xpath("//mutation[@component_type='TableArrangement']"))
+                        number_of_verticalArr += len(tree.xpath("//mutation[@component_type='VerticalArrangement']"))
+                        number_of_verticalScrollArr += len(tree.xpath("//mutation[@component_type='VerticalScrollArrangement']"))
+                        number_of_camcorder += len(tree.xpath("//mutation[@component_type='Camcorder']"))
+                        number_of_cameras += len(tree.xpath("//mutation[@component_type='Camera']"))
+                        number_of_imagepickers += len(tree.xpath("//mutation[@component_type='ImagePicker']"))
+                        number_of_players += len(tree.xpath("//mutation[@component_type='Player']"))
+                        number_of_sounds += len(tree.xpath("//mutation[@component_type='Sound']"))
+                        number_of_soundrecorders += len(tree.xpath("//mutation[@component_type='SoundRecorder']"))
+                        number_of_speechrecognizers += len(tree.xpath("//mutation[@component_type='SpeechRecognizer']"))
+                        number_of_texttospeechs += len(tree.xpath("//mutation[@component_type='TextToSpeech']"))
+                        number_of_videoplayers += len(tree.xpath("//mutation[@component_type='VideoPlayer']"))
+                        number_of_yandextranslators += len(tree.xpath("//mutation[@component_type='YandexTranslate']"))
+                        number_of_balls += len(tree.xpath("//mutation[@component_type='Ball']"))
+                        number_of_canvases += len(tree.xpath("//mutation[@component_type='Canvas']"))
+                        number_of_imagesprites += len(tree.xpath("//mutation[@component_type='ImageSprite']"))
+                        number_of_circles += len(tree.xpath("//mutation[@component_type='Circle']"))
+                        number_of_featurecollections += len(tree.xpath("//mutation[@component_type='FeatureCollection']"))
+                        number_of_linestrings += len(tree.xpath("//mutation[@component_type='LineString']"))
+                        number_of_maps += len(tree.xpath("//mutation[@component_type='Map']"))
+                        number_of_markers += len(tree.xpath("//mutation[@component_type='Marker']"))
+                        number_of_navigations += len(tree.xpath("//mutation[@component_type='Navigation']"))
+                        number_of_polygons += len(tree.xpath("//mutation[@component_type='Polygon']"))
+                        number_of_rectangles += len(tree.xpath("//mutation[@component_type='Rectangle']"))
+                        number_of_accelerometerSensors += len(tree.xpath("//mutation[@component_type='AccelerometerSensor']"))
+                        number_of_barcodeScanners += len(tree.xpath("//mutation[@component_type='BarcodeScanner']"))
+                        number_of_barometers += len(tree.xpath("//mutation[@component_type='Barometer']"))
+                        number_of_clocks += len(tree.xpath("//mutation[@component_type='Clock']"))
+                        number_of_gyroscopeSensors += len(tree.xpath("//mutation[@component_type='GyroscopeSensor']"))
+                        number_of_hygrometers += len(tree.xpath("//mutation[@component_type='Hygrometer']"))
+                        number_of_lightSensors += len(tree.xpath("//mutation[@component_type='LightSensor']"))
+                        number_of_locationSensors += len(tree.xpath("//mutation[@component_type='LocationSensor']"))
+                        number_of_magneticFieldSensors += len(tree.xpath("//mutation[@component_type='MagneticFieldSensor']"))
+                        number_of_nearFields += len(tree.xpath("//mutation[@component_type='NearField']"))
+                        number_of_orientationSensors += len(tree.xpath("//mutation[@component_type='OrientationSensor']"))
+                        number_of_pedometers += len(tree.xpath("//mutation[@component_type='Pedometer']"))
+                        number_of_proximitySensors += len(tree.xpath("//mutation[@component_type='ProximitySensor']"))
+                        number_of_thermometers += len(tree.xpath("//mutation[@component_type='Thermometer']"))
+
                     number += 1
                 f.close()
             else:
                 # pre každý súbor zísakme potrebné údaje
                 data["blocksPerProject"][file.title] = number_of_blocks_per_project
                 data["screensPerProject"][file.title] = number_of_screens_per_project
+                data["buttonsPerProject"][file.title] = number_of_buttons
+                data["checkboxesPerProject"][file.title] = number_of_checkboxes
+                data["datepickersPerProject"][file.title] = number_of_datepickers
+                data["imagesPerProject"][file.title] = number_of_images
+                data["labelsPerProject"][file.title] = number_of_labels
+                data["listpickersPerProject"][file.title] = number_of_listpickers
+                data["listviewsPerProject"][file.title] = number_of_listviews
+                data["notifiersPerProject"][file.title] = number_of_notifiers
+                data["passwordtextboxesPerProject"][file.title] = number_of_passwordtextboxes
+                data["slidersPerProject"][file.title] = number_of_sliders
+                data["spinnersPerProject"][file.title] = number_of_spinners
+                data["switchesPerProject"][file.title] = number_of_switches
+                data["textboxesPerProject"][file.title] = number_of_textboxes
+                data["timepickersPerProject"][file.title] = number_of_timepickers
+                data["webviewersPerProject"][file.title] = number_of_webviewers
+                data["horizontalArrangmentPerProject"][file.title] = number_of_horizontalArr
+                data["horizontalScrollArrangmentPerProject"][file.title] = number_of_horizontalScrollArr
+                data["tableArrangmentPerProject"][file.title] = number_of_tableArr
+                data["verticalArrangmentPerProject"][file.title] = number_of_verticalArr
+                data["verticalScrollArrangmentPerProject"][file.title] = number_of_verticalScrollArr
+                data["camcordersPerProject"][file.title] = number_of_camcorder
+                data["camerasPerProject"][file.title] = number_of_cameras
+                data["imagepickersPerProject"][file.title] = number_of_imagepickers
+                data["playersPerProject"][file.title] = number_of_players
+                data["soundsPerProject"][file.title] = number_of_sounds
+                data["soundrecordersPerProject"][file.title] = number_of_soundrecorders
+                data["speechrecognizersPerProject"][file.title] = number_of_speechrecognizers
+                data["texttospeechsPerProject"][file.title] = number_of_texttospeechs
+                data["videoplayersPerProject"][file.title] = number_of_videoplayers
+                data["yandextranslatorsPerProject"][file.title] = number_of_yandextranslators
+                data["ballsPerProject"][file.title] = number_of_balls
+                data["canvasesPerProject"][file.title] = number_of_canvases
+                data["imagespritesPerProject"][file.title] = number_of_imagesprites
+                data["circlesPerProject"][file.title] = number_of_circles
+                data["featurecollectionsPerProject"][file.title] = number_of_featurecollections
+                data["linestringsPerProject"][file.title] = number_of_linestrings
+                data["mapsPerProject"][file.title] = number_of_maps
+                data["markersPerProject"][file.title] = number_of_markers
+                data["navigationsPerProject"][file.title] = number_of_navigations
+                data["polygonsPerProject"][file.title] = number_of_polygons
+                data["rectanglesPerProject"][file.title] = number_of_rectangles
+                data["accelerometerSensorsPerProject"][file.title] = number_of_accelerometerSensors
+                data["barcodeScannersPerProject"][file.title] = number_of_barcodeScanners
+                data["barometersPerProject"][file.title] = number_of_barometers
+                data["clocksPerProject"][file.title] = number_of_clocks
+                data["gyroscopeSensorsPerProject"][file.title] = number_of_gyroscopeSensors
+                data["hygrometersPerProject"][file.title] = number_of_hygrometers
+                data["lightSensorsPerProject"][file.title] = number_of_lightSensors
+                data["locationSensorsPerProject"][file.title] = number_of_locationSensors
+                data["magneticFieldSensorsPerProject"][file.title] = number_of_magneticFieldSensors
+                data["nearFieldsPerProject"][file.title] = number_of_nearFields
+                data["orientationSensorsPerProject"][file.title] = number_of_orientationSensors
+                data["pedometersPerProject"][file.title] = number_of_pedometers
+                data["proximitySensorsPerProject"][file.title] = number_of_proximitySensors
+                data["thermometersPerProject"][file.title] = number_of_thermometers
+
+
                 number_of_blocks_per_project = 0
                 number_of_screens_per_project = 0
+                number_of_buttons = 0
+                number_of_checkboxes = 0
+                number_of_datepickers = 0
+                number_of_images = 0
+                number_of_labels = 0
+                number_of_listpickers = 0
+                number_of_listviews = 0
+                number_of_notifiers = 0
+                number_of_passwordtextboxes = 0
+                number_of_sliders = 0
+                number_of_spinners = 0
+                number_of_switches = 0
+                number_of_textboxes = 0
+                number_of_timepickers = 0
+                number_of_webviewers = 0
+                number_of_horizontalArr = 0
+                number_of_horizontalScrollArr = 0
+                number_of_tableArr = 0
+                number_of_verticalArr = 0
+                number_of_verticalScrollArr = 0
+                number_of_camcorder = 0
+                number_of_cameras = 0
+                number_of_imagepickers = 0
+                number_of_players = 0
+                number_of_sounds = 0
+                number_of_soundrecorders = 0
+                number_of_speechrecognizers = 0
+                number_of_texttospeechs = 0
+                number_of_videoplayers = 0
+                number_of_yandextranslators = 0
+                number_of_balls = 0
+                number_of_canvases = 0
+                number_of_imagesprites = 0
+                number_of_circles = 0
+                number_of_featurecollections = 0
+                number_of_linestrings = 0
+                number_of_maps = 0
+                number_of_markers = 0
+                number_of_navigations = 0
+                number_of_polygons = 0
+                number_of_rectangles = 0
+                number_of_accelerometerSensors = 0
+                number_of_barcodeScanners = 0
+                number_of_barometers = 0
+                number_of_clocks = 0
+                number_of_gyroscopeSensors = 0
+                number_of_hygrometers = 0
+                number_of_lightSensors = 0
+                number_of_locationSensors = 0
+                number_of_magneticFieldSensors = 0
+                number_of_nearFields = 0
+                number_of_orientationSensors = 0
+                number_of_pedometers = 0
+                number_of_proximitySensors = 0
+                number_of_thermometers = 0
+
                 noMoreScreens = True
 
 
@@ -405,11 +687,11 @@ def analyse(files):
 
     # vložíme výsledné hodnoty do data, ktoré vrátime ako odpoveď
     data['basicStats']['Number of projects'] = number_of_projects
-    data['basicStats']['Average number of screens'] = round(number_of_screens / number_of_projects)
-    data['basicStats']['Average number of blocks'] = round(number_of_blocks / number_of_projects)
-    data['basicStats']['Average number of components'] = round(number_of_components / number_of_projects)
-    data['basicStats']['Average number of built-in blocks'] = round((control_blocks + logic_blocks + math_blocks + text_blocks + lists_blocks + dictionaries_blocks + colors_blocks + variables_blocks + procedures_blocks + helpers_names_blocks) / number_of_projects)
-    data['basicStats']['Average number of component blocks'] = round((event_blocks + setGet_blocks + method_blocks + componentObject_blocks + helpers_assets_blocks) / number_of_projects)
+    data['basicStats']['Average number of screens'] = round(number_of_screens / number_of_projects,1)
+    data['basicStats']['Average number of blocks'] = round(number_of_blocks / number_of_projects,1)
+    data['basicStats']['Average number of components'] = round(number_of_components / number_of_projects,1)
+    data['basicStats']['Average number of built-in blocks'] = round((control_blocks + logic_blocks + math_blocks + text_blocks + lists_blocks + dictionaries_blocks + colors_blocks + variables_blocks + procedures_blocks + helpers_names_blocks) / number_of_projects,1)
+    data['basicStats']['Average number of component blocks'] = round((event_blocks + setGet_blocks + method_blocks + componentObject_blocks + helpers_assets_blocks) / number_of_projects,1)
     data['builtInBlocks']['Control blocks'] = control_blocks
     data['builtInBlocks']['Logic blocks'] = logic_blocks
     data['builtInBlocks']['Math blocks'] = math_blocks
