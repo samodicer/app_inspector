@@ -89,6 +89,19 @@ export default {
               data: this.chartData,
             },
           ],
+          annotation: {
+            annotations: [
+              {
+                type: 'line',
+                mode: 'horizontal',
+                scaleID: 'y-axis-0',
+                value: '10',
+                borderColor: '#AA927D',
+                borderWidth: 2,
+              },
+            ],
+            drawTime: 'afterDraw', // (default)
+          },
         },
         {
           maintainAspectRatio: false,

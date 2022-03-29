@@ -405,11 +405,11 @@ def analyse(files):
 
     # vložíme výsledné hodnoty do data, ktoré vrátime ako odpoveď
     data['basicStats']['Number of projects'] = number_of_projects
-    data['basicStats']['Number of screens'] = number_of_screens
-    data['basicStats']['Number of blocks'] = number_of_blocks
-    data['basicStats']['Number of components'] = number_of_components
-    data['basicStats']['Number of built-in blocks'] = control_blocks + logic_blocks + math_blocks + text_blocks + lists_blocks + dictionaries_blocks + colors_blocks + variables_blocks + procedures_blocks + helpers_names_blocks
-    data['basicStats']['Number of component blocks'] = event_blocks + setGet_blocks + method_blocks + componentObject_blocks + helpers_assets_blocks
+    data['basicStats']['Average number of screens'] = round(number_of_screens / number_of_projects)
+    data['basicStats']['Average number of blocks'] = round(number_of_blocks / number_of_projects)
+    data['basicStats']['Average number of components'] = round(number_of_components / number_of_projects)
+    data['basicStats']['Average number of built-in blocks'] = round((control_blocks + logic_blocks + math_blocks + text_blocks + lists_blocks + dictionaries_blocks + colors_blocks + variables_blocks + procedures_blocks + helpers_names_blocks) / number_of_projects)
+    data['basicStats']['Average number of component blocks'] = round((event_blocks + setGet_blocks + method_blocks + componentObject_blocks + helpers_assets_blocks) / number_of_projects)
     data['builtInBlocks']['Control blocks'] = control_blocks
     data['builtInBlocks']['Logic blocks'] = logic_blocks
     data['builtInBlocks']['Math blocks'] = math_blocks
