@@ -57,6 +57,7 @@ const actions = {
             // keď príde chyba odstránime tokeny z lokálneho úložiska
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
+            location.reload();
             console.log(err);
             reject(err);
           });
@@ -147,6 +148,7 @@ const actions = {
             // keď príde chyba zmažeme tokeny
             if (err.response.status == 500) {
               commit('destroyToken');
+              location.reload();
             }
             console.log(err);
             reject(err);
