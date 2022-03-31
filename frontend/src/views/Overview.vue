@@ -351,105 +351,6 @@
                       <v-icon large color="#26a69a"> mdi-compare </v-icon>
                       Project comparison
                     </h1>
-
-                    <!--<v-row>
-                      <v-col>
-                        <v-sheet
-                          id="sheet"
-                          rounded="lg"
-                          color="#F7F7F7"
-                          height="100%"
-                          elevation="2"
-                        >
-                          <p class="card_title">Blocks per project</p>
-                          <div
-                            v-if="
-                              this.sumOfArray(
-                                this.chartDataBlocksPerProject.data
-                              ) != 0
-                            "
-                          >
-                            <BarChart
-                              :chartData="this.chartDataBlocksPerProject.data"
-                              :chartLabels="
-                                this.chartDataBlocksPerProject.labels
-                              "
-                              class="bar-chart"
-                            ></BarChart>
-                          </div>
-                          <div id="noData" v-else>
-                            <v-icon x-large> mdi-eye-off </v-icon>
-                            <p>No data to analyse</p>
-                          </div>
-                        </v-sheet>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col>
-                        <v-sheet
-                          id="sheet"
-                          rounded="lg"
-                          color="#F7F7F7"
-                          height="100%"
-                          elevation="2"
-                        >
-                          <p class="card_title">Components per project</p>
-                          <div
-                            v-if="
-                              this.sumOfArray(
-                                this.chartDataComponentsPerProject.data
-                              ) != 0
-                            "
-                          >
-                            <BarChart
-                              :chartData="
-                                this.chartDataComponentsPerProject.data
-                              "
-                              :chartLabels="
-                                this.chartDataComponentsPerProject.labels
-                              "
-                              class="bar-chart"
-                            ></BarChart>
-                          </div>
-                          <div id="noData" v-else>
-                            <v-icon x-large> mdi-eye-off </v-icon>
-                            <p>No data to analyse</p>
-                          </div>
-                        </v-sheet>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col>
-                        <v-sheet
-                          id="sheet"
-                          rounded="lg"
-                          color="#F7F7F7"
-                          height="100%"
-                          elevation="2"
-                        >
-                          <p class="card_title">Screens per project</p>
-                          <div
-                            v-if="
-                              this.sumOfArray(
-                                this.chartDataScreensPerProject.data
-                              ) != 0
-                            "
-                          >
-                            <BarChart
-                              :chartData="this.chartDataScreensPerProject.data"
-                              :chartLabels="
-                                this.chartDataScreensPerProject.labels
-                              "
-                              class="bar-chart"
-                            ></BarChart>
-                          </div>
-                          <div id="noData" v-else>
-                            <v-icon x-large> mdi-eye-off </v-icon>
-                            <p>No data to analyse</p>
-                          </div>
-                        </v-sheet>
-                      </v-col>
-                    </v-row>-->
                     <v-row>
                       <v-col>
                         <v-sheet
@@ -463,17 +364,17 @@
                             :items="items"
                             color="#26a69a"
                             label="Compare by"
-                            v-model="criterion"
+                            v-model="compareBy"
                           ></v-select>
-                          <p class="card_title">{{ criterion }}</p>
+                          <p class="card_title">{{ compareBy }}</p>
                           <div
                             v-if="
-                              this.sumOfArray(this.chartDataCriteria.data) != 0
+                              this.sumOfArray(this.chartCompareBy.data) != 0
                             "
                           >
                             <BarChart
-                              :chartData="this.chartDataCriteria.data"
-                              :chartLabels="this.chartDataCriteria.labels"
+                              :chartData="this.chartCompareBy.data"
+                              :chartLabels="this.chartCompareBy.labels"
                               class="bar-chart"
                             ></BarChart>
                           </div>
@@ -529,8 +430,9 @@ export default {
       numberOfProjects: 0,
       renderChart: false,
       settingsDialog: false,
+      sumValues: (obj) => Object.values(obj).reduce((a, b) => a + b),
       items: [
-        'Blocks per project',
+        /*'Blocks per project',
         'Components per project',
         'Screens per project',
         'User Interface - Button blocks per project',
@@ -587,8 +489,40 @@ export default {
         'Sensors - Pedometer blocks per project',
         'Sensors - ProximitySensor blocks per project',
         'Sensors - Thermometer blocks per project',
+        'Social - ContactPicker blocks per project',
+        'Social - EmailPicker blocks per project',
+        'Social - PhoneCall blocks per project',
+        'Social - PhoneNumberPicker blocks per project',
+        'Social - Sharing blocks per project',
+        'Social - Texting blocks per project',
+        'Social - Twitter blocks per project',
+        'Storage - CloudDB blocks per project',
+        'Storage - File blocks per project',
+        'Storage - TinyDB blocks per project',
+        'Storage - TinyWebDB blocks per project',
+        'Connectivity - ActivityStarter blocks per project',
+        'Connectivity - BluetoothClient blocks per project',
+        'Connectivity - BluetoothServer blocks per project',
+        'Connectivity - Serial blocks per project',
+        'Connectivity - Web blocks per project',
+        'LEGO MINDSTORMS - NxtDrive blocks per project',
+        'LEGO MINDSTORMS - NxtColorSensor blocks per project',
+        'LEGO MINDSTORMS - NxtLightSensor blocks per project',
+        'LEGO MINDSTORMS - NxtSoundSensor blocks per project',
+        'LEGO MINDSTORMS - NxtTouchSensor blocks per project',
+        'LEGO MINDSTORMS - NxtUltrasonicSensor blocks per project',
+        'LEGO MINDSTORMS - NxtDirectCommands blocks per project',
+        'LEGO MINDSTORMS - Ev3Motors blocks per project',
+        'LEGO MINDSTORMS - Ev3ColorSensor blocks per project',
+        'LEGO MINDSTORMS - Ev3GyroSensor blocks per project',
+        'LEGO MINDSTORMS - Ev3TouchSensor blocks per project',
+        'LEGO MINDSTORMS - Ev3UltrasonicSensor blocks per project',
+        'LEGO MINDSTORMS - Ev3Sound blocks per project',
+        'LEGO MINDSTORMS - Ev3UI blocks per project',
+        'LEGO MINDSTORMS - Ev3Commands blocks per project',
+        'Experimental - FirebaseDB blocks per project',*/
       ],
-      criterion: 'Blocks per project',
+      compareBy: 'Blocks per project',
       basicStatsExportData: {
         labels: [],
         data: [],
@@ -638,7 +572,7 @@ export default {
         labels: [],
         data: [],
       },
-      chartDataCriteria: {
+      chartCompareBy: {
         labels: [],
         data: [],
       },
@@ -916,436 +850,682 @@ export default {
         this.chartDataScreensPerProject.data.push(value);
       }
 
-      switch (this.criterion) {
+      /*switch (this.compareBy) {
         case 'Blocks per project':
           for (const [key, value] of Object.entries(val[0].blocksPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Components per project':
           for (const [key, value] of Object.entries(
             val[0].componentsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Screens per project':
           for (const [key, value] of Object.entries(val[0].screensPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - Button blocks per project':
           for (const [key, value] of Object.entries(val[0].buttonsPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - Checkbox blocks per project':
           for (const [key, value] of Object.entries(
             val[0].checkboxesPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - DatePicker blocks per project':
           for (const [key, value] of Object.entries(
             val[0].datepickersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - Image blocks per project':
           for (const [key, value] of Object.entries(val[0].imagesPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - Label blocks per project':
           for (const [key, value] of Object.entries(val[0].labelsPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - ListPicker blocks per project':
           for (const [key, value] of Object.entries(
             val[0].listpickersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - ListView blocks per project':
           for (const [key, value] of Object.entries(
             val[0].listviewsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - Notifier blocks per project':
           for (const [key, value] of Object.entries(
             val[0].notifiersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - PasswordTextBox blocks per project':
           for (const [key, value] of Object.entries(
             val[0].passwordtextboxesPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - Slider blocks per project':
           for (const [key, value] of Object.entries(val[0].slidersPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - Spinner blocks per project':
           for (const [key, value] of Object.entries(
             val[0].spinnersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - Switch blocks per project':
           for (const [key, value] of Object.entries(
             val[0].switchesPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - TextBox blocks per project':
           for (const [key, value] of Object.entries(
             val[0].textboxesPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - TimePicker blocks per project':
           for (const [key, value] of Object.entries(
             val[0].timepickersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'User Interface - WebViewer blocks per project':
           for (const [key, value] of Object.entries(
             val[0].webviewersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Layout - HorizontalArrangment blocks per project':
           for (const [key, value] of Object.entries(
             val[0].horizontalArrangmentPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Layout - HorizontalScrollArrangment blocks per project':
           for (const [key, value] of Object.entries(
             val[0].horizontalScrollArrangmentPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Layout - TableArrangment blocks per project':
           for (const [key, value] of Object.entries(
             val[0].tableArrangmentPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Layout - VerticalArrangment blocks per project':
           for (const [key, value] of Object.entries(
             val[0].verticalArrangmentPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Layout - VerticalScrollArrangment blocks per project':
           for (const [key, value] of Object.entries(
             val[0].verticalScrollArrangmentPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Media - Camcorder blocks per project':
           for (const [key, value] of Object.entries(
             val[0].camcordersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Media - Camera blocks per project':
           for (const [key, value] of Object.entries(val[0].camerasPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Media - ImagePicker blocks per project':
           for (const [key, value] of Object.entries(
             val[0].imagepickersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Media - Player blocks per project':
           for (const [key, value] of Object.entries(val[0].playersPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Media - Sound blocks per project':
           for (const [key, value] of Object.entries(val[0].soundsPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Media - SoundRecorder blocks per project':
           for (const [key, value] of Object.entries(
             val[0].soundrecordersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Media - SpeechRecognizer blocks per project':
           for (const [key, value] of Object.entries(
             val[0].speechrecognizersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Media - TextToSpeech blocks per project':
           for (const [key, value] of Object.entries(
             val[0].texttospeechsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Media - VideoPlayer blocks per project':
           for (const [key, value] of Object.entries(
             val[0].videoplayersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Media - YandexTranslate blocks per project':
           for (const [key, value] of Object.entries(
             val[0].yandextranslatorsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Drawing and Animation - Ball blocks per project':
           for (const [key, value] of Object.entries(val[0].ballsPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Drawing and Animation - Canvas blocks per project':
           for (const [key, value] of Object.entries(
             val[0].canvasesPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Drawing and Animation - ImageSprite blocks per project':
           for (const [key, value] of Object.entries(
             val[0].imagespritesPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Maps - Circle blocks per project':
           for (const [key, value] of Object.entries(val[0].circlesPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Maps - FeatureCollection blocks per project':
           for (const [key, value] of Object.entries(
             val[0].featurecollectionsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Maps - Map blocks per project':
           for (const [key, value] of Object.entries(val[0].mapsPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Maps - Marker blocks per project':
           for (const [key, value] of Object.entries(val[0].markersPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Maps - Navigation blocks per project':
           for (const [key, value] of Object.entries(
             val[0].navigationsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Maps - Polygon blocks per project':
           for (const [key, value] of Object.entries(
             val[0].polygonsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Maps - Rectangle blocks per project':
           for (const [key, value] of Object.entries(
             val[0].rectanglesPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - AccelerometerSensor blocks per project':
           for (const [key, value] of Object.entries(
             val[0].accelerometerSensorsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - BarcodeScanner blocks per project':
           for (const [key, value] of Object.entries(
             val[0].barcodeScannersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - Barometer blocks per project':
           for (const [key, value] of Object.entries(
             val[0].barometersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - Clock blocks per project':
           for (const [key, value] of Object.entries(val[0].clocksPerProject)) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - GyroscopeSensor blocks per project':
           for (const [key, value] of Object.entries(
             val[0].gyroscopeSensorsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - Hygrometer blocks per project':
           for (const [key, value] of Object.entries(
             val[0].hygrometersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - LightSensor blocks per project':
           for (const [key, value] of Object.entries(
             val[0].lightSensorsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - LocationSensor blocks per project':
           for (const [key, value] of Object.entries(
             val[0].locationSensorsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - MagneticFieldSensor blocks per project':
           for (const [key, value] of Object.entries(
             val[0].magneticFieldSensorsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - NearField blocks per project':
           for (const [key, value] of Object.entries(
             val[0].nearFieldsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - OrientationSensor blocks per project':
           for (const [key, value] of Object.entries(
             val[0].orientationSensorsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - Pedometer blocks per project':
           for (const [key, value] of Object.entries(
             val[0].pedometersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - ProximitySensor blocks per project':
           for (const [key, value] of Object.entries(
             val[0].proximitySensorsPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
         case 'Sensors - Thermometer blocks per project':
           for (const [key, value] of Object.entries(
             val[0].thermometersPerProject
           )) {
-            this.chartDataCriteria.labels.push(key);
-            this.chartDataCriteria.data.push(value);
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
           }
           break;
-      }
+        case 'Social - ContactPicker blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].contactPickersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - EmailPicker blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].emailPickersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - PhoneCall blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].phoneCallsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - PhoneNumberPicker blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].phoneNumberPickersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - Sharing blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].sharingsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - Texting blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].textingsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - Twitter blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].twittersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Storage - CloudDB blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].cloudDbsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Storage - File blocks per project':
+          for (const [key, value] of Object.entries(val[0].filesPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Storage - TinyDB blocks per project':
+          for (const [key, value] of Object.entries(val[0].tinyDbsPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Storage - TinyWebDB blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].tinyWebDbsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Connectivity - ActivityStarter blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].activityStartersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Connectivity - BluetoothClient blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].bluetoothClientsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Connectivity - BluetoothServer blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].bluetoothServersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Connectivity - Serial blocks per project':
+          for (const [key, value] of Object.entries(val[0].serialsPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Connectivity - Web blocks per project':
+          for (const [key, value] of Object.entries(val[0].websPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtDrive blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtDrivesPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtColorSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtColorSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtLightSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtLightSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtSoundSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtSoundSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtTouchSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtTouchSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtUltrasonicSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtUltrasonicSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtDirectCommands blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtDirectCommandsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3Motors blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3MotorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3ColorSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3ColorSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3GyroSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3GyroSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3TouchSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3TouchSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3UltrasonicSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3UltrasonicSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3Sound blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3SoundsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3UI blocks per project':
+          for (const [key, value] of Object.entries(val[0].ev3UIsPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3Commands blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3CommandsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Experimental - FirebaseDB blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].firebaseDbsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+      }*/
     },
     sortData(type, labels, data) {
       // vytvoríme objekt
@@ -1415,9 +1595,9 @@ export default {
           this.chartDataScreensPerProject.labels = sortedLabels;
           this.chartDataScreensPerProject.data = sortedData;
           break;
-        case 'criteria':
-          this.chartDataCriteria.labels = sortedLabels;
-          this.chartDataCriteria.data = sortedData;
+        case 'compareBy':
+          this.chartCompareBy.labels = sortedLabels;
+          this.chartCompareBy.data = sortedData;
           break;
       }
     },
@@ -1569,11 +1749,11 @@ export default {
         this.chartDataScreensPerProject.data
       );
 
-      this.sortData(
-        'criteria',
-        this.chartDataCriteria.labels,
-        this.chartDataCriteria.data
-      );
+      /*this.sortData(
+        'compareBy',
+        this.chartCompareBy.labels,
+        this.chartCompareBy.data
+      );*/
 
       // nastavíme dáta na export do Excelu
       this.setExportData(
@@ -1640,6 +1820,970 @@ export default {
       // vykreslíme grafy
       this.renderChart = true;
     },
+    renderProjectComparison(val) {
+      this.chartCompareBy.labels = [];
+      this.chartCompareBy.data = [];
+      switch (this.compareBy) {
+        case 'Blocks per project':
+          for (const [key, value] of Object.entries(val[0].blocksPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Components per project':
+          for (const [key, value] of Object.entries(
+            val[0].componentsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Screens per project':
+          for (const [key, value] of Object.entries(val[0].screensPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - Button blocks per project':
+          for (const [key, value] of Object.entries(val[0].buttonsPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - Checkbox blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].checkboxesPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - DatePicker blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].datepickersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - Image blocks per project':
+          for (const [key, value] of Object.entries(val[0].imagesPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - Label blocks per project':
+          for (const [key, value] of Object.entries(val[0].labelsPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - ListPicker blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].listpickersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - ListView blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].listviewsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - Notifier blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].notifiersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - PasswordTextBox blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].passwordtextboxesPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - Slider blocks per project':
+          for (const [key, value] of Object.entries(val[0].slidersPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - Spinner blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].spinnersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - Switch blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].switchesPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - TextBox blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].textboxesPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - TimePicker blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].timepickersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'User Interface - WebViewer blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].webviewersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Layout - HorizontalArrangment blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].horizontalArrangmentPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Layout - HorizontalScrollArrangment blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].horizontalScrollArrangmentPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Layout - TableArrangment blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].tableArrangmentPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Layout - VerticalArrangment blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].verticalArrangmentPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Layout - VerticalScrollArrangment blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].verticalScrollArrangmentPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Media - Camcorder blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].camcordersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Media - Camera blocks per project':
+          for (const [key, value] of Object.entries(val[0].camerasPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Media - ImagePicker blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].imagepickersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Media - Player blocks per project':
+          for (const [key, value] of Object.entries(val[0].playersPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Media - Sound blocks per project':
+          for (const [key, value] of Object.entries(val[0].soundsPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Media - SoundRecorder blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].soundrecordersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Media - SpeechRecognizer blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].speechrecognizersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Media - TextToSpeech blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].texttospeechsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Media - VideoPlayer blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].videoplayersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Media - YandexTranslate blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].yandextranslatorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Drawing and Animation - Ball blocks per project':
+          for (const [key, value] of Object.entries(val[0].ballsPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Drawing and Animation - Canvas blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].canvasesPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Drawing and Animation - ImageSprite blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].imagespritesPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Maps - Circle blocks per project':
+          for (const [key, value] of Object.entries(val[0].circlesPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Maps - FeatureCollection blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].featurecollectionsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Maps - Map blocks per project':
+          for (const [key, value] of Object.entries(val[0].mapsPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Maps - Marker blocks per project':
+          for (const [key, value] of Object.entries(val[0].markersPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Maps - Navigation blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].navigationsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Maps - Polygon blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].polygonsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Maps - Rectangle blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].rectanglesPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - AccelerometerSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].accelerometerSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - BarcodeScanner blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].barcodeScannersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - Barometer blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].barometersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - Clock blocks per project':
+          for (const [key, value] of Object.entries(val[0].clocksPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - GyroscopeSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].gyroscopeSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - Hygrometer blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].hygrometersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - LightSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].lightSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - LocationSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].locationSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - MagneticFieldSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].magneticFieldSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - NearField blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nearFieldsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - OrientationSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].orientationSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - Pedometer blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].pedometersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - ProximitySensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].proximitySensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Sensors - Thermometer blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].thermometersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - ContactPicker blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].contactPickersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - EmailPicker blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].emailPickersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - PhoneCall blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].phoneCallsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - PhoneNumberPicker blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].phoneNumberPickersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - Sharing blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].sharingsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - Texting blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].textingsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Social - Twitter blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].twittersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Storage - CloudDB blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].cloudDbsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Storage - File blocks per project':
+          for (const [key, value] of Object.entries(val[0].filesPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Storage - TinyDB blocks per project':
+          for (const [key, value] of Object.entries(val[0].tinyDbsPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Storage - TinyWebDB blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].tinyWebDbsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Connectivity - ActivityStarter blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].activityStartersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Connectivity - BluetoothClient blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].bluetoothClientsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Connectivity - BluetoothServer blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].bluetoothServersPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Connectivity - Serial blocks per project':
+          for (const [key, value] of Object.entries(val[0].serialsPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Connectivity - Web blocks per project':
+          for (const [key, value] of Object.entries(val[0].websPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtDrive blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtDrivesPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtColorSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtColorSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtLightSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtLightSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtSoundSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtSoundSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtTouchSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtTouchSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtUltrasonicSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtUltrasonicSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - NxtDirectCommands blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].nxtDirectCommandsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3Motors blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3MotorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3ColorSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3ColorSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3GyroSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3GyroSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3TouchSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3TouchSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3UltrasonicSensor blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3UltrasonicSensorsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3Sound blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3SoundsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3UI blocks per project':
+          for (const [key, value] of Object.entries(val[0].ev3UIsPerProject)) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'LEGO MINDSTORMS - Ev3Commands blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].ev3CommandsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+        case 'Experimental - FirebaseDB blocks per project':
+          for (const [key, value] of Object.entries(
+            val[0].firebaseDbsPerProject
+          )) {
+            this.chartCompareBy.labels.push(key);
+            this.chartCompareBy.data.push(value);
+          }
+          break;
+      }
+      this.sortData(
+        'compareBy',
+        this.chartCompareBy.labels,
+        this.chartCompareBy.data
+      );
+    },
+    setSelectValues(val) {
+      if (this.sumValues(val[0].blocksPerProject) != 0) {
+        this.items.push('Blocks per project');
+      }
+      if (this.sumValues(val[0].componentsPerProject) != 0) {
+        this.items.push('Components per project');
+      }
+      if (this.sumValues(val[0].screensPerProject) != 0) {
+        this.items.push('Screens per project');
+      }
+      if (this.sumValues(val[0].buttonsPerProject) != 0) {
+        this.items.push('User Interface - Button blocks per project');
+      }
+      if (this.sumValues(val[0].checkboxesPerProject) != 0) {
+        this.items.push('User Interface - Checkbox blocks per project');
+      }
+      if (this.sumValues(val[0].datepickersPerProject) != 0) {
+        this.items.push('User Interface - DatePicker blocks per project');
+      }
+      if (this.sumValues(val[0].imagesPerProject) != 0) {
+        this.items.push('User Interface - Image blocks per project');
+      }
+      if (this.sumValues(val[0].labelsPerProject) != 0) {
+        this.items.push('User Interface - Label blocks per project');
+      }
+      if (this.sumValues(val[0].listpickersPerProject) != 0) {
+        this.items.push('User Interface - ListPicker blocks per project');
+      }
+      if (this.sumValues(val[0].listviewsPerProject) != 0) {
+        this.items.push('User Interface - ListView blocks per project');
+      }
+      if (this.sumValues(val[0].notifiersPerProject) != 0) {
+        this.items.push('User Interface - Notifier blocks per project');
+      }
+      if (this.sumValues(val[0].passwordtextboxesPerProject) != 0) {
+        this.items.push('User Interface - PasswordTextBox blocks per project');
+      }
+      if (this.sumValues(val[0].slidersPerProject) != 0) {
+        this.items.push('User Interface - Slider blocks per project');
+      }
+      if (this.sumValues(val[0].spinnersPerProject) != 0) {
+        this.items.push('User Interface - Spinner blocks per project');
+      }
+      if (this.sumValues(val[0].switchesPerProject) != 0) {
+        this.items.push('User Interface - Switch blocks per project');
+      }
+      if (this.sumValues(val[0].textboxesPerProject) != 0) {
+        this.items.push('User Interface - TextBox blocks per project');
+      }
+      if (this.sumValues(val[0].timepickersPerProject) != 0) {
+        this.items.push('User Interface - TimePicker blocks per project');
+      }
+      if (this.sumValues(val[0].webviewersPerProject) != 0) {
+        this.items.push('User Interface - WebViewer blocks per project');
+      }
+      if (this.sumValues(val[0].horizontalArrangmentPerProject) != 0) {
+        this.items.push('Layout - HorizontalArrangment blocks per project');
+      }
+      if (this.sumValues(val[0].horizontalScrollArrangmentPerProject) != 0) {
+        this.items.push(
+          'Layout - HorizontalScrollArrangment blocks per project'
+        );
+      }
+      if (this.sumValues(val[0].tableArrangmentPerProject) != 0) {
+        this.items.push('Layout - TableArrangment blocks per project');
+      }
+      if (this.sumValues(val[0].verticalArrangmentPerProject) != 0) {
+        this.items.push('Layout - VerticalArrangment blocks per project');
+      }
+      if (this.sumValues(val[0].verticalScrollArrangmentPerProject) != 0) {
+        this.items.push('Layout - VerticalScrollArrangment blocks per project');
+      }
+      if (this.sumValues(val[0].camcordersPerProject) != 0) {
+        this.items.push('Media - Camcorder blocks per project');
+      }
+      if (this.sumValues(val[0].camerasPerProject) != 0) {
+        this.items.push('Media - Camera blocks per project');
+      }
+      if (this.sumValues(val[0].imagepickersPerProject) != 0) {
+        this.items.push('Media - ImagePicker blocks per project');
+      }
+      if (this.sumValues(val[0].playersPerProject) != 0) {
+        this.items.push('Media - Player blocks per project');
+      }
+      if (this.sumValues(val[0].soundsPerProject) != 0) {
+        this.items.push('Media - Sound blocks per project');
+      }
+      if (this.sumValues(val[0].soundrecordersPerProject) != 0) {
+        this.items.push('Media - SoundRecorder blocks per project');
+      }
+      if (this.sumValues(val[0].speechrecognizersPerProject) != 0) {
+        this.items.push('Media - SpeechRecognizer blocks per project');
+      }
+      if (this.sumValues(val[0].texttospeechsPerProject) != 0) {
+        this.items.push('Media - TextToSpeech blocks per project');
+      }
+      if (this.sumValues(val[0].videoplayersPerProject) != 0) {
+        this.items.push('Media - VideoPlayer blocks per project');
+      }
+      if (this.sumValues(val[0].yandextranslatorsPerProject) != 0) {
+        this.items.push('Media - YandexTranslate blocks per project');
+      }
+      if (this.sumValues(val[0].ballsPerProject) != 0) {
+        this.items.push('Drawing and Animation - Ball blocks per project');
+      }
+      if (this.sumValues(val[0].canvasesPerProject) != 0) {
+        this.items.push('Drawing and Animation - Canvas blocks per project');
+      }
+      if (this.sumValues(val[0].imagespritesPerProject) != 0) {
+        this.items.push(
+          'Drawing and Animation - ImageSprite blocks per project'
+        );
+      }
+      if (this.sumValues(val[0].circlesPerProject) != 0) {
+        this.items.push('Maps - Circle blocks per project');
+      }
+      if (this.sumValues(val[0].featurecollectionsPerProject) != 0) {
+        this.items.push('Maps - FeatureCollection blocks per project');
+      }
+      if (this.sumValues(val[0].mapsPerProject) != 0) {
+        this.items.push('Maps - Map blocks per project');
+      }
+      if (this.sumValues(val[0].markersPerProject) != 0) {
+        this.items.push('Maps - Marker blocks per project');
+      }
+      if (this.sumValues(val[0].navigationsPerProject) != 0) {
+        this.items.push('Maps - Navigation blocks per project');
+      }
+      if (this.sumValues(val[0].polygonsPerProject) != 0) {
+        this.items.push('Maps - Polygon blocks per project');
+      }
+      if (this.sumValues(val[0].rectanglesPerProject) != 0) {
+        this.items.push('Maps - Rectangle blocks per project');
+      }
+      if (this.sumValues(val[0].accelerometerSensorsPerProject) != 0) {
+        this.items.push('Sensors - AccelerometerSensor blocks per project');
+      }
+      if (this.sumValues(val[0].barcodeScannersPerProject) != 0) {
+        this.items.push('Sensors - BarcodeScanner blocks per project');
+      }
+      if (this.sumValues(val[0].barometersPerProject) != 0) {
+        this.items.push('Sensors - Barometer blocks per project');
+      }
+      if (this.sumValues(val[0].clocksPerProject) != 0) {
+        this.items.push('Sensors - Clock blocks per project');
+      }
+      if (this.sumValues(val[0].gyroscopeSensorsPerProject) != 0) {
+        this.items.push('Sensors - GyroscopeSensor blocks per project');
+      }
+      if (this.sumValues(val[0].hygrometersPerProject) != 0) {
+        this.items.push('Sensors - Hygrometer blocks per project');
+      }
+      if (this.sumValues(val[0].lightSensorsPerProject) != 0) {
+        this.items.push('Sensors - LightSensor blocks per project');
+      }
+      if (this.sumValues(val[0].locationSensorsPerProject) != 0) {
+        this.items.push('Sensors - LocationSensor blocks per project');
+      }
+      if (this.sumValues(val[0].magneticFieldSensorsPerProject) != 0) {
+        this.items.push('Sensors - MagneticFieldSensor blocks per project');
+      }
+      if (this.sumValues(val[0].nearFieldsPerProject) != 0) {
+        this.items.push('Sensors - NearField blocks per project');
+      }
+      if (this.sumValues(val[0].orientationSensorsPerProject) != 0) {
+        this.items.push('Sensors - OrientationSensor blocks per project');
+      }
+      if (this.sumValues(val[0].pedometersPerProject) != 0) {
+        this.items.push('Sensors - Pedometer blocks per project');
+      }
+      if (this.sumValues(val[0].proximitySensorsPerProject) != 0) {
+        this.items.push('Sensors - ProximitySensor blocks per project');
+      }
+      if (this.sumValues(val[0].thermometersPerProject) != 0) {
+        this.items.push('Sensors - Thermometer blocks per project');
+      }
+      if (this.sumValues(val[0].contactPickersPerProject) != 0) {
+        this.items.push('Social - ContactPicker blocks per project');
+      }
+      if (this.sumValues(val[0].emailPickersPerProject) != 0) {
+        this.items.push('Social - EmailPicker blocks per project');
+      }
+      if (this.sumValues(val[0].phoneCallsPerProject) != 0) {
+        this.items.push('Social - PhoneCall blocks per project');
+      }
+      if (this.sumValues(val[0].phoneNumberPickersPerProject) != 0) {
+        this.items.push('Social - PhoneNumberPicker blocks per project');
+      }
+      if (this.sumValues(val[0].sharingsPerProject) != 0) {
+        this.items.push('Social - Sharing blocks per project');
+      }
+      if (this.sumValues(val[0].textingsPerProject) != 0) {
+        this.items.push('Social - Texting blocks per project');
+      }
+      if (this.sumValues(val[0].twittersPerProject) != 0) {
+        this.items.push('Social - Twitter blocks per project');
+      }
+      if (this.sumValues(val[0].cloudDbsPerProject) != 0) {
+        this.items.push('Storage - CloudDB blocks per project');
+      }
+      if (this.sumValues(val[0].filesPerProject) != 0) {
+        this.items.push('Storage - File blocks per project');
+      }
+      if (this.sumValues(val[0].tinyDbsPerProject) != 0) {
+        this.items.push('Storage - TinyDB blocks per project');
+      }
+      if (this.sumValues(val[0].tinyWebDbsPerProject) != 0) {
+        this.items.push('Storage - TinyWebDB blocks per project');
+      }
+      if (this.sumValues(val[0].activityStartersPerProject) != 0) {
+        this.items.push('Connectivity - ActivityStarter blocks per project');
+      }
+      if (this.sumValues(val[0].bluetoothClientsPerProject) != 0) {
+        this.items.push('Connectivity - BluetoothClient blocks per project');
+      }
+      if (this.sumValues(val[0].bluetoothServersPerProject) != 0) {
+        this.items.push('Connectivity - BluetoothServer blocks per project');
+      }
+      if (this.sumValues(val[0].serialsPerProject) != 0) {
+        this.items.push('Connectivity - Serial blocks per project');
+      }
+      if (this.sumValues(val[0].websPerProject) != 0) {
+        this.items.push('Connectivity - Web blocks per project');
+      }
+      if (this.sumValues(val[0].nxtDrivesPerProject) != 0) {
+        this.items.push('LEGO MINDSTORMS - NxtDrive blocks per project');
+      }
+      if (this.sumValues(val[0].nxtColorSensorsPerProject) != 0) {
+        this.items.push('LEGO MINDSTORMS - NxtColorSensor blocks per project');
+      }
+      if (this.sumValues(val[0].nxtLightSensorsPerProject) != 0) {
+        this.items.push('LEGO MINDSTORMS - NxtLightSensor blocks per project');
+      }
+      if (this.sumValues(val[0].nxtSoundSensorsPerProject) != 0) {
+        this.items.push('LEGO MINDSTORMS - NxtSoundSensor blocks per project');
+      }
+      if (this.sumValues(val[0].nxtTouchSensorsPerProject) != 0) {
+        this.items.push('LEGO MINDSTORMS - NxtTouchSensor blocks per project');
+      }
+      if (this.sumValues(val[0].nxtUltrasonicSensorsPerProject) != 0) {
+        this.items.push(
+          'LEGO MINDSTORMS - NxtUltrasonicSensor blocks per project'
+        );
+      }
+      if (this.sumValues(val[0].nxtDirectCommandsPerProject) != 0) {
+        this.items.push(
+          'LEGO MINDSTORMS - NxtDirectCommands blocks per project'
+        );
+      }
+      if (this.sumValues(val[0].ev3MotorsPerProject) != 0) {
+        this.items.push('LEGO MINDSTORMS - Ev3Motors blocks per project');
+      }
+      if (this.sumValues(val[0].ev3ColorSensorsPerProject) != 0) {
+        this.items.push('LEGO MINDSTORMS - Ev3ColorSensor blocks per project');
+      }
+      if (this.sumValues(val[0].ev3GyroSensorsPerProject) != 0) {
+        this.items.push('LEGO MINDSTORMS - Ev3GyroSensor blocks per project');
+      }
+      if (this.sumValues(val[0].ev3TouchSensorsPerProject) != 0) {
+        this.items.push('LEGO MINDSTORMS - Ev3TouchSensor blocks per project');
+      }
+      if (this.sumValues(val[0].ev3UltrasonicSensorsPerProject) != 0) {
+        this.items.push(
+          'LEGO MINDSTORMS - Ev3UltrasonicSensor blocks per project'
+        );
+      }
+      if (this.sumValues(val[0].ev3SoundsPerProject) != 0) {
+        this.items.push('LEGO MINDSTORMS - Ev3Sound blocks per project');
+      }
+      if (this.sumValues(val[0].ev3UIsPerProject) != 0) {
+        this.items.push('LEGO MINDSTORMS - Ev3UI blocks per project');
+      }
+      if (this.sumValues(val[0].ev3CommandsPerProject) != 0) {
+        this.items.push('LEGO MINDSTORMS - Ev3Commands blocks per project');
+      }
+      if (this.sumValues(val[0].firebaseDbsPerProject) != 0) {
+        this.items.push('Experimental - FirebaseDB blocks per project');
+      }
+    },
     resetData() {
       // resetneme všetky dáta
       this.basicStats = null;
@@ -1667,8 +2811,8 @@ export default {
       this.chartDataComponentsPerProject.data = [];
       this.chartDataScreensPerProject.labels = [];
       this.chartDataScreensPerProject.data = [];
-      this.chartDataCriteria.labels = [];
-      this.chartDataCriteria.data = [];
+      this.chartCompareBy.labels = [];
+      this.chartCompareBy.data = [];
       this.SETTINGS_FOR_EXPORT.workSheets[0].tableSettings.data.headerDefinition = [];
       this.SETTINGS_FOR_EXPORT.workSheets[1].tableSettings.data.headerDefinition = [];
       this.SETTINGS_FOR_EXPORT.workSheets[2].tableSettings.data.headerDefinition = [];
@@ -1712,16 +2856,15 @@ export default {
       this.resetData();
       if (this.getAnalysedData.length != 0) {
         this.setData(this.getAnalysedData);
+        this.setSelectValues(this.getAnalysedData);
+        this.renderProjectComparison(this.getAnalysedData);
       }
     },
   },
   watch: {
     // ak sa zmenia analyzované dáta obnoví sa celý proces vykreslenia grafov
-    getAnalysedData: function (val) {
-      if (val) {
-        this.resetData();
-        this.setData(val);
-      }
+    getAnalysedData: function () {
+      this.startProcess();
     },
     // ak začne proces analýzy, zavrieme kartu
     getAnalysed: function (val) {
@@ -1731,9 +2874,10 @@ export default {
         }
       }
     },
-    criterion: function (val) {
+    // ak sa zmeni hodnota v selecte zmeníme hodnoty grafu
+    compareBy: function (val) {
       if (val) {
-        this.startProcess();
+        this.renderProjectComparison(this.getAnalysedData);
       }
     },
   },

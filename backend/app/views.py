@@ -170,6 +170,38 @@ def analyse(files):
            "pedometersPerProject":{},
            "proximitySensorsPerProject":{},
            "thermometersPerProject":{},
+           "contactPickersPerProject":{},
+           "emailPickersPerProject":{},
+           "phoneCallsPerProject":{},
+           "phoneNumberPickersPerProject":{},
+           "sharingsPerProject":{},
+           "textingsPerProject":{},
+           "twittersPerProject":{},
+           "cloudDbsPerProject":{},
+           "filesPerProject":{},
+           "tinyDbsPerProject":{},
+           "tinyWebDbsPerProject":{},
+           "activityStartersPerProject":{},
+           "bluetoothClientsPerProject":{},
+           "bluetoothServersPerProject":{},
+           "serialsPerProject":{},
+           "websPerProject":{},
+           "nxtDrivesPerProject":{},
+           "nxtColorSensorsPerProject":{},
+           "nxtLightSensorsPerProject":{},
+           "nxtSoundSensorsPerProject":{},
+           "nxtTouchSensorsPerProject":{},
+           "nxtUltrasonicSensorsPerProject":{},
+           "nxtDirectCommandsPerProject":{},
+           "ev3MotorsPerProject":{},
+           "ev3ColorSensorsPerProject":{},
+           "ev3GyroSensorsPerProject":{},
+           "ev3TouchSensorsPerProject":{},
+           "ev3UltrasonicSensorsPerProject":{},
+           "ev3SoundsPerProject":{},
+           "ev3UIsPerProject":{},
+           "ev3CommandsPerProject":{},
+           "firebaseDbsPerProject":{},
            }
 
     number_of_blocks = 0
@@ -288,6 +320,38 @@ def analyse(files):
     number_of_pedometers = 0
     number_of_proximitySensors = 0
     number_of_thermometers = 0
+    number_of_contactPickers = 0
+    number_of_emailPickers = 0
+    number_of_phoneCalls = 0
+    number_of_phoneNumberPickers = 0
+    number_of_sharings = 0
+    number_of_textings = 0
+    number_of_twitters = 0
+    number_of_cloudDbs = 0
+    number_of_files = 0
+    number_of_tinyDbs = 0
+    number_of_tinyWebDbs = 0
+    number_of_activityStarters = 0
+    number_of_bluetoothClients = 0
+    number_of_bluetoothServers = 0
+    number_of_serials = 0
+    number_of_webs = 0
+    number_of_nxtDrives = 0
+    number_of_nxtColorSensors = 0
+    number_of_nxtLightSensors = 0
+    number_of_nxtSoundSensors = 0
+    number_of_nxtTouchSensors = 0
+    number_of_nxtUltrasonicSensors = 0
+    number_of_nxtDirectCommands = 0
+    number_of_ev3Motors = 0
+    number_of_ev3ColorSensors = 0
+    number_of_ev3GyroSensors = 0
+    number_of_ev3TouchSensors = 0
+    number_of_ev3UltrasonicSensors = 0
+    number_of_ev3Sounds = 0
+    number_of_ev3UIs = 0
+    number_of_ev3Commands = 0
+    number_of_firebaseDbs = 0
 
     # prebehneme po súboroch
     for file in files:
@@ -533,6 +597,38 @@ def analyse(files):
                         number_of_pedometers += len(tree.xpath("//mutation[@component_type='Pedometer']"))
                         number_of_proximitySensors += len(tree.xpath("//mutation[@component_type='ProximitySensor']"))
                         number_of_thermometers += len(tree.xpath("//mutation[@component_type='Thermometer']"))
+                        number_of_contactPickers += len(tree.xpath("//mutation[@component_type='ContactPicker']"))
+                        number_of_emailPickers += len(tree.xpath("//mutation[@component_type='EmailPicker']"))
+                        number_of_phoneCalls += len(tree.xpath("//mutation[@component_type='PhoneCall']"))
+                        number_of_phoneNumberPickers += len(tree.xpath("//mutation[@component_type='PhoneNumberPicker']"))
+                        number_of_sharings += len(tree.xpath("//mutation[@component_type='Sharing']"))
+                        number_of_textings += len(tree.xpath("//mutation[@component_type='Texting']"))
+                        number_of_twitters += len(tree.xpath("//mutation[@component_type='Twitter']"))
+                        number_of_cloudDbs += len(tree.xpath("//mutation[@component_type='CloudDB']"))
+                        number_of_files += len(tree.xpath("//mutation[@component_type='File']"))
+                        number_of_tinyDbs += len(tree.xpath("//mutation[@component_type='TinyDB']"))
+                        number_of_tinyWebDbs += len(tree.xpath("//mutation[@component_type='TinyWebDB']"))
+                        number_of_activityStarters += len(tree.xpath("//mutation[@component_type='ActivityStarter']"))
+                        number_of_bluetoothClients += len(tree.xpath("//mutation[@component_type='BluetoothClient']"))
+                        number_of_bluetoothServers += len(tree.xpath("//mutation[@component_type='BluetoothServer']"))
+                        number_of_serials += len(tree.xpath("//mutation[@component_type='Serial']"))
+                        number_of_webs += len(tree.xpath("//mutation[@component_type='Web']"))
+                        number_of_nxtDrives += len(tree.xpath("//mutation[@component_type='NxtDrive']"))
+                        number_of_nxtColorSensors += len(tree.xpath("//mutation[@component_type='NxtColorSensor']"))
+                        number_of_nxtLightSensors += len(tree.xpath("//mutation[@component_type='NxtLightSensor']"))
+                        number_of_nxtSoundSensors += len(tree.xpath("//mutation[@component_type='NxtSoundSensor']"))
+                        number_of_nxtTouchSensors += len(tree.xpath("//mutation[@component_type='NxtTouchSensor']"))
+                        number_of_nxtUltrasonicSensors += len(tree.xpath("//mutation[@component_type='NxtUltrasonicSensor']"))
+                        number_of_nxtDirectCommands += len(tree.xpath("//mutation[@component_type='NxtDirectCommands']"))
+                        number_of_ev3Motors += len(tree.xpath("//mutation[@component_type='Ev3Motors']"))
+                        number_of_ev3ColorSensors += len(tree.xpath("//mutation[@component_type='Ev3ColorSensor']"))
+                        number_of_ev3GyroSensors += len(tree.xpath("//mutation[@component_type='Ev3GyroSensor']"))
+                        number_of_ev3TouchSensors += len(tree.xpath("//mutation[@component_type='Ev3TouchSensor']"))
+                        number_of_ev3UltrasonicSensors += len(tree.xpath("//mutation[@component_type='Ev3UltrasonicSensor']"))
+                        number_of_ev3Sounds += len(tree.xpath("//mutation[@component_type='Ev3Sound']"))
+                        number_of_ev3UIs += len(tree.xpath("//mutation[@component_type='Ev3UI']"))
+                        number_of_ev3Commands += len(tree.xpath("//mutation[@component_type='Ev3Commands']"))
+                        number_of_firebaseDbs += len(tree.xpath("//mutation[@component_type='FirebaseDB']"))
 
                     number += 1
                 f.close()
@@ -595,7 +691,38 @@ def analyse(files):
                 data["pedometersPerProject"][file.title] = number_of_pedometers
                 data["proximitySensorsPerProject"][file.title] = number_of_proximitySensors
                 data["thermometersPerProject"][file.title] = number_of_thermometers
-
+                data["contactPickersPerProject"][file.title] = number_of_contactPickers
+                data["emailPickersPerProject"][file.title] = number_of_emailPickers
+                data["phoneCallsPerProject"][file.title] = number_of_phoneCalls
+                data["phoneNumberPickersPerProject"][file.title] = number_of_phoneNumberPickers
+                data["sharingsPerProject"][file.title] = number_of_sharings
+                data["textingsPerProject"][file.title] = number_of_textings
+                data["twittersPerProject"][file.title] = number_of_twitters
+                data["cloudDbsPerProject"][file.title] = number_of_cloudDbs
+                data["filesPerProject"][file.title] = number_of_files
+                data["tinyDbsPerProject"][file.title] = number_of_tinyDbs
+                data["tinyWebDbsPerProject"][file.title] = number_of_tinyWebDbs
+                data["activityStartersPerProject"][file.title] = number_of_activityStarters
+                data["bluetoothClientsPerProject"][file.title] = number_of_bluetoothClients
+                data["bluetoothServersPerProject"][file.title] = number_of_bluetoothServers
+                data["serialsPerProject"][file.title] = number_of_serials
+                data["websPerProject"][file.title] = number_of_webs
+                data["nxtDrivesPerProject"][file.title] = number_of_nxtDrives 
+                data["nxtLightSensorsPerProject"][file.title] = number_of_nxtLightSensors
+                data["nxtColorSensorsPerProject"][file.title] = number_of_nxtColorSensors
+                data["nxtSoundSensorsPerProject"][file.title] = number_of_nxtSoundSensors 
+                data["nxtTouchSensorsPerProject"][file.title] = number_of_nxtTouchSensors
+                data["nxtUltrasonicSensorsPerProject"][file.title] = number_of_nxtUltrasonicSensors 
+                data["nxtDirectCommandsPerProject"][file.title] = number_of_nxtDirectCommands 
+                data["ev3MotorsPerProject"][file.title] = number_of_ev3Motors 
+                data["ev3ColorSensorsPerProject"][file.title] = number_of_ev3ColorSensors 
+                data["ev3GyroSensorsPerProject"][file.title] = number_of_ev3GyroSensors 
+                data["ev3TouchSensorsPerProject"][file.title] = number_of_ev3TouchSensors 
+                data["ev3UltrasonicSensorsPerProject"][file.title] = number_of_ev3UltrasonicSensors 
+                data["ev3SoundsPerProject"][file.title] = number_of_ev3Sounds 
+                data["ev3UIsPerProject"][file.title] = number_of_ev3UIs
+                data["ev3CommandsPerProject"][file.title] = number_of_ev3Commands
+                data["firebaseDbsPerProject"][file.title] = number_of_firebaseDbs
 
                 number_of_blocks_per_project = 0
                 number_of_screens_per_project = 0
@@ -654,6 +781,38 @@ def analyse(files):
                 number_of_pedometers = 0
                 number_of_proximitySensors = 0
                 number_of_thermometers = 0
+                number_of_contactPickers = 0
+                number_of_emailPickers = 0
+                number_of_phoneCalls = 0
+                number_of_phoneNumberPickers = 0
+                number_of_sharings = 0
+                number_of_textings = 0
+                number_of_twitters = 0
+                number_of_cloudDbs = 0
+                number_of_files = 0
+                number_of_tinyDbs = 0
+                number_of_tinyWebDbs = 0
+                number_of_activityStarters = 0
+                number_of_bluetoothClients = 0
+                number_of_bluetoothServers = 0
+                number_of_serials = 0
+                number_of_webs = 0
+                number_of_nxtDrives = 0
+                number_of_nxtColorSensors = 0
+                number_of_nxtLightSensors = 0
+                number_of_nxtSoundSensors = 0
+                number_of_nxtTouchSensors = 0
+                number_of_nxtUltrasonicSensors = 0
+                number_of_nxtDirectCommands = 0
+                number_of_ev3Motors = 0
+                number_of_ev3ColorSensors = 0
+                number_of_ev3GyroSensors = 0
+                number_of_ev3TouchSensors = 0
+                number_of_ev3UltrasonicSensors = 0
+                number_of_ev3Sounds = 0
+                number_of_ev3UIs = 0
+                number_of_ev3Commands = 0
+                number_of_firebaseDbs = 0
 
                 noMoreScreens = True
 
