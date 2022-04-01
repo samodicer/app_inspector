@@ -1,6 +1,5 @@
 import os
 import shutil
-from turtle import title
 import zipfile
 from lxml import html
 import json
@@ -14,7 +13,6 @@ from rest_framework_simplejwt.tokens import AccessToken
 
 from .serializers import RegisterSerializer
 from .serializers import DocumentSerializer
-from .serializers import AnalyseSerializer
 from .serializers import UserSerializer
 
 from .models import Document
