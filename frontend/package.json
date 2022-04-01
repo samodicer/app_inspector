@@ -12,7 +12,7 @@
     "axios": "^0.21.4",
     "chart.js": "2.9.4",
     "core-js": "^3.6.5",
-    "export-xlsx": "^0.1.2",
+    "export-from-json": "^1.6.0",
     "express": "^4.17.3",
     "vue": "^2.6.11",
     "vue-chartjs": "3.5.1",
