@@ -354,6 +354,8 @@ def analyse(files):
     # prebehneme po súboroch
     for file in files:
         # zadefinujeme si cesty
+        if not os.path.exists("./media/unzipped_files/"):
+            os.mkdir("./media/unzipped_files/")
         path = "./media/unzipped_files/"+str(file.id)
         my_dir = "./media/unzipped_files/"+str(file.id)
         my_zip = "./media/"+str(file.file)
