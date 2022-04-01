@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from app import views
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
 
 # koncové body API rozhrania
