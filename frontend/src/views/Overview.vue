@@ -1468,7 +1468,7 @@ export default {
         this.chartCompareBy.data
       );
     },
-    p(val) {
+    setProjectComparisonExport(val) {
       var result;
       if (this.sumValues(val[0].blocksPerProject) != 0) {
         this.items.push('Blocks per project');
@@ -1481,12 +1481,12 @@ export default {
               val[0].blocksPerProject
             )) {
               const obj = {};
-              obj.Project_name = String(key);
-              obj.Blocks = String(value);
+              obj.Project_name = key;
+              obj.Blocks = value;
               this.exportProjectComparison.push(obj);
             }
           } else {
-            result.Blocks = String(value);
+            result.Blocks = value;
           }
         }
       }
@@ -3397,6 +3397,7 @@ export default {
       this.chartCompareBy.data = [];
       this.exportProjectComparison = [];
       this.exportOverallStats = [];
+      this.items = [];
     },
     downloadOverallStats() {
       const data = this.exportOverallStats;
@@ -3430,7 +3431,7 @@ export default {
       this.resetData();
       if (this.getAnalysedData.length != 0) {
         this.setData(this.getAnalysedData);
-        this.p(this.getAnalysedData);
+        this.setProjectComparisonExport(this.getAnalysedData);
         this.renderProjectComparison(this.getAnalysedData);
       }
     },
