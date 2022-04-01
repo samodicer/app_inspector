@@ -1,6 +1,5 @@
 import os
 import shutil
-from turtle import title
 import zipfile
 from lxml import html
 import json
@@ -14,7 +13,6 @@ from rest_framework_simplejwt.tokens import AccessToken
 
 from .serializers import RegisterSerializer
 from .serializers import DocumentSerializer
-from .serializers import AnalyseSerializer
 from .serializers import UserSerializer
 
 from .models import Document
@@ -356,6 +354,8 @@ def analyse(files):
     # prebehneme po súboroch
     for file in files:
         # zadefinujeme si cesty
+        if not os.path.exists("./media/unzipped_files/"):
+            os.mkdir("./media/unzipped_files/")
         path = "./media/unzipped_files/"+str(file.id)
         my_dir = "./media/unzipped_files/"+str(file.id)
         my_zip = "./media/"+str(file.file)
