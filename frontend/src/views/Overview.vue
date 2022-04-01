@@ -471,11 +471,6 @@ export default {
       sumValues: (obj) => Object.values(obj).reduce((a, b) => a + b),
       items: [],
       compareBy: '',
-      basicStatsExportData: {
-        labels: [],
-        data: [],
-      },
-      panel: [0, 1],
       chartDataBuiltInBlocks: {
         labels: [],
         data: [],
@@ -526,193 +521,6 @@ export default {
       },
       exportProjectComparison: [],
       exportOverallStats: [],
-      SETTINGS_FOR_EXPORT: {
-        fileName: 'ai_overview',
-        workSheets: [
-          {
-            sheetName: 'Basic statistics',
-            startingRowNumber: 2,
-            gapBetweenTwoTables: 2,
-            tableSettings: {
-              data: {
-                importable: true,
-                tableTitle: 'Basic statistics',
-                headerDefinition: [],
-              },
-            },
-          },
-          {
-            sheetName: 'Built-in blocks',
-            startingRowNumber: 2,
-            gapBetweenTwoTables: 2,
-            tableSettings: {
-              data: {
-                importable: true,
-                tableTitle: 'Built-in blocks',
-                headerDefinition: [],
-              },
-            },
-          },
-          {
-            sheetName: 'Component blocks',
-            startingRowNumber: 2,
-            gapBetweenTwoTables: 2,
-            tableSettings: {
-              data: {
-                importable: true,
-                tableTitle: 'Component blocks',
-                headerDefinition: [],
-              },
-            },
-          },
-          {
-            sheetName: 'Component blocks types',
-            startingRowNumber: 2,
-            gapBetweenTwoTables: 2,
-            tableSettings: {
-              data: {
-                importable: true,
-                tableTitle: 'Component blocks types',
-                headerDefinition: [],
-              },
-            },
-          },
-          {
-            sheetName: 'User Interface component blocks',
-            startingRowNumber: 2,
-            gapBetweenTwoTables: 2,
-            tableSettings: {
-              data: {
-                importable: true,
-                tableTitle: 'User Interface component blocks',
-                headerDefinition: [],
-              },
-            },
-          },
-          {
-            sheetName: 'Drawing & Ani. component blocks',
-            startingRowNumber: 2,
-            gapBetweenTwoTables: 2,
-            tableSettings: {
-              data: {
-                importable: true,
-                tableTitle: 'Drawing and Animation component blocks',
-                headerDefinition: [],
-              },
-            },
-          },
-          {
-            sheetName: 'Storage & Exp. component blocks',
-            startingRowNumber: 2,
-            gapBetweenTwoTables: 2,
-            tableSettings: {
-              data: {
-                importable: true,
-                tableTitle: 'Storage and Experimental component blocks',
-                headerDefinition: [],
-              },
-            },
-          },
-          {
-            sheetName: 'Control blocks types',
-            startingRowNumber: 2,
-            gapBetweenTwoTables: 2,
-            tableSettings: {
-              data: {
-                importable: true,
-                tableTitle: 'Control blocks types',
-                headerDefinition: [],
-              },
-            },
-          },
-          {
-            sheetName: 'Procedure blocks types',
-            startingRowNumber: 2,
-            gapBetweenTwoTables: 2,
-            tableSettings: {
-              data: {
-                importable: true,
-                tableTitle: 'Procedure blocks types',
-                headerDefinition: [],
-              },
-            },
-          },
-          {
-            sheetName: 'Blocks per project',
-            startingRowNumber: 2,
-            gapBetweenTwoTables: 2,
-            tableSettings: {
-              data: {
-                importable: true,
-                tableTitle: 'Blocks per project',
-                headerDefinition: [],
-              },
-            },
-          },
-          {
-            sheetName: 'Components per project',
-            startingRowNumber: 2,
-            gapBetweenTwoTables: 2,
-            tableSettings: {
-              data: {
-                importable: true,
-                tableTitle: 'Components per project',
-                headerDefinition: [],
-              },
-            },
-          },
-          {
-            sheetName: 'Screens per project',
-            startingRowNumber: 2,
-            gapBetweenTwoTables: 2,
-            tableSettings: {
-              data: {
-                importable: true,
-                tableTitle: 'Screens per project',
-                headerDefinition: [],
-              },
-            },
-          },
-        ],
-      },
-      dataToExport: [
-        {
-          data: [],
-        },
-        {
-          data: [],
-        },
-        {
-          data: [],
-        },
-        {
-          data: [],
-        },
-        {
-          data: [],
-        },
-        {
-          data: [],
-        },
-        {
-          data: [],
-        },
-        {
-          data: [],
-        },
-        {
-          data: [],
-        },
-        {
-          data: [],
-        },
-        {
-          data: [],
-        },
-        {
-          data: [],
-        },
-      ],
     };
   },
   computed: {
@@ -730,8 +538,6 @@ export default {
 
       // naplníme názvy a hodnoty pomocou dát zo servera
       for (const [key, value] of Object.entries(val[0].basicStats)) {
-        this.basicStatsExportData.labels.push(key);
-        this.basicStatsExportData.data.push(value);
         if (key == 'Number of projects') {
           this.numberOfProjects = value;
         }
@@ -910,89 +716,6 @@ export default {
           break;
       }
     },
-    setExportData(type, labels, data) {
-      // vytvoríme štýlovací objekt pre hlavičku
-      const style = {
-        alignment: { horizontal: 'center', vertical: 'middle' },
-      };
-
-      // vytvoríme objekt pre hlavičku
-      var tableHeaders = labels.map(function (d) {
-        return {
-          name: d,
-          key: d,
-          style: style,
-          width: 12,
-        };
-      });
-
-      //  vytvoríme objekt pre dáta
-      var tableData = data.map(function (d, i) {
-        return {
-          [labels[i]]: d,
-        };
-      });
-
-      // spojíme všetky dátové objekty do jedného
-      const tableDataMerged = Object.assign({}, ...tableData);
-
-      // pre každý typ nastavíme dáta pre tabuľku
-      switch (type) {
-        case 'basicStats':
-          this.SETTINGS_FOR_EXPORT.workSheets[0].tableSettings.data.headerDefinition = tableHeaders;
-          this.dataToExport[0].data = [tableDataMerged];
-          break;
-        case 'builtInBlocks':
-          this.SETTINGS_FOR_EXPORT.workSheets[1].tableSettings.data.headerDefinition = tableHeaders;
-          this.dataToExport[1].data = [tableDataMerged];
-          break;
-        case 'componentBlocks':
-          this.SETTINGS_FOR_EXPORT.workSheets[2].tableSettings.data.headerDefinition = tableHeaders;
-          this.dataToExport[2].data = [tableDataMerged];
-          break;
-        case 'componentBlocksCategories':
-          this.SETTINGS_FOR_EXPORT.workSheets[3].tableSettings.data.headerDefinition = tableHeaders;
-          this.dataToExport[3].data = [tableDataMerged];
-          break;
-        case 'userInterfaceComponentBlocks':
-          this.SETTINGS_FOR_EXPORT.workSheets[4].tableSettings.data.headerDefinition = tableHeaders;
-          this.dataToExport[4].data = [tableDataMerged];
-          break;
-        case 'drawingAndAnimationComponentBlocks':
-          this.SETTINGS_FOR_EXPORT.workSheets[5].tableSettings.data.headerDefinition = tableHeaders;
-          this.dataToExport[5].data = [tableDataMerged];
-          break;
-        case 'storageAndExperimentalComponentBlocks':
-          this.SETTINGS_FOR_EXPORT.workSheets[6].tableSettings.data.headerDefinition = tableHeaders;
-          this.dataToExport[6].data = [tableDataMerged];
-          break;
-        case 'controlBlocksTypes':
-          this.SETTINGS_FOR_EXPORT.workSheets[7].tableSettings.data.headerDefinition = tableHeaders;
-          this.dataToExport[7].data = [tableDataMerged];
-          break;
-        case 'procedureBlocksType':
-          this.SETTINGS_FOR_EXPORT.workSheets[8].tableSettings.data.headerDefinition = tableHeaders;
-          this.dataToExport[8].data = [tableDataMerged];
-          break;
-        case 'blocksPerProject':
-          this.SETTINGS_FOR_EXPORT.workSheets[9].tableSettings.data.headerDefinition = tableHeaders;
-          this.dataToExport[9].data = [tableDataMerged];
-          break;
-        case 'componentsPerProject':
-          this.SETTINGS_FOR_EXPORT.workSheets[10].tableSettings.data.headerDefinition = tableHeaders;
-          this.dataToExport[10].data = [tableDataMerged];
-          break;
-        case 'screensPerProject':
-          this.SETTINGS_FOR_EXPORT.workSheets[11].tableSettings.data.headerDefinition = tableHeaders;
-          this.dataToExport[11].data = [tableDataMerged];
-          break;
-      }
-    },
-    /*exportToExcel() {
-      // stiahneme Excel súbor s analyzovaními dátami
-      const excelExport = new ExcelExport();
-      excelExport.downloadExcel(this.SETTINGS_FOR_EXPORT, this.dataToExport);
-    },*/
     setData(val) {
       // nastavíme dáta pre názvy a hodnoty grafov
       this.setChartData(val);
@@ -1053,75 +776,6 @@ export default {
       );
 
       this.sortData(
-        'screensPerProject',
-        this.chartDataScreensPerProject.labels,
-        this.chartDataScreensPerProject.data
-      );
-
-      /*this.sortData(
-        'compareBy',
-        this.chartCompareBy.labels,
-        this.chartCompareBy.data
-      );*/
-
-      // nastavíme dáta na export do Excelu
-      this.setExportData(
-        'basicStats',
-        this.basicStatsExportData.labels,
-        this.basicStatsExportData.data
-      );
-
-      this.setExportData(
-        'builtInBlocks',
-        this.chartDataBuiltInBlocks.labels,
-        this.chartDataBuiltInBlocks.data
-      );
-      this.setExportData(
-        'componentBlocks',
-        this.chartDataComponentBlocks.labels,
-        this.chartDataComponentBlocks.data
-      );
-      this.setExportData(
-        'componentBlocksCategories',
-        this.chartDataComponentBlocksCategories.labels,
-        this.chartDataComponentBlocksCategories.data
-      );
-      this.setExportData(
-        'userInterfaceComponentBlocks',
-        this.chartDataUIComponentBlocks.labels,
-        this.chartDataUIComponentBlocks.data
-      );
-      this.setExportData(
-        'drawingAndAnimationComponentBlocks',
-        this.chartDataDrawAndAnimComponentBlocks.labels,
-        this.chartDataDrawAndAnimComponentBlocks.data
-      );
-      this.setExportData(
-        'storageAndExperimentalComponentBlocks',
-        this.chartDataStorageAndExpComponentBlocks.labels,
-        this.chartDataStorageAndExpComponentBlocks.data
-      );
-      this.setExportData(
-        'controlBlocksTypes',
-        this.chartDataControlBlocksTypes.labels,
-        this.chartDataControlBlocksTypes.data
-      );
-      this.setExportData(
-        'procedureBlocksType',
-        this.chartDataProcedureBlocksTypes.labels,
-        this.chartDataProcedureBlocksTypes.data
-      );
-      this.setExportData(
-        'blocksPerProject',
-        this.chartDataBlocksPerProject.labels,
-        this.chartDataBlocksPerProject.data
-      );
-      this.setExportData(
-        'componentsPerProject',
-        this.chartDataComponentsPerProject.labels,
-        this.chartDataComponentsPerProject.data
-      );
-      this.setExportData(
         'screensPerProject',
         this.chartDataScreensPerProject.labels,
         this.chartDataScreensPerProject.data
@@ -1814,7 +1468,7 @@ export default {
         this.chartCompareBy.data
       );
     },
-    setDataForExport(val) {
+    p(val) {
       var result;
       if (this.sumValues(val[0].blocksPerProject) != 0) {
         this.items.push('Blocks per project');
@@ -3717,8 +3371,6 @@ export default {
     resetData() {
       // resetneme všetky dáta
       this.basicStats = null;
-      this.basicStatsExportData.labels = [];
-      this.basicStatsExportData.data = [];
       this.chartDataBuiltInBlocks.labels = [];
       this.chartDataBuiltInBlocks.data = [];
       this.chartDataComponentBlocks.labels = [];
@@ -3743,30 +3395,8 @@ export default {
       this.chartDataScreensPerProject.data = [];
       this.chartCompareBy.labels = [];
       this.chartCompareBy.data = [];
-      this.SETTINGS_FOR_EXPORT.workSheets[0].tableSettings.data.headerDefinition = [];
-      this.SETTINGS_FOR_EXPORT.workSheets[1].tableSettings.data.headerDefinition = [];
-      this.SETTINGS_FOR_EXPORT.workSheets[2].tableSettings.data.headerDefinition = [];
-      this.SETTINGS_FOR_EXPORT.workSheets[3].tableSettings.data.headerDefinition = [];
-      this.SETTINGS_FOR_EXPORT.workSheets[4].tableSettings.data.headerDefinition = [];
-      this.SETTINGS_FOR_EXPORT.workSheets[5].tableSettings.data.headerDefinition = [];
-      this.SETTINGS_FOR_EXPORT.workSheets[6].tableSettings.data.headerDefinition = [];
-      this.SETTINGS_FOR_EXPORT.workSheets[7].tableSettings.data.headerDefinition = [];
-      this.SETTINGS_FOR_EXPORT.workSheets[8].tableSettings.data.headerDefinition = [];
-      this.SETTINGS_FOR_EXPORT.workSheets[9].tableSettings.data.headerDefinition = [];
-      this.SETTINGS_FOR_EXPORT.workSheets[10].tableSettings.data.headerDefinition = [];
-      this.SETTINGS_FOR_EXPORT.workSheets[11].tableSettings.data.headerDefinition = [];
-      this.dataToExport[0].data = [];
-      this.dataToExport[1].data = [];
-      this.dataToExport[2].data = [];
-      this.dataToExport[3].data = [];
-      this.dataToExport[4].data = [];
-      this.dataToExport[5].data = [];
-      this.dataToExport[6].data = [];
-      this.dataToExport[7].data = [];
-      this.dataToExport[8].data = [];
-      this.dataToExport[9].data = [];
-      this.dataToExport[10].data = [];
-      this.dataToExport[11].data = [];
+      this.exportProjectComparison = [];
+      this.exportOverallStats = [];
     },
     downloadOverallStats() {
       const data = this.exportOverallStats;
@@ -3800,7 +3430,7 @@ export default {
       this.resetData();
       if (this.getAnalysedData.length != 0) {
         this.setData(this.getAnalysedData);
-        this.setDataForExport(this.getAnalysedData);
+        this.p(this.getAnalysedData);
         this.renderProjectComparison(this.getAnalysedData);
       }
     },
