@@ -13,6 +13,10 @@
             >
               <v-row style="margin-bottom: 0px">
                 <v-col class="text-right">
+                  <download-excel :data="this.dataForExcel">
+                    Download Data
+                    <p>HERE</p>
+                  </download-excel>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
@@ -486,6 +490,7 @@ export default {
         labels: [],
         data: [],
       },
+      dataForExcel: [],
       SETTINGS_FOR_EXPORT: {
         fileName: 'ai_overview',
         workSheets: [
@@ -846,7 +851,7 @@ export default {
           name: d,
           key: d,
           style: style,
-          width: 25,
+          width: 12,
         };
       });
 
@@ -1738,283 +1743,1725 @@ export default {
         this.chartCompareBy.data
       );
     },
-    setSelectValues(val) {
+    setDataForExport(val) {
+      var result;
       if (this.sumValues(val[0].blocksPerProject) != 0) {
         this.items.push('Blocks per project');
+        for (const [key, value] of Object.entries(val[0].blocksPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].blocksPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = String(key);
+              obj.Blocks = String(value);
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Blocks = String(value);
+          }
+        }
       }
       if (this.sumValues(val[0].componentsPerProject) != 0) {
         this.items.push('Components per project');
+        for (const [key, value] of Object.entries(
+          val[0].componentsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].componentsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Components = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Components = value;
+          }
+        }
       }
       if (this.sumValues(val[0].screensPerProject) != 0) {
         this.items.push('Screens per project');
+        for (const [key, value] of Object.entries(val[0].screensPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].screensPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Screens = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Screens = value;
+          }
+        }
       }
       if (this.sumValues(val[0].buttonsPerProject) != 0) {
         this.items.push('User Interface - Button blocks per project');
+        for (const [key, value] of Object.entries(val[0].buttonsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].buttonsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Button_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Button_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].checkboxesPerProject) != 0) {
         this.items.push('User Interface - Checkbox blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].checkboxesPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].checkboxesPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.CheckBox_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.CheckBox_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].datepickersPerProject) != 0) {
         this.items.push('User Interface - DatePicker blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].datepickersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].datepickersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.DatePicker_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.DatePicker_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].imagesPerProject) != 0) {
         this.items.push('User Interface - Image blocks per project');
+        for (const [key, value] of Object.entries(val[0].imagesPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].imagesPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Image_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Image_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].labelsPerProject) != 0) {
         this.items.push('User Interface - Label blocks per project');
+        for (const [key, value] of Object.entries(val[0].labelsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].labelsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Label_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Label_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].listpickersPerProject) != 0) {
         this.items.push('User Interface - ListPicker blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].listpickersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].listpickersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.ListPicker_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.ListPicker_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].listviewsPerProject) != 0) {
         this.items.push('User Interface - ListView blocks per project');
+        for (const [key, value] of Object.entries(val[0].listviewsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].listviewsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.ListView_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.ListView_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].notifiersPerProject) != 0) {
         this.items.push('User Interface - Notifier blocks per project');
+        for (const [key, value] of Object.entries(val[0].notifiersPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].notifiersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Notifier_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Notifier_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].passwordtextboxesPerProject) != 0) {
         this.items.push('User Interface - PasswordTextBox blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].passwordtextboxesPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].passwordtextboxesPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.PasswordTextBox_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.PasswordTextBox_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].slidersPerProject) != 0) {
         this.items.push('User Interface - Slider blocks per project');
+        for (const [key, value] of Object.entries(val[0].slidersPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].slidersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Slider_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Slider_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].spinnersPerProject) != 0) {
         this.items.push('User Interface - Spinner blocks per project');
+        for (const [key, value] of Object.entries(val[0].spinnersPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].spinnersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Spinner_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Spinner_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].switchesPerProject) != 0) {
         this.items.push('User Interface - Switch blocks per project');
+        for (const [key, value] of Object.entries(val[0].switchesPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].switchesPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Switch_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Switch_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].textboxesPerProject) != 0) {
         this.items.push('User Interface - TextBox blocks per project');
+        for (const [key, value] of Object.entries(val[0].textboxesPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].textboxesPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.TextBox_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.TextBox_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].timepickersPerProject) != 0) {
         this.items.push('User Interface - TimePicker blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].timepickersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].timepickersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.TimePicker_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.TimePicker_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].webviewersPerProject) != 0) {
         this.items.push('User Interface - WebViewer blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].webviewersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].webviewersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.WebViewer_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.WebViewer_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].horizontalArrangmentPerProject) != 0) {
         this.items.push('Layout - HorizontalArrangment blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].horizontalArrangmentPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].horizontalArrangmentPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.HorizontalArrangment_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.HorizontalArrangment_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].horizontalScrollArrangmentPerProject) != 0) {
         this.items.push(
           'Layout - HorizontalScrollArrangment blocks per project'
         );
+        for (const [key, value] of Object.entries(
+          val[0].horizontalScrollArrangmentPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].horizontalScrollArrangmentPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.HorizontalScrollArrangment_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.HorizontalScrollArrangment_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].tableArrangmentPerProject) != 0) {
         this.items.push('Layout - TableArrangment blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].tableArrangmentPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].tableArrangmentPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.TableArrangment_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.TableArrangment_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].verticalArrangmentPerProject) != 0) {
         this.items.push('Layout - VerticalArrangment blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].verticalArrangmentPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].verticalArrangmentPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.VerticalArrangment_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.VerticalArrangment_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].verticalScrollArrangmentPerProject) != 0) {
         this.items.push('Layout - VerticalScrollArrangment blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].verticalScrollArrangmentPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].verticalScrollArrangmentPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.VerticalScrollArrangment_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.VerticalScrollArrangment_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].camcordersPerProject) != 0) {
         this.items.push('Media - Camcorder blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].camcordersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].camcordersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Camcorder_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Camcorder_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].camerasPerProject) != 0) {
         this.items.push('Media - Camera blocks per project');
+        for (const [key, value] of Object.entries(val[0].camerasPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].camerasPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Camera_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Camera_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].imagepickersPerProject) != 0) {
         this.items.push('Media - ImagePicker blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].imagepickersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].imagepickersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.ImagePicker_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.ImagePicker_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].playersPerProject) != 0) {
         this.items.push('Media - Player blocks per project');
+        for (const [key, value] of Object.entries(val[0].playersPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].playersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Player_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Player_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].soundsPerProject) != 0) {
         this.items.push('Media - Sound blocks per project');
+        for (const [key, value] of Object.entries(val[0].soundsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].soundsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Sound_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Sound_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].soundrecordersPerProject) != 0) {
         this.items.push('Media - SoundRecorder blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].soundrecordersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].soundrecordersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.SoundRecorder_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.SoundRecorder_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].speechrecognizersPerProject) != 0) {
         this.items.push('Media - SpeechRecognizer blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].speechrecognizersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].speechrecognizersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.SpeechRecognizer_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.SpeechRecognizer_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].texttospeechsPerProject) != 0) {
         this.items.push('Media - TextToSpeech blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].texttospeechsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].texttospeechsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.TextToSpeech_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.TextToSpeech_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].videoplayersPerProject) != 0) {
         this.items.push('Media - VideoPlayer blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].videoplayersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].videoplayersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.VideoPlayer_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.VideoPlayer_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].yandextranslatorsPerProject) != 0) {
         this.items.push('Media - YandexTranslate blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].yandextranslatorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].yandextranslatorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.YandexTranslate_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.YandexTranslate_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].ballsPerProject) != 0) {
         this.items.push('Drawing and Animation - Ball blocks per project');
+        for (const [key, value] of Object.entries(val[0].ballsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(val[0].ballsPerProject)) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Ball_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Ball_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].canvasesPerProject) != 0) {
         this.items.push('Drawing and Animation - Canvas blocks per project');
+        for (const [key, value] of Object.entries(val[0].canvasesPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].canvasesPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Canvas_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Canvas_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].imagespritesPerProject) != 0) {
         this.items.push(
           'Drawing and Animation - ImageSprite blocks per project'
         );
+        for (const [key, value] of Object.entries(
+          val[0].imagespritesPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].imagespritesPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.ImageSprite_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.ImageSprite_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].circlesPerProject) != 0) {
         this.items.push('Maps - Circle blocks per project');
+        for (const [key, value] of Object.entries(val[0].circlesPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].circlesPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Circle_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Circle_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].featurecollectionsPerProject) != 0) {
         this.items.push('Maps - FeatureCollection blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].featurecollectionsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].featurecollectionsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.FeatureCollection_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.FeatureCollection_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].mapsPerProject) != 0) {
         this.items.push('Maps - Map blocks per project');
+        for (const [key, value] of Object.entries(val[0].mapsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(val[0].mapsPerProject)) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Map_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Map_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].markersPerProject) != 0) {
         this.items.push('Maps - Marker blocks per project');
+        for (const [key, value] of Object.entries(val[0].markersPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].markersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Marker_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Marker_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].navigationsPerProject) != 0) {
         this.items.push('Maps - Navigation blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].navigationsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].navigationsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Navigation_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Navigation_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].polygonsPerProject) != 0) {
         this.items.push('Maps - Polygon blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].navigationsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].navigationsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Navigation_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Navigation_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].rectanglesPerProject) != 0) {
         this.items.push('Maps - Rectangle blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].rectanglesPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].rectanglesPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Rectangle_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Rectangle_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].accelerometerSensorsPerProject) != 0) {
         this.items.push('Sensors - AccelerometerSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].accelerometerSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].accelerometerSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.AccelerometerSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.AccelerometerSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].barcodeScannersPerProject) != 0) {
         this.items.push('Sensors - BarcodeScanner blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].barcodeScannersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].barcodeScannersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.BarcodeScanner_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.BarcodeScanner_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].barometersPerProject) != 0) {
         this.items.push('Sensors - Barometer blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].barometersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].barometersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Barometer_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Barometer_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].clocksPerProject) != 0) {
         this.items.push('Sensors - Clock blocks per project');
+        for (const [key, value] of Object.entries(val[0].clocksPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].clocksPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Clock_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Clock_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].gyroscopeSensorsPerProject) != 0) {
         this.items.push('Sensors - GyroscopeSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].gyroscopeSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].gyroscopeSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.GyroscopeSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.GyroscopeSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].hygrometersPerProject) != 0) {
         this.items.push('Sensors - Hygrometer blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].hygrometersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].hygrometersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Hygrometer_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Hygrometer_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].lightSensorsPerProject) != 0) {
         this.items.push('Sensors - LightSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].lightSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].lightSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.LightSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.LightSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].locationSensorsPerProject) != 0) {
         this.items.push('Sensors - LocationSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].locationSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].locationSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.LocationSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.LocationSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].magneticFieldSensorsPerProject) != 0) {
         this.items.push('Sensors - MagneticFieldSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].magneticFieldSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].magneticFieldSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.MagneticFieldSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.MagneticFieldSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].nearFieldsPerProject) != 0) {
         this.items.push('Sensors - NearField blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].nearFieldsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].nearFieldsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.NearField_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.NearField_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].orientationSensorsPerProject) != 0) {
         this.items.push('Sensors - OrientationSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].orientationSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].orientationSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.OrientationSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.OrientationSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].pedometersPerProject) != 0) {
         this.items.push('Sensors - Pedometer blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].pedometersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].pedometersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Pedometer_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Pedometer_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].proximitySensorsPerProject) != 0) {
         this.items.push('Sensors - ProximitySensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].proximitySensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].proximitySensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.ProximitySensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.ProximitySensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].thermometersPerProject) != 0) {
         this.items.push('Sensors - Thermometer blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].thermometersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].thermometersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Thermometer_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Thermometer_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].contactPickersPerProject) != 0) {
         this.items.push('Social - ContactPicker blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].contactPickersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].contactPickersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.ContactPicker_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.ContactPicker_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].emailPickersPerProject) != 0) {
         this.items.push('Social - EmailPicker blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].emailPickersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].emailPickersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.EmailPicker_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.EmailPicker_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].phoneCallsPerProject) != 0) {
         this.items.push('Social - PhoneCall blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].phoneCallsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].phoneCallsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.PhoneCall_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.PhoneCall_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].phoneNumberPickersPerProject) != 0) {
         this.items.push('Social - PhoneNumberPicker blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].phoneNumberPickersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].phoneNumberPickersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.PhoneNumberPicker_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.PhoneNumberPicker_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].sharingsPerProject) != 0) {
         this.items.push('Social - Sharing blocks per project');
+        for (const [key, value] of Object.entries(val[0].sharingsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].sharingsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Sharing_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Sharing_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].textingsPerProject) != 0) {
         this.items.push('Social - Texting blocks per project');
+        for (const [key, value] of Object.entries(val[0].textingsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].textingsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Texting_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Texting_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].twittersPerProject) != 0) {
         this.items.push('Social - Twitter blocks per project');
+        for (const [key, value] of Object.entries(val[0].twittersPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].twittersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Twitter_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Twitter_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].cloudDbsPerProject) != 0) {
         this.items.push('Storage - CloudDB blocks per project');
+        for (const [key, value] of Object.entries(val[0].cloudDbsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].cloudDbsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.CloudDB_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.CloudDB_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].filesPerProject) != 0) {
         this.items.push('Storage - File blocks per project');
+        for (const [key, value] of Object.entries(val[0].filesPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(val[0].filesPerProject)) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Files_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Files_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].tinyDbsPerProject) != 0) {
         this.items.push('Storage - TinyDB blocks per project');
+        for (const [key, value] of Object.entries(val[0].tinyDbsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].tinyDbsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.TinyDB_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.TinyDB_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].tinyWebDbsPerProject) != 0) {
         this.items.push('Storage - TinyWebDB blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].tinyWebDbsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].tinyWebDbsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.TinyWebDB_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.TinyWebDB_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].activityStartersPerProject) != 0) {
         this.items.push('Connectivity - ActivityStarter blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].activityStartersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].activityStartersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.ActivityStarter_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.ActivityStarter_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].bluetoothClientsPerProject) != 0) {
         this.items.push('Connectivity - BluetoothClient blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].bluetoothClientsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].bluetoothClientsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.BluetoothClient_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.BluetoothClient_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].bluetoothServersPerProject) != 0) {
         this.items.push('Connectivity - BluetoothServer blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].bluetoothServersPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].bluetoothServersPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.BluetoothServer_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.BluetoothServer_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].serialsPerProject) != 0) {
         this.items.push('Connectivity - Serial blocks per project');
+        for (const [key, value] of Object.entries(val[0].serialsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].serialsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Serial_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Serial_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].websPerProject) != 0) {
         this.items.push('Connectivity - Web blocks per project');
+        for (const [key, value] of Object.entries(val[0].websPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(val[0].websPerProject)) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Web_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Web_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].nxtDrivesPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - NxtDrive blocks per project');
+        for (const [key, value] of Object.entries(val[0].nxtDrivesPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].nxtDrivesPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.NxtDrive_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Web_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].nxtColorSensorsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - NxtColorSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].nxtColorSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].nxtColorSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.NxtColorSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.NxtColorSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].nxtLightSensorsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - NxtLightSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].nxtLightSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].nxtLightSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.NxtLightSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.NxtLightSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].nxtSoundSensorsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - NxtSoundSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].nxtSoundSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].nxtSoundSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.NxtSoundSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.NxtSoundSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].nxtTouchSensorsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - NxtTouchSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].nxtTouchSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].nxtTouchSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.NxtTouchSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.NxtTouchSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].nxtUltrasonicSensorsPerProject) != 0) {
         this.items.push(
           'LEGO MINDSTORMS - NxtUltrasonicSensor blocks per project'
         );
+        for (const [key, value] of Object.entries(
+          val[0].nxtUltrasonicSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].nxtUltrasonicSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.NxtUltrasonicSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.NxtUltrasonicSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].nxtDirectCommandsPerProject) != 0) {
         this.items.push(
           'LEGO MINDSTORMS - NxtDirectCommands blocks per project'
         );
+        for (const [key, value] of Object.entries(
+          val[0].nxtDirectCommandsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].nxtDirectCommandsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.NxtDirectCommands_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.NxtDirectCommands_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].ev3MotorsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - Ev3Motors blocks per project');
+        for (const [key, value] of Object.entries(val[0].ev3MotorsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].ev3MotorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Ev3Motors_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Ev3Motors_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].ev3ColorSensorsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - Ev3ColorSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].ev3ColorSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].ev3ColorSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Ev3ColorSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Ev3ColorSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].ev3GyroSensorsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - Ev3GyroSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].ev3GyroSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].ev3GyroSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Ev3GyroSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Ev3GyroSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].ev3TouchSensorsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - Ev3TouchSensor blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].ev3TouchSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].ev3TouchSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Ev3TouchSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Ev3TouchSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].ev3UltrasonicSensorsPerProject) != 0) {
         this.items.push(
           'LEGO MINDSTORMS - Ev3UltrasonicSensor blocks per project'
         );
+        for (const [key, value] of Object.entries(
+          val[0].ev3UltrasonicSensorsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].ev3UltrasonicSensorsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Ev3UltrasonicSensor_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Ev3UltrasonicSensor_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].ev3SoundsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - Ev3Sound blocks per project');
+        for (const [key, value] of Object.entries(val[0].ev3SoundsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].ev3SoundsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Ev3Sound_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Ev3Sound_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].ev3UIsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - Ev3UI blocks per project');
+        for (const [key, value] of Object.entries(val[0].ev3UIsPerProject)) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].ev3UIsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Ev3UI_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Ev3UI_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].ev3CommandsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - Ev3Commands blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].ev3CommandsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].ev3CommandsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.Ev3Commands_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.Ev3Commands_blocks = value;
+          }
+        }
       }
       if (this.sumValues(val[0].firebaseDbsPerProject) != 0) {
         this.items.push('Experimental - FirebaseDB blocks per project');
+        for (const [key, value] of Object.entries(
+          val[0].firebaseDbsPerProject
+        )) {
+          result = this.dataForExcel.find((x) => x.Project_name === key);
+          if (result == null) {
+            for (const [key, value] of Object.entries(
+              val[0].firebaseDbsPerProject
+            )) {
+              const obj = {};
+              obj.Project_name = key;
+              obj.FirebaseDB_blocks = value;
+              this.dataForExcel.push(obj);
+            }
+          } else {
+            result.FirebaseDB_blocks = value;
+          }
+        }
       }
       this.compareBy = this.items[0];
     },
@@ -2090,7 +3537,7 @@ export default {
       this.resetData();
       if (this.getAnalysedData.length != 0) {
         this.setData(this.getAnalysedData);
-        this.setSelectValues(this.getAnalysedData);
+        this.setDataForExport(this.getAnalysedData);
         this.renderProjectComparison(this.getAnalysedData);
       }
     },
