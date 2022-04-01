@@ -30,10 +30,14 @@
 
               <v-list-item-action>
                 <v-btn
+                  :loading="loading && item == clickedBtn"
                   class="white--text"
                   tabindex="2"
                   color="#26A69A"
-                  @click="analyze(item.files)"
+                  @click="
+                    analyze(item.files);
+                    clickedBtn = item;
+                  "
                 >
                   Analyse
                 </v-btn>
@@ -58,7 +62,10 @@ export default {
   name: 'Home',
   components: {},
   data() {
-    return {};
+    return {
+      loading: false,
+      clickedBtn: {},
+    };
   },
   methods: {
     ...mapActions({
@@ -87,6 +94,7 @@ export default {
     },
     analyze(files) {
       var ids = [];
+      this.loading = true;
       // ak sú nejaké súbory
       if (files.length != 0) {
         // pridáme do pola id súborov
@@ -98,6 +106,8 @@ export default {
           // zmeníme stavy
           this.changeUploadedFiles(files);
           this.changeAnalysed(true);
+          this.loading = false;
+          this.clickedBtn = {};
           // presmerovanie na Overview
           if (this.$router.currentRoute.path != '/overview') {
             this.$router.push('overview');

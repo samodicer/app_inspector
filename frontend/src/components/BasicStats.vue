@@ -28,21 +28,22 @@ export default {
 <style scoped>
 #sheet {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   width: 490px;
   height: 300px;
 }
 .card_title {
-  position: absolute;
   font-weight: 700;
   font-size: 20px;
-  margin-bottom: 200px;
+  margin-top: 30px;
 }
 .card_number {
   cursor: default;
   font-weight: 700;
   font-size: 60px;
+  margin-top: 120px;
+  position: absolute;
   transition: 0.5s;
 }
 .card_number:hover {

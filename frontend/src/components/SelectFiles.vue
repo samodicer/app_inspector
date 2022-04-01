@@ -44,7 +44,9 @@
           </template>
         </v-virtual-scroll>
         <div class="btn">
-          <v-btn color="#26A69A" dark @click="analyze()"> Analyse files </v-btn>
+          <v-btn color="#26A69A" :loading="loading" dark @click="analyze()">
+            Analyse files
+          </v-btn>
         </div>
       </v-card>
     </div>
@@ -76,6 +78,7 @@ export default {
   components: {},
   data() {
     return {
+      loading: false,
       user_id: null,
       selectedFiles: [],
       headerCheck: true,
@@ -91,12 +94,14 @@ export default {
     analyze() {
       // ak sú vybrané nejaké súbory analyzujeme ich, ak nie zobrazíme snackbar
       if (this.selectedFiles.length != 0) {
+        this.loading = true;
         // id súborov pošleme na analýzu
         this.analyseFile({
           ids: this.selectedFiles,
         }).then(() => {
           // zmeníme stav
           this.changeAnalysed(true);
+          this.loading = false;
           // presmerovanie na Overview
           if (this.$router.currentRoute.path != '/overview') {
             this.$router.push('overview');

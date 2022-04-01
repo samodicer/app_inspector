@@ -13,24 +13,6 @@
             >
               <v-row style="margin-bottom: 0px">
                 <v-col class="text-right">
-                  <download-excel :data="this.dataForExcel">
-                    Download Data
-                    <p>HERE</p>
-                  </download-excel>
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-icon
-                        id="icon"
-                        x-large
-                        @click="exportToExcel"
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        mdi-file-export
-                      </v-icon>
-                    </template>
-                    <span>Export to Excel</span>
-                  </v-tooltip>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
@@ -43,7 +25,7 @@
                         mdi-cog
                       </v-icon>
                     </template>
-                    <span>Settings</span>
+                    <span style="font-size: 12px">Settings</span>
                   </v-tooltip>
                   <div v-if="settingsDialog">
                     <v-dialog
@@ -74,6 +56,32 @@
               <v-row>
                 <v-col>
                   <v-card id="card">
+                    <v-row
+                      style="
+                        display: flex;
+                        justify-content: end;
+                        align-items: center;
+                        flex-direction: row;
+                        margin-bottom: 0px;
+                      "
+                    >
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon
+                            id="icon"
+                            x-large
+                            @click="downloadOverallStats()"
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            mdi-download
+                          </v-icon>
+                        </template>
+                        <span style="font-size: 12px"
+                          >Export overall statistics to CSV</span
+                        >
+                      </v-tooltip>
+                    </v-row>
                     <h1 id="heading">
                       <v-icon large color="#26a69a">
                         mdi-chart-timeline-variant
@@ -351,6 +359,32 @@
                     </v-row>
                   </v-card>
                   <v-card id="card" v-if="this.numberOfProjects > 1">
+                    <v-row
+                      style="
+                        display: flex;
+                        justify-content: end;
+                        align-items: center;
+                        flex-direction: row;
+                        margin-bottom: 0px;
+                      "
+                    >
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon
+                            id="icon"
+                            x-large
+                            @click="downloadProjectComparison()"
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            mdi-download
+                          </v-icon>
+                        </template>
+                        <span style="font-size: 12px"
+                          >Export project comparison to CSV</span
+                        >
+                      </v-tooltip>
+                    </v-row>
                     <h1 id="heading">
                       <v-icon large color="#26a69a"> mdi-compare </v-icon>
                       Project comparison
@@ -410,12 +444,12 @@ import { mapActions, mapGetters } from 'vuex';
 import Navbar from '../components/Navbar.vue';
 import DoughnutChart from '../components/DoughnutChart.vue';
 import BarChart from '../components/BarChart.vue';
-import ExcelExport from 'export-xlsx';
 import SelectFiles from '../components/SelectFiles.vue';
 import BasicStats from '../components/BasicStats.vue';
 import PieChart from '../components/PieChart.vue';
 import LineChart from '../components/LineChart.vue';
 import Footer from '../components/Footer.vue';
+import exportFromJSON from 'export-from-json';
 
 export default {
   name: 'Overview',
@@ -490,7 +524,8 @@ export default {
         labels: [],
         data: [],
       },
-      dataForExcel: [],
+      exportProjectComparison: [],
+      exportOverallStats: [],
       SETTINGS_FOR_EXPORT: {
         fileName: 'ai_overview',
         workSheets: [
@@ -700,16 +735,28 @@ export default {
         if (key == 'Number of projects') {
           this.numberOfProjects = value;
         }
+        const obj = {};
+        obj.Parameter = 'Basic stats - ' + key;
+        obj.Value = value;
+        this.exportOverallStats.push(obj);
       }
 
       for (const [key, value] of Object.entries(val[0].builtInBlocks)) {
         this.chartDataBuiltInBlocks.labels.push(key);
         this.chartDataBuiltInBlocks.data.push(value);
+        const obj = {};
+        obj.Parameter = 'Built-in blocks - ' + key;
+        obj.Value = value;
+        this.exportOverallStats.push(obj);
       }
 
       for (const [key, value] of Object.entries(val[0].componentBlocks)) {
         this.chartDataComponentBlocks.labels.push(key);
         this.chartDataComponentBlocks.data.push(value);
+        const obj = {};
+        obj.Parameter = 'Component blocks - ' + key;
+        obj.Value = value;
+        this.exportOverallStats.push(obj);
       }
 
       for (const [key, value] of Object.entries(
@@ -717,6 +764,10 @@ export default {
       )) {
         this.chartDataComponentBlocksCategories.labels.push(key);
         this.chartDataComponentBlocksCategories.data.push(value);
+        const obj = {};
+        obj.Parameter = 'Component blocks types - ' + key;
+        obj.Value = value;
+        this.exportOverallStats.push(obj);
       }
 
       for (const [key, value] of Object.entries(
@@ -724,6 +775,10 @@ export default {
       )) {
         this.chartDataUIComponentBlocks.labels.push(key);
         this.chartDataUIComponentBlocks.data.push(value);
+        const obj = {};
+        obj.Parameter = 'User Interface component blocks - ' + key;
+        obj.Value = value;
+        this.exportOverallStats.push(obj);
       }
 
       for (const [key, value] of Object.entries(
@@ -731,6 +786,10 @@ export default {
       )) {
         this.chartDataDrawAndAnimComponentBlocks.labels.push(key);
         this.chartDataDrawAndAnimComponentBlocks.data.push(value);
+        const obj = {};
+        obj.Parameter = 'Drawing and Animation component blocks - ' + key;
+        obj.Value = value;
+        this.exportOverallStats.push(obj);
       }
 
       for (const [key, value] of Object.entries(
@@ -738,16 +797,28 @@ export default {
       )) {
         this.chartDataStorageAndExpComponentBlocks.labels.push(key);
         this.chartDataStorageAndExpComponentBlocks.data.push(value);
+        const obj = {};
+        obj.Parameter = 'Storage and Experimental component blocks - ' + key;
+        obj.Value = value;
+        this.exportOverallStats.push(obj);
       }
 
       for (const [key, value] of Object.entries(val[0].controlBlocksTypes)) {
         this.chartDataControlBlocksTypes.labels.push(key);
         this.chartDataControlBlocksTypes.data.push(value);
+        const obj = {};
+        obj.Parameter = 'Control blocks types - ' + key;
+        obj.Value = value;
+        this.exportOverallStats.push(obj);
       }
 
       for (const [key, value] of Object.entries(val[0].procedureBlocksTypes)) {
         this.chartDataProcedureBlocksTypes.labels.push(key);
         this.chartDataProcedureBlocksTypes.data.push(value);
+        const obj = {};
+        obj.Parameter = 'Procedure blocks types - ' + key;
+        obj.Value = value;
+        this.exportOverallStats.push(obj);
       }
 
       for (const [key, value] of Object.entries(val[0].blocksPerProject)) {
@@ -917,11 +988,11 @@ export default {
           break;
       }
     },
-    exportToExcel() {
+    /*exportToExcel() {
       // stiahneme Excel súbor s analyzovaními dátami
       const excelExport = new ExcelExport();
       excelExport.downloadExcel(this.SETTINGS_FOR_EXPORT, this.dataToExport);
-    },
+    },*/
     setData(val) {
       // nastavíme dáta pre názvy a hodnoty grafov
       this.setChartData(val);
@@ -1748,7 +1819,9 @@ export default {
       if (this.sumValues(val[0].blocksPerProject) != 0) {
         this.items.push('Blocks per project');
         for (const [key, value] of Object.entries(val[0].blocksPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].blocksPerProject
@@ -1756,7 +1829,7 @@ export default {
               const obj = {};
               obj.Project_name = String(key);
               obj.Blocks = String(value);
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Blocks = String(value);
@@ -1768,7 +1841,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].componentsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].componentsPerProject
@@ -1776,7 +1851,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Components = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Components = value;
@@ -1786,7 +1861,9 @@ export default {
       if (this.sumValues(val[0].screensPerProject) != 0) {
         this.items.push('Screens per project');
         for (const [key, value] of Object.entries(val[0].screensPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].screensPerProject
@@ -1794,7 +1871,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Screens = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Screens = value;
@@ -1804,7 +1881,9 @@ export default {
       if (this.sumValues(val[0].buttonsPerProject) != 0) {
         this.items.push('User Interface - Button blocks per project');
         for (const [key, value] of Object.entries(val[0].buttonsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].buttonsPerProject
@@ -1812,7 +1891,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Button_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Button_blocks = value;
@@ -1824,7 +1903,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].checkboxesPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].checkboxesPerProject
@@ -1832,7 +1913,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.CheckBox_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.CheckBox_blocks = value;
@@ -1844,7 +1925,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].datepickersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].datepickersPerProject
@@ -1852,7 +1935,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.DatePicker_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.DatePicker_blocks = value;
@@ -1862,7 +1945,9 @@ export default {
       if (this.sumValues(val[0].imagesPerProject) != 0) {
         this.items.push('User Interface - Image blocks per project');
         for (const [key, value] of Object.entries(val[0].imagesPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].imagesPerProject
@@ -1870,7 +1955,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Image_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Image_blocks = value;
@@ -1880,7 +1965,9 @@ export default {
       if (this.sumValues(val[0].labelsPerProject) != 0) {
         this.items.push('User Interface - Label blocks per project');
         for (const [key, value] of Object.entries(val[0].labelsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].labelsPerProject
@@ -1888,7 +1975,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Label_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Label_blocks = value;
@@ -1900,7 +1987,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].listpickersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].listpickersPerProject
@@ -1908,7 +1997,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.ListPicker_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.ListPicker_blocks = value;
@@ -1918,7 +2007,9 @@ export default {
       if (this.sumValues(val[0].listviewsPerProject) != 0) {
         this.items.push('User Interface - ListView blocks per project');
         for (const [key, value] of Object.entries(val[0].listviewsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].listviewsPerProject
@@ -1926,7 +2017,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.ListView_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.ListView_blocks = value;
@@ -1936,7 +2027,9 @@ export default {
       if (this.sumValues(val[0].notifiersPerProject) != 0) {
         this.items.push('User Interface - Notifier blocks per project');
         for (const [key, value] of Object.entries(val[0].notifiersPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].notifiersPerProject
@@ -1944,7 +2037,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Notifier_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Notifier_blocks = value;
@@ -1956,7 +2049,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].passwordtextboxesPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].passwordtextboxesPerProject
@@ -1964,7 +2059,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.PasswordTextBox_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.PasswordTextBox_blocks = value;
@@ -1974,7 +2069,9 @@ export default {
       if (this.sumValues(val[0].slidersPerProject) != 0) {
         this.items.push('User Interface - Slider blocks per project');
         for (const [key, value] of Object.entries(val[0].slidersPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].slidersPerProject
@@ -1982,7 +2079,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Slider_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Slider_blocks = value;
@@ -1992,7 +2089,9 @@ export default {
       if (this.sumValues(val[0].spinnersPerProject) != 0) {
         this.items.push('User Interface - Spinner blocks per project');
         for (const [key, value] of Object.entries(val[0].spinnersPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].spinnersPerProject
@@ -2000,7 +2099,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Spinner_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Spinner_blocks = value;
@@ -2010,7 +2109,9 @@ export default {
       if (this.sumValues(val[0].switchesPerProject) != 0) {
         this.items.push('User Interface - Switch blocks per project');
         for (const [key, value] of Object.entries(val[0].switchesPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].switchesPerProject
@@ -2018,7 +2119,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Switch_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Switch_blocks = value;
@@ -2028,7 +2129,9 @@ export default {
       if (this.sumValues(val[0].textboxesPerProject) != 0) {
         this.items.push('User Interface - TextBox blocks per project');
         for (const [key, value] of Object.entries(val[0].textboxesPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].textboxesPerProject
@@ -2036,7 +2139,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.TextBox_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.TextBox_blocks = value;
@@ -2048,7 +2151,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].timepickersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].timepickersPerProject
@@ -2056,7 +2161,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.TimePicker_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.TimePicker_blocks = value;
@@ -2068,7 +2173,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].webviewersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].webviewersPerProject
@@ -2076,7 +2183,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.WebViewer_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.WebViewer_blocks = value;
@@ -2088,7 +2195,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].horizontalArrangmentPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].horizontalArrangmentPerProject
@@ -2096,7 +2205,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.HorizontalArrangment_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.HorizontalArrangment_blocks = value;
@@ -2110,7 +2219,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].horizontalScrollArrangmentPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].horizontalScrollArrangmentPerProject
@@ -2118,7 +2229,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.HorizontalScrollArrangment_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.HorizontalScrollArrangment_blocks = value;
@@ -2130,7 +2241,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].tableArrangmentPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].tableArrangmentPerProject
@@ -2138,7 +2251,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.TableArrangment_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.TableArrangment_blocks = value;
@@ -2150,7 +2263,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].verticalArrangmentPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].verticalArrangmentPerProject
@@ -2158,7 +2273,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.VerticalArrangment_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.VerticalArrangment_blocks = value;
@@ -2170,7 +2285,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].verticalScrollArrangmentPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].verticalScrollArrangmentPerProject
@@ -2178,7 +2295,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.VerticalScrollArrangment_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.VerticalScrollArrangment_blocks = value;
@@ -2190,7 +2307,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].camcordersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].camcordersPerProject
@@ -2198,7 +2317,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Camcorder_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Camcorder_blocks = value;
@@ -2208,7 +2327,9 @@ export default {
       if (this.sumValues(val[0].camerasPerProject) != 0) {
         this.items.push('Media - Camera blocks per project');
         for (const [key, value] of Object.entries(val[0].camerasPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].camerasPerProject
@@ -2216,7 +2337,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Camera_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Camera_blocks = value;
@@ -2228,7 +2349,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].imagepickersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].imagepickersPerProject
@@ -2236,7 +2359,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.ImagePicker_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.ImagePicker_blocks = value;
@@ -2246,7 +2369,9 @@ export default {
       if (this.sumValues(val[0].playersPerProject) != 0) {
         this.items.push('Media - Player blocks per project');
         for (const [key, value] of Object.entries(val[0].playersPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].playersPerProject
@@ -2254,7 +2379,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Player_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Player_blocks = value;
@@ -2264,7 +2389,9 @@ export default {
       if (this.sumValues(val[0].soundsPerProject) != 0) {
         this.items.push('Media - Sound blocks per project');
         for (const [key, value] of Object.entries(val[0].soundsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].soundsPerProject
@@ -2272,7 +2399,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Sound_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Sound_blocks = value;
@@ -2284,7 +2411,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].soundrecordersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].soundrecordersPerProject
@@ -2292,7 +2421,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.SoundRecorder_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.SoundRecorder_blocks = value;
@@ -2304,7 +2433,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].speechrecognizersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].speechrecognizersPerProject
@@ -2312,7 +2443,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.SpeechRecognizer_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.SpeechRecognizer_blocks = value;
@@ -2324,7 +2455,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].texttospeechsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].texttospeechsPerProject
@@ -2332,7 +2465,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.TextToSpeech_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.TextToSpeech_blocks = value;
@@ -2344,7 +2477,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].videoplayersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].videoplayersPerProject
@@ -2352,7 +2487,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.VideoPlayer_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.VideoPlayer_blocks = value;
@@ -2364,7 +2499,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].yandextranslatorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].yandextranslatorsPerProject
@@ -2372,7 +2509,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.YandexTranslate_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.YandexTranslate_blocks = value;
@@ -2382,13 +2519,15 @@ export default {
       if (this.sumValues(val[0].ballsPerProject) != 0) {
         this.items.push('Drawing and Animation - Ball blocks per project');
         for (const [key, value] of Object.entries(val[0].ballsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(val[0].ballsPerProject)) {
               const obj = {};
               obj.Project_name = key;
               obj.Ball_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Ball_blocks = value;
@@ -2398,7 +2537,9 @@ export default {
       if (this.sumValues(val[0].canvasesPerProject) != 0) {
         this.items.push('Drawing and Animation - Canvas blocks per project');
         for (const [key, value] of Object.entries(val[0].canvasesPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].canvasesPerProject
@@ -2406,7 +2547,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Canvas_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Canvas_blocks = value;
@@ -2420,7 +2561,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].imagespritesPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].imagespritesPerProject
@@ -2428,7 +2571,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.ImageSprite_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.ImageSprite_blocks = value;
@@ -2438,7 +2581,9 @@ export default {
       if (this.sumValues(val[0].circlesPerProject) != 0) {
         this.items.push('Maps - Circle blocks per project');
         for (const [key, value] of Object.entries(val[0].circlesPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].circlesPerProject
@@ -2446,7 +2591,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Circle_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Circle_blocks = value;
@@ -2458,7 +2603,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].featurecollectionsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].featurecollectionsPerProject
@@ -2466,7 +2613,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.FeatureCollection_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.FeatureCollection_blocks = value;
@@ -2476,13 +2623,15 @@ export default {
       if (this.sumValues(val[0].mapsPerProject) != 0) {
         this.items.push('Maps - Map blocks per project');
         for (const [key, value] of Object.entries(val[0].mapsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(val[0].mapsPerProject)) {
               const obj = {};
               obj.Project_name = key;
               obj.Map_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Map_blocks = value;
@@ -2492,7 +2641,9 @@ export default {
       if (this.sumValues(val[0].markersPerProject) != 0) {
         this.items.push('Maps - Marker blocks per project');
         for (const [key, value] of Object.entries(val[0].markersPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].markersPerProject
@@ -2500,7 +2651,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Marker_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Marker_blocks = value;
@@ -2512,7 +2663,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].navigationsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].navigationsPerProject
@@ -2520,7 +2673,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Navigation_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Navigation_blocks = value;
@@ -2532,7 +2685,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].navigationsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].navigationsPerProject
@@ -2540,7 +2695,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Navigation_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Navigation_blocks = value;
@@ -2552,7 +2707,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].rectanglesPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].rectanglesPerProject
@@ -2560,7 +2717,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Rectangle_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Rectangle_blocks = value;
@@ -2572,7 +2729,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].accelerometerSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].accelerometerSensorsPerProject
@@ -2580,7 +2739,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.AccelerometerSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.AccelerometerSensor_blocks = value;
@@ -2592,7 +2751,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].barcodeScannersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].barcodeScannersPerProject
@@ -2600,7 +2761,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.BarcodeScanner_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.BarcodeScanner_blocks = value;
@@ -2612,7 +2773,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].barometersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].barometersPerProject
@@ -2620,7 +2783,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Barometer_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Barometer_blocks = value;
@@ -2630,7 +2793,9 @@ export default {
       if (this.sumValues(val[0].clocksPerProject) != 0) {
         this.items.push('Sensors - Clock blocks per project');
         for (const [key, value] of Object.entries(val[0].clocksPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].clocksPerProject
@@ -2638,7 +2803,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Clock_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Clock_blocks = value;
@@ -2650,7 +2815,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].gyroscopeSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].gyroscopeSensorsPerProject
@@ -2658,7 +2825,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.GyroscopeSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.GyroscopeSensor_blocks = value;
@@ -2670,7 +2837,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].hygrometersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].hygrometersPerProject
@@ -2678,7 +2847,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Hygrometer_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Hygrometer_blocks = value;
@@ -2690,7 +2859,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].lightSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].lightSensorsPerProject
@@ -2698,7 +2869,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.LightSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.LightSensor_blocks = value;
@@ -2710,7 +2881,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].locationSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].locationSensorsPerProject
@@ -2718,7 +2891,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.LocationSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.LocationSensor_blocks = value;
@@ -2730,7 +2903,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].magneticFieldSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].magneticFieldSensorsPerProject
@@ -2738,7 +2913,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.MagneticFieldSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.MagneticFieldSensor_blocks = value;
@@ -2750,7 +2925,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].nearFieldsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].nearFieldsPerProject
@@ -2758,7 +2935,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.NearField_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.NearField_blocks = value;
@@ -2770,7 +2947,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].orientationSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].orientationSensorsPerProject
@@ -2778,7 +2957,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.OrientationSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.OrientationSensor_blocks = value;
@@ -2790,7 +2969,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].pedometersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].pedometersPerProject
@@ -2798,7 +2979,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Pedometer_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Pedometer_blocks = value;
@@ -2810,7 +2991,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].proximitySensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].proximitySensorsPerProject
@@ -2818,7 +3001,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.ProximitySensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.ProximitySensor_blocks = value;
@@ -2830,7 +3013,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].thermometersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].thermometersPerProject
@@ -2838,7 +3023,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Thermometer_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Thermometer_blocks = value;
@@ -2850,7 +3035,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].contactPickersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].contactPickersPerProject
@@ -2858,7 +3045,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.ContactPicker_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.ContactPicker_blocks = value;
@@ -2870,7 +3057,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].emailPickersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].emailPickersPerProject
@@ -2878,7 +3067,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.EmailPicker_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.EmailPicker_blocks = value;
@@ -2890,7 +3079,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].phoneCallsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].phoneCallsPerProject
@@ -2898,7 +3089,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.PhoneCall_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.PhoneCall_blocks = value;
@@ -2910,7 +3101,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].phoneNumberPickersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].phoneNumberPickersPerProject
@@ -2918,7 +3111,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.PhoneNumberPicker_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.PhoneNumberPicker_blocks = value;
@@ -2928,7 +3121,9 @@ export default {
       if (this.sumValues(val[0].sharingsPerProject) != 0) {
         this.items.push('Social - Sharing blocks per project');
         for (const [key, value] of Object.entries(val[0].sharingsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].sharingsPerProject
@@ -2936,7 +3131,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Sharing_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Sharing_blocks = value;
@@ -2946,7 +3141,9 @@ export default {
       if (this.sumValues(val[0].textingsPerProject) != 0) {
         this.items.push('Social - Texting blocks per project');
         for (const [key, value] of Object.entries(val[0].textingsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].textingsPerProject
@@ -2954,7 +3151,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Texting_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Texting_blocks = value;
@@ -2964,7 +3161,9 @@ export default {
       if (this.sumValues(val[0].twittersPerProject) != 0) {
         this.items.push('Social - Twitter blocks per project');
         for (const [key, value] of Object.entries(val[0].twittersPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].twittersPerProject
@@ -2972,7 +3171,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Twitter_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Twitter_blocks = value;
@@ -2982,7 +3181,9 @@ export default {
       if (this.sumValues(val[0].cloudDbsPerProject) != 0) {
         this.items.push('Storage - CloudDB blocks per project');
         for (const [key, value] of Object.entries(val[0].cloudDbsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].cloudDbsPerProject
@@ -2990,7 +3191,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.CloudDB_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.CloudDB_blocks = value;
@@ -3000,13 +3201,15 @@ export default {
       if (this.sumValues(val[0].filesPerProject) != 0) {
         this.items.push('Storage - File blocks per project');
         for (const [key, value] of Object.entries(val[0].filesPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(val[0].filesPerProject)) {
               const obj = {};
               obj.Project_name = key;
               obj.Files_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Files_blocks = value;
@@ -3016,7 +3219,9 @@ export default {
       if (this.sumValues(val[0].tinyDbsPerProject) != 0) {
         this.items.push('Storage - TinyDB blocks per project');
         for (const [key, value] of Object.entries(val[0].tinyDbsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].tinyDbsPerProject
@@ -3024,7 +3229,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.TinyDB_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.TinyDB_blocks = value;
@@ -3036,7 +3241,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].tinyWebDbsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].tinyWebDbsPerProject
@@ -3044,7 +3251,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.TinyWebDB_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.TinyWebDB_blocks = value;
@@ -3056,7 +3263,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].activityStartersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].activityStartersPerProject
@@ -3064,7 +3273,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.ActivityStarter_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.ActivityStarter_blocks = value;
@@ -3076,7 +3285,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].bluetoothClientsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].bluetoothClientsPerProject
@@ -3084,7 +3295,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.BluetoothClient_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.BluetoothClient_blocks = value;
@@ -3096,7 +3307,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].bluetoothServersPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].bluetoothServersPerProject
@@ -3104,7 +3317,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.BluetoothServer_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.BluetoothServer_blocks = value;
@@ -3114,7 +3327,9 @@ export default {
       if (this.sumValues(val[0].serialsPerProject) != 0) {
         this.items.push('Connectivity - Serial blocks per project');
         for (const [key, value] of Object.entries(val[0].serialsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].serialsPerProject
@@ -3122,7 +3337,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Serial_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Serial_blocks = value;
@@ -3132,13 +3347,15 @@ export default {
       if (this.sumValues(val[0].websPerProject) != 0) {
         this.items.push('Connectivity - Web blocks per project');
         for (const [key, value] of Object.entries(val[0].websPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(val[0].websPerProject)) {
               const obj = {};
               obj.Project_name = key;
               obj.Web_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Web_blocks = value;
@@ -3148,7 +3365,9 @@ export default {
       if (this.sumValues(val[0].nxtDrivesPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - NxtDrive blocks per project');
         for (const [key, value] of Object.entries(val[0].nxtDrivesPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].nxtDrivesPerProject
@@ -3156,7 +3375,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.NxtDrive_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Web_blocks = value;
@@ -3168,7 +3387,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].nxtColorSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].nxtColorSensorsPerProject
@@ -3176,7 +3397,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.NxtColorSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.NxtColorSensor_blocks = value;
@@ -3188,7 +3409,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].nxtLightSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].nxtLightSensorsPerProject
@@ -3196,7 +3419,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.NxtLightSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.NxtLightSensor_blocks = value;
@@ -3208,7 +3431,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].nxtSoundSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].nxtSoundSensorsPerProject
@@ -3216,7 +3441,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.NxtSoundSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.NxtSoundSensor_blocks = value;
@@ -3228,7 +3453,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].nxtTouchSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].nxtTouchSensorsPerProject
@@ -3236,7 +3463,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.NxtTouchSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.NxtTouchSensor_blocks = value;
@@ -3250,7 +3477,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].nxtUltrasonicSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].nxtUltrasonicSensorsPerProject
@@ -3258,7 +3487,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.NxtUltrasonicSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.NxtUltrasonicSensor_blocks = value;
@@ -3272,7 +3501,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].nxtDirectCommandsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].nxtDirectCommandsPerProject
@@ -3280,7 +3511,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.NxtDirectCommands_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.NxtDirectCommands_blocks = value;
@@ -3290,7 +3521,9 @@ export default {
       if (this.sumValues(val[0].ev3MotorsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - Ev3Motors blocks per project');
         for (const [key, value] of Object.entries(val[0].ev3MotorsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].ev3MotorsPerProject
@@ -3298,7 +3531,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Ev3Motors_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Ev3Motors_blocks = value;
@@ -3310,7 +3543,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].ev3ColorSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].ev3ColorSensorsPerProject
@@ -3318,7 +3553,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Ev3ColorSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Ev3ColorSensor_blocks = value;
@@ -3330,7 +3565,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].ev3GyroSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].ev3GyroSensorsPerProject
@@ -3338,7 +3575,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Ev3GyroSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Ev3GyroSensor_blocks = value;
@@ -3350,7 +3587,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].ev3TouchSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].ev3TouchSensorsPerProject
@@ -3358,7 +3597,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Ev3TouchSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Ev3TouchSensor_blocks = value;
@@ -3372,7 +3611,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].ev3UltrasonicSensorsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].ev3UltrasonicSensorsPerProject
@@ -3380,7 +3621,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Ev3UltrasonicSensor_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Ev3UltrasonicSensor_blocks = value;
@@ -3390,7 +3631,9 @@ export default {
       if (this.sumValues(val[0].ev3SoundsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - Ev3Sound blocks per project');
         for (const [key, value] of Object.entries(val[0].ev3SoundsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].ev3SoundsPerProject
@@ -3398,7 +3641,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Ev3Sound_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Ev3Sound_blocks = value;
@@ -3408,7 +3651,9 @@ export default {
       if (this.sumValues(val[0].ev3UIsPerProject) != 0) {
         this.items.push('LEGO MINDSTORMS - Ev3UI blocks per project');
         for (const [key, value] of Object.entries(val[0].ev3UIsPerProject)) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].ev3UIsPerProject
@@ -3416,7 +3661,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Ev3UI_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Ev3UI_blocks = value;
@@ -3428,7 +3673,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].ev3CommandsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].ev3CommandsPerProject
@@ -3436,7 +3683,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.Ev3Commands_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.Ev3Commands_blocks = value;
@@ -3448,7 +3695,9 @@ export default {
         for (const [key, value] of Object.entries(
           val[0].firebaseDbsPerProject
         )) {
-          result = this.dataForExcel.find((x) => x.Project_name === key);
+          result = this.exportProjectComparison.find(
+            (x) => x.Project_name === key
+          );
           if (result == null) {
             for (const [key, value] of Object.entries(
               val[0].firebaseDbsPerProject
@@ -3456,7 +3705,7 @@ export default {
               const obj = {};
               obj.Project_name = key;
               obj.FirebaseDB_blocks = value;
-              this.dataForExcel.push(obj);
+              this.exportProjectComparison.push(obj);
             }
           } else {
             result.FirebaseDB_blocks = value;
@@ -3518,6 +3767,20 @@ export default {
       this.dataToExport[9].data = [];
       this.dataToExport[10].data = [];
       this.dataToExport[11].data = [];
+    },
+    downloadOverallStats() {
+      const data = this.exportOverallStats;
+      const fileName = 'ai_overall_statistics';
+      const exportType = exportFromJSON.types.csv;
+      const withBOM = true;
+      exportFromJSON({ data, fileName, exportType, withBOM });
+    },
+    downloadProjectComparison() {
+      const data = this.exportProjectComparison;
+      const fileName = 'ai_project_comparison';
+      const exportType = exportFromJSON.types.csv;
+      const withBOM = true;
+      exportFromJSON({ data, fileName, exportType, withBOM });
     },
     sumOfArray(data) {
       // vráti súčet prvkov pola
@@ -3581,7 +3844,6 @@ export default {
   margin-bottom: 50px;
 }
 #heading {
-  margin-top: 50px;
   margin-bottom: 50px;
   margin-left: 10px;
   margin-right: 10px;
