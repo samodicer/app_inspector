@@ -415,6 +415,12 @@
                               :chartLabels="this.chartCompareBy.labels"
                               class="bar-chart"
                             ></BarChart>
+                            <v-checkbox
+                              v-model="sort"
+                              color="#26a69a"
+                              :label="'Sort by highest value'"
+                              @change="renderProjectComparison(getAnalysedData)"
+                            ></v-checkbox>
                           </div>
                           <div id="noData" style="margin-bottom: 60px" v-else>
                             <v-icon x-large> mdi-eye-off </v-icon>
@@ -468,6 +474,7 @@ export default {
       numberOfProjects: 0,
       renderChart: false,
       settingsDialog: false,
+      sort: true,
       sumValues: (obj) => Object.values(obj).reduce((a, b) => a + b),
       items: [],
       compareBy: '',
@@ -1462,11 +1469,13 @@ export default {
           }
           break;
       }
-      this.sortData(
-        'compareBy',
-        this.chartCompareBy.labels,
-        this.chartCompareBy.data
-      );
+      if (this.sort) {
+        this.sortData(
+          'compareBy',
+          this.chartCompareBy.labels,
+          this.chartCompareBy.data
+        );
+      }
     },
     setProjectComparisonExport(val) {
       var result;
