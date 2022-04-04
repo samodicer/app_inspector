@@ -6,6 +6,8 @@ export default {
   name: 'BarChart',
   data() {
     return {
+      firstRender: true,
+      pickedColors: [],
       backgroundColor: [
         '#F78585',
         '#F8AD72',
@@ -79,6 +81,9 @@ export default {
       }
     },
     shuffle(array) {
+      if (!this.firstRender) {
+        return this.pickedColors;
+      }
       // náhodné poradie farieb
       let currentIndex = array.length,
         randomIndex;
@@ -94,6 +99,7 @@ export default {
           array[currentIndex],
         ];
       }
+      this.pickedColors = array;
       return array;
     },
     renderMyChart() {
@@ -134,6 +140,7 @@ export default {
           },
         }
       );
+      this.firstRender = false;
     },
   },
   watch: {
