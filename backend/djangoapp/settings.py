@@ -148,7 +148,7 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': 'aKuEs-nAGhzHBSTdKKLNt1CbH_M',
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
